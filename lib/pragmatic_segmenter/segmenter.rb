@@ -154,12 +154,15 @@ module PragmaticSegmenter
       line
     end
 
+    def replace_periods_in_email_addresses(text)
+      text.gsub!(/(\w)(\.)(\w)/, '\1∮\3')
+    end
+
     def analyze_lines(line:, segments:)
       line.gsub!(/\n/, 'ȹ')
       line = replace_ellipsis(line)
 
-      # account for periods in email addresses
-      line.gsub!(/(\w)(\.)(\w)/, '\1∮\3')
+      replace_periods_in_email_addresses(line)
 
       clause_1 = false
       end_punc_check = false
@@ -253,14 +256,14 @@ module PragmaticSegmenter
         line.gsub!(/∯/, '.')
         segments << line
       end
-      new_array = []
+      segmented_text = []
       segments.each do |s|
         if s =~ /\.“\s[A-Z]/
-          s.scan(/\.“\s[A-Z]/).each do |new_s|
-            new_array << new_s
+          s.scan(/\.“\s[A-Z]/).each do |segment|
+            segmented_text << segment
           end
         else
-          new_array << s
+          segmented_text << s
         end
       end
     end

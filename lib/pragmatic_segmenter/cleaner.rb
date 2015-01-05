@@ -2,6 +2,11 @@
 
 module PragmaticSegmenter
   class Cleaner
+    # Rubular: http://rubular.com/r/ENrVFMdJ8v
+    HTML_TAG_CATCHER = /<\/?[^>]*>/
+    # Rubular: http://rubular.com/r/XZVqMPJhea
+    ESCAPED_HTML_TAG_CATCHER = /&lt;\/?[^gt;]*gt;/
+
     attr_reader :language, :doc_type
     def initialize(text:, **args)
       @text = text.dup
@@ -42,10 +47,8 @@ module PragmaticSegmenter
     end
 
     def strip_html
-      # Rubular: http://rubular.com/r/ENrVFMdJ8v
-      @text.gsub!(/<\/?[^>]*>/, '')
-      # Rubular: http://rubular.com/r/XZVqMPJhea
-      @text.gsub!(/&lt;\/?[^gt;]*gt;/, '')
+      @text.gsub!(HTML_TAG_CATCHER, '')
+      @text.gsub!(ESCAPED_HTML_TAG_CATCHER, '')
     end
 
     def strip_other_inline_formatting
