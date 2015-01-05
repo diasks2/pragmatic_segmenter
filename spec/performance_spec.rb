@@ -1,5 +1,4 @@
 # -*- encoding : utf-8 -*-
-
 require 'benchmark'
 require 'spec_helper'
 

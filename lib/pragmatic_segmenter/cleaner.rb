@@ -44,7 +44,7 @@ module PragmaticSegmenter
     # Rubular: http://rubular.com/r/DwNSuZrNtk
     CONSECUTIVE_PERIODS_REGEX = /\.{5,}/
 
-    attr_reader :language, :doc_type
+    attr_reader :text, :language, :doc_type
     def initialize(text:, **args)
       @text = text.dup
       @language = args[:language]
@@ -52,18 +52,18 @@ module PragmaticSegmenter
     end
 
     def clean
-      return unless @text
-      @text = remove_newline_in_middle_of_sentence(@text)
-      @text = remove_newline_in_middle_of_word(@text)
-      @text = remove_newline_in_middle_of_word_ja(@text) if language.eql?('ja')
-      @text = replace_double_newlines(@text)
-      @text = replace_newlines(@text)
-      @text = strip_html(@text)
-      @text = strip_other_inline_formatting(@text)
-      @text = clean_quotations(@text)
-      @text = clean_quotations_en(@text) if language.eql?('en')
-      @text = clean_table_of_contents(@text)
-      @text
+      return unless text
+      clean_text = remove_newline_in_middle_of_sentence(text)
+      clean_text = remove_newline_in_middle_of_word(clean_text)
+      clean_text = remove_newline_in_middle_of_word_ja(clean_text) if language.eql?('ja')
+      clean_text = replace_double_newlines(clean_text)
+      clean_text = replace_newlines(clean_text)
+      clean_text = strip_html(clean_text)
+      clean_text = strip_other_inline_formatting(clean_text)
+      clean_text = clean_quotations(clean_text)
+      clean_text = clean_quotations_en(clean_text) if language.eql?('en')
+      clean_text = clean_table_of_contents(clean_text)
+      clean_text
     end
 
     private
