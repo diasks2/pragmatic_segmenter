@@ -53,7 +53,9 @@ module PragmaticSegmenter
 
     def clean
       return unless @text
-      remove_errant_newlines
+      @text = remove_newline_in_middle_of_sentence(@text)
+      @text = remove_newline_in_middle_of_word(@text)
+      @text = remove_newline_in_middle_of_word_ja(@text) if language.eql?('ja')
       @text = replace_double_newlines(@text)
       @text = replace_newlines(@text)
       @text = strip_html(@text)
@@ -66,11 +68,14 @@ module PragmaticSegmenter
 
     private
 
-    def remove_errant_newlines
-      newline_check(/^(?:[^\.])*/)
-      newline_check(/\.(?:[^\.])*/)
-      @text = remove_newline_in_middle_of_word(@text)
-      @text = remove_newline_in_middle_of_word_ja(@text) if language.eql?('ja')
+    def remove_newline_in_middle_of_sentence(txt)
+      txt.dup.gsub!(/(?:[^\.])*/) do |match|
+        next unless match.include?("\n")
+        orig = match.dup
+        match.gsub!(NEWLINE_IN_MIDDLE_OF_SENTENCE_REGEX, '')
+        txt.gsub!(/#{Regexp.escape(orig)}/, "#{match}")
+      end
+      txt
     end
 
     def remove_newline_in_middle_of_word(txt)
@@ -79,15 +84,6 @@ module PragmaticSegmenter
 
     def remove_newline_in_middle_of_word_ja(txt)
       txt.gsub(NEWLINE_IN_MIDDLE_OF_WORD_JA_REGEX, '')
-    end
-
-    def newline_check(regex)
-      @text.dup.gsub!(regex) do |match|
-        next unless match.include?("\n")
-        orig = match.dup
-        match.gsub!(NEWLINE_IN_MIDDLE_OF_SENTENCE_REGEX, '')
-        @text.gsub!(/#{Regexp.escape(orig)}/, "#{match}")
-      end
     end
 
     def strip_html(txt)
