@@ -263,7 +263,7 @@ module PragmaticSegmenter
       line = replace_4_period_ellipsis_with_spaces(line)
       line = replace_4_consecutive_period_ellipsis(line)
       line = replace_3_consecutive_period_ellipsis(line)
-      line = replace_other_3_period_ellipsis(line)
+      replace_other_3_period_ellipsis(line)
     end
 
     def replace_3_period_ellipsis_with_spaces(line)
@@ -472,8 +472,8 @@ module PragmaticSegmenter
 
     def sub_symbols(text)
       text.gsub(/∯/, '.').gsub(/♬/, '،').gsub(/♭/, ':').gsub(/ᓰ/, '。').gsub(/ᓱ/, '．')
-          .gsub(/ᓳ/, '！').gsub(/ᓴ/, '!').gsub(/ᓷ/, '?').gsub(/ᓸ/, '？').gsub(/☉/, '?!')
-          .gsub(/☈/, '!?').gsub(/☇/, '??').gsub(/☄/, '!!').delete('ȸ').gsub(/ȹ/, "\n")
+        .gsub(/ᓳ/, '！').gsub(/ᓴ/, '!').gsub(/ᓷ/, '?').gsub(/ᓸ/, '？').gsub(/☉/, '?!')
+        .gsub(/☈/, '!?').gsub(/☇/, '??').gsub(/☄/, '!!').delete('ȸ').gsub(/ȹ/, "\n")
     end
 
     def replace_period_in_number_1
@@ -487,7 +487,7 @@ module PragmaticSegmenter
     end
 
     def replace_period_in_number_3
-       # Rubular: http://rubular.com/r/HPa4sdc6b9
+      # Rubular: http://rubular.com/r/HPa4sdc6b9
       @text.gsub!(/(?<=^\d)\.(?=(\s\S)|\))/, '∯')
     end
 
@@ -511,10 +511,9 @@ module PragmaticSegmenter
       replace_period_in_number_2
       replace_period_in_number_3
       replace_period_in_number_4
-      if language.eql?('de')
-        de_replace_period_in_number_1
-        de_replace_period_in_number_2
-      end
+      return unless language.eql?('de')
+      de_replace_period_in_number_1
+      de_replace_period_in_number_2
     end
 
     def multi_period_abbr
@@ -600,7 +599,7 @@ module PragmaticSegmenter
           sentence_array << line.tr("\n", '').strip
         end
       end
-      sentence_array.reject{ |e| e.empty? }
+      sentence_array.reject(&:empty?)
     end
 
     def remove_extra_white_space(line)
