@@ -25,6 +25,8 @@ module PragmaticSegmenter
     SENTENCE_BOUNDARY_MY = /.*?[။၏!\?]|.*?$/
     SENTENCE_BOUNDARY_UR = /.*?[۔؟!\?]|.*?$/
 
+    WORDS_WITH_EXCLAMATIONS = ['!Xũ', '!Kung', 'ǃʼOǃKung', '!Xuun', '!Kung-Ekoka', 'ǃHu', 'ǃKhung', 'ǃKu', 'ǃung', 'ǃXo', 'ǃXû', 'ǃXung', 'ǃXũ', '!Xun', 'Yahoo!', 'Y!J', 'Yum!']
+
     # Rubular: http://rubular.com/r/yqa4Rit8EY
     POSSESSIVE_ABBREVIATION_REGEX = /\.(?='s\s)|\.(?='s$)|\.(?='s\z)/
 
@@ -72,6 +74,36 @@ module PragmaticSegmenter
 
     # Rubular: http://rubular.com/r/JMjlZHAT4g
     SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX = /(?<=[!?\.][\"\'\u{201d}\u{201c}])\s{1}(?=[A-Z])/
+
+    # Rubular: http://rubular.com/r/2YFrKWQUYi
+    BETWEEN_SINGLE_QUOTES_REGEX = /(?<=\s)'(?:[^']|'[a-zA-Z])*'/
+
+    # Rubular: http://rubular.com/r/TkZomF9tTM
+    BETWEEN_DOUBLE_QUOTES_DE_REGEX = /„(?>[^“\\]+|\\{2}|\\.)*“/
+
+    # Rubular: http://rubular.com/r/3Pw1QlXOjd
+    BETWEEN_DOUBLE_QUOTES_REGEX = /"(?>[^"\\]+|\\{2}|\\.)*"/
+
+    # Rubular: http://rubular.com/r/GnjOmry5Z2
+    BETWEEN_QUOTE_JA_REGEX = /\u{300c}(?>[^\u{300c}\u{300d}\\]+|\\{2}|\\.)*\u{300d}/
+
+    # Rubular: http://rubular.com/r/x6s4PZK8jc
+    BETWEEN_QUOTE_ARROW_REGEX = /«(?>[^»\\]+|\\{2}|\\.)*»/
+
+    # Rubular: http://rubular.com/r/JbAIpKdlSq
+    BETWEEN_QUOTE_SLANTED_REGEX = /“(?>[^”\\]+|\\{2}|\\.)*”/
+
+    # Rubular: http://rubular.com/r/6tTityPflI
+    BETWEEN_PARENS_REGEX = /\((?>[^\(\)\\]+|\\{2}|\\.)*\)/
+
+    # Rubular: http://rubular.com/r/EjHcZn5ZSG
+    BETWEEN_PARENS_JA_REGEX = /\u{ff08}(?>[^\u{ff08}\u{ff09}\\]+|\\{2}|\\.)*\u{ff09}/
+
+    # Rubular: http://rubular.com/r/OdcXBsub0w
+    BETWEEN_UNCONVENTIONAL_DOUBLE_QUOTE_DE_REGEX = /,,(?>[^“\\]+|\\{2}|\\.)*“/
+
+    # Rubular: http://rubular.com/r/2UskIupGgP
+    SPLIT_DOUBLE_QUOTES_DE_REGEX = /\A„(?>[^“\\]+|\\{2}|\\.)*“/
 
     SENTENCE_BOUNDARY_REGEX = /\u{ff08}(?:[^\u{ff09}])*\u{ff09}(?=\s?[A-Z])|\u{300c}(?:[^\u{300d}])*\u{300d}(?=\s[A-Z])|\((?:[^\)])*\)(?=\s[A-Z])|'(?:[^'])*'(?=\s[A-Z])|"(?:[^"])*"(?=\s[A-Z])|“(?:[^”])*”(?=\s[A-Z])|\S.*?[。．.！!?？ȸȹ☉☈☇☄]/
 
@@ -132,9 +164,9 @@ module PragmaticSegmenter
         character_array = @text.scan(next_word_start)
         abbrev_match.each_with_index do |am, index|
           if language.eql?('de')
-            @text.gsub!(/(?<=#{am})\.(?=\s)/, '∯')
+            @text = replace_abbr_de(@text, am)
           elsif language.eql?('ar') || language.eql?('fa')
-            @text.gsub!(/(?<=#{am})\./, '∯')
+            @text = replace_abbr_ar_fa(@text, am)
           else
             character = character_array[index]
             prefix = abbr.prefix
@@ -156,6 +188,14 @@ module PragmaticSegmenter
           end
         end
       end
+    end
+
+    def replace_abbr_de(txt, abbr)
+      txt.gsub(/(?<=#{abbr})\.(?=\s)/, '∯')
+    end
+
+    def replace_abbr_ar_fa(txt, abbr)
+      txt.gsub(/(?<=#{abbr})\./, '∯')
     end
 
     def replace_pre_number_abbr(txt, abbr)
@@ -273,44 +313,9 @@ module PragmaticSegmenter
       end
       if clause_1
         line << 'ȸ' unless end_punc_check || language.eql?('ar') || language.eql?('fa')
-        copy_l = line
-        if language == 'de'
-          if copy_l.include?('„')
-            btwn_dbl_quote = copy_l.scan(/„(?>[^“\\]+|\\{2}|\\.)*“/)
-            copy_l.scan(/\A„(?>[^“\\]+|\\{2}|\\.)*“/).each do |q|
-              btwn_dbl_quote << q
-            end
-          elsif copy_l.include?(',,')
-            btwn_dbl_quote = copy_l.scan(/,,(?>[^“\\]+|\\{2}|\\.)*“/)
-          end
-        else
-          btwn_dbl_quote = copy_l.scan(/"(?>[^"\\]+|\\{2}|\\.)*"/)
-        end
-        # Rubular: http://rubular.com/r/2YFrKWQUYi
-        btwn_sngl_quote = copy_l.scan(
-          /(?<=\s)'(?:[^']|'[a-zA-Z])*'/)
-        btwn_jp_quote = copy_l.scan(
-          /\u{300c}(?>[^\u{300c}\u{300d}\\]+|\\{2}|\\.)*\u{300d}/)
-        btwn_parens = copy_l.scan(
-          /\((?>[^\(\)\\]+|\\{2}|\\.)*\)/)
-        btwn_jp_parens = copy_l.scan(
-          /\u{ff08}(?>[^\u{ff08}\u{ff09}\\]+|\\{2}|\\.)*\u{ff09}/)
-        btwn_ru_quote = copy_l.scan(/«(?>[^»\\]+|\\{2}|\\.)*»/)
-        btwn_dbl_spec_quote = copy_l.scan(/”(?>[^”\\]+|\\{2}|\\.)*”/)
-        btwn_dbl_spec_2_quote = copy_l.scan(/“(?>[^”\\]+|\\{2}|\\.)*”/)
-        words_with_exclamations = ['!Xũ', '!Kung', 'ǃʼOǃKung', '!Xuun', '!Kung-Ekoka', 'ǃHu', 'ǃKhung', 'ǃKu', 'ǃung', 'ǃXo', 'ǃXû', 'ǃXung', 'ǃXũ', '!Xun', 'Yahoo!', 'Y!J', 'Yum!']
-        words_with_exclamations.each do |exclamation|
-          exclam_abbr = copy_l.scan(/#{Regexp.escape(exclamation)}/)
-          sub_punct(exclam_abbr, line)
-        end
-        sub_punct(btwn_dbl_spec_quote, line)
-        sub_punct(btwn_dbl_spec_2_quote, line)
-        sub_punct(btwn_ru_quote, line)
-        sub_punct(btwn_dbl_quote, line)
-        sub_punct(btwn_sngl_quote, line)
-        sub_punct(btwn_jp_quote, line)
-        sub_punct(btwn_parens, line)
-        sub_punct(btwn_jp_parens, line)
+
+        sub_part_of_word_exclamation_points(line)
+        sub_punctuation_between_quotes_and_parens(line)
         line = replace_double_punctuation(line)
         case
         when language.eql?('ar')
@@ -348,6 +353,67 @@ module PragmaticSegmenter
         line.gsub!(/∯/, '.')
         segments << line
       end
+    end
+
+    def sub_punctuation_between_quotes_and_parens(line)
+      sub_punctuation_between_single_quotes(line)
+      sub_punctuation_between_double_quotes(line)
+      sub_punctuation_between_quotes_ja(line)
+      sub_punctuation_between_parens(line)
+      sub_punctuation_between_parens_ja(line)
+      sub_punctuation_between_quotes_arrow(line)
+      sub_punctuation_between_quotes_slanted(line)
+    end
+
+    def sub_part_of_word_exclamation_points(line)
+      WORDS_WITH_EXCLAMATIONS.each do |exclamation|
+        sub_punct(line.scan(/#{Regexp.escape(exclamation)}/), line)
+      end
+    end
+
+    def sub_punctuation_between_parens(line)
+      sub_punct(line.scan(BETWEEN_PARENS_REGEX), line)
+    end
+
+    def sub_punctuation_between_parens_ja(line)
+      sub_punct(line.scan(BETWEEN_PARENS_JA_REGEX), line)
+    end
+
+    def sub_punctuation_between_single_quotes(line)
+      sub_punct(line.scan(BETWEEN_SINGLE_QUOTES_REGEX), line)
+    end
+
+    def sub_punctuation_between_double_quotes(line)
+      if language == 'de'
+        btwn_dbl_quote = sub_punctuation_between_double_quotes_de(line)
+      else
+        btwn_dbl_quote = line.scan(BETWEEN_DOUBLE_QUOTES_REGEX)
+      end
+      sub_punct(btwn_dbl_quote, line)
+    end
+
+    def sub_punctuation_between_quotes_ja(line)
+      sub_punct(line.scan(BETWEEN_QUOTE_JA_REGEX), line)
+    end
+
+    def sub_punctuation_between_quotes_arrow(line)
+      sub_punct(line.scan(BETWEEN_QUOTE_ARROW_REGEX), line)
+    end
+
+    def sub_punctuation_between_quotes_slanted(line)
+      sub_punct(line.scan(BETWEEN_QUOTE_SLANTED_REGEX), line)
+    end
+
+    def sub_punctuation_between_double_quotes_de(line)
+      if line.include?('„')
+        btwn_dbl_quote = line.scan(BETWEEN_DOUBLE_QUOTES_DE_REGEX)
+        line.scan(SPLIT_DOUBLE_QUOTES_DE_REGEX).each do |q|
+          btwn_dbl_quote << q
+        end
+      elsif line.include?(',,')
+        btwn_dbl_quote = line.scan(BETWEEN_UNCONVENTIONAL_DOUBLE_QUOTE_DE_REGEX)
+      end
+      btwn_dbl_quote
     end
 
     def replace_double_punctuation(line)
