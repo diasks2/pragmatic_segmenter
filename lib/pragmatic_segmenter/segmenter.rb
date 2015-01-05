@@ -16,6 +16,36 @@ module PragmaticSegmenter
     PUNCT_MY = ['။', '၏', '?', '!']
     PUNCT_AM = ['።', '፧', '?', '!']
 
+    # Rubular: http://rubular.com/r/yqa4Rit8EY
+    POSSESSIVE_ABBREVIATION_REGEX = /\.(?='s\s)|\.(?='s$)|\.(?='s\z)/
+
+    # Rubular: http://rubular.com/r/G2opjedIm9
+    GEO_LOCATION_REGEX = /(?<=[a-zA-z]°)\.(?=\s*\d+)/
+
+    # Rubular: http://rubular.com/r/i60hCK81fz
+    ELLIPSIS_3_CONSECUTIVE_REGEX = /\.\.\.(?=\s+[A-Z])/
+
+    # Rubular: http://rubular.com/r/Hdqpd90owl
+    ELLIPSIS_4_CONSECUTIVE_REGEX = /(?<=\S)\.{3}(?=\.\s[A-Z])/
+
+    # Rubular: http://rubular.com/r/YBG1dIHTRu
+    ELLIPSIS_3_SPACE_REGEX = /(\s\.){3}\s/
+
+    # Rubular: http://rubular.com/r/2VvZ8wRbd8
+    ELLIPSIS_4_SPACE_REGEX = /(?<=[a-z])(\.\s){3}\.(\z|$|\n)/
+
+    # Rubular: http://rubular.com/r/e3H6kwnr6H
+    SINGLE_UPPERCASE_LETTER_AT_START_OF_LINE_REGEX =  /(?<=^[A-Z])\.(?=\s)/
+
+    # Rubular: http://rubular.com/r/gitvf0YWH4
+    SINGLE_UPPERCASE_LETTER_REGEX = /(?<=\s[A-Z])\.(?=\s)/
+
+    # Rubular: http://rubular.com/r/B4X33QKIL8
+    SINGLE_LOWERCASE_LETTER_DE_REGEX = /(?<=\s[a-z])\.(?=\s)/
+
+    # Rubular: http://rubular.com/r/iUNSkCuso0
+    SINGLE_LOWERCASE_LETTER_AT_START_OF_LINE_DE_REGEX = /(?<=^[a-z])\.(?=\s)/
+
     attr_reader :language, :doc_type
     def initialize(text:, **args)
       return [] unless text
@@ -49,7 +79,7 @@ module PragmaticSegmenter
       replace_period_related_to_numbers
       multi_period_abbr
       abbr_as_sentence_boundary
-      geo_location
+      replace_geo_location_periods
       split_lines
     end
 
@@ -57,23 +87,12 @@ module PragmaticSegmenter
 
     def process_abbr
       original = @text.dup
+      replace_possessive_abbreviations
+      replace_single_uppercase_letter_abbrviation_at_start_of_line
+      replace_single_uppercase_letter_abbreviation
+      replace_single_lowercase_letter_de
+      replace_single_lowercase_letter_at_start_of_line_de
 
-      # Rubular: http://rubular.com/r/yqa4Rit8EY
-      # any possessive abbreviations (i.e. JFK Jr.'s)
-      @text.gsub!(/\.(?='s\s)|\.(?='s$)|\.(?='s\z)/, '∯')
-
-      # any single upper case letter followed by a period is not a sentence ender
-      # usually upper case letters are initials in a name
-      # Rubular: http://rubular.com/r/e3H6kwnr6H
-      @text.gsub!(/(?<=^[A-Z])\.(?=\s)/, '∯')
-      # Rubular: http://rubular.com/r/gitvf0YWH4
-      @text.gsub!(/(?<=\s[A-Z])\.(?=\s)/, '∯')
-      if language.eql?('de') || language.eql?('fr')
-        # Rubular: http://rubular.com/r/B4X33QKIL8
-        @text.gsub!(/(?<=\s[a-z])\.(?=\s)/, '∯') # German test #011, #013, #018, #019, #023
-        # Rubular: http://rubular.com/r/iUNSkCuso0
-        @text.gsub!(/(?<=^[a-z])\.(?=\s)/, '∯') # German test #032
-      end
       downcased = @text.downcase
       abbr = PragmaticSegmenter::Abbreviation.new(language: language)
       abbr.all.each do |a|
@@ -114,6 +133,26 @@ module PragmaticSegmenter
       end
     end
 
+    def replace_single_lowercase_letter_at_start_of_line_de
+      @text.gsub!(SINGLE_LOWERCASE_LETTER_AT_START_OF_LINE_DE_REGEX, '∯') if language.eql?('de')
+    end
+
+    def replace_single_lowercase_letter_de
+      @text.gsub!(SINGLE_LOWERCASE_LETTER_DE_REGEX, '∯') if language.eql?('de')
+    end
+
+    def replace_single_uppercase_letter_abbrviation_at_start_of_line
+      @text.gsub!(SINGLE_UPPERCASE_LETTER_AT_START_OF_LINE_REGEX, '∯')
+    end
+
+    def replace_single_uppercase_letter_abbreviation
+      @text.gsub!(SINGLE_UPPERCASE_LETTER_REGEX, '∯')
+    end
+
+    def replace_possessive_abbreviations
+      @text.gsub!(POSSESSIVE_ABBREVIATION_REGEX, '∯')
+    end
+
     def abbr_as_sentence_boundary
       # Find the most common cases where abbreviations double as sentence boundaries.
       %w(A Being Did For He How However I In Millions More She That The There They We What When Where Who Why).each do |word|
@@ -129,28 +168,39 @@ module PragmaticSegmenter
       end
     end
 
-    def geo_location
-      # Rubular: http://rubular.com/r/G2opjedIm9
-      @text.gsub!(/(?<=[a-zA-z]°)\.(?=\s*\d+)/, '∯')
+    def replace_geo_location_periods
+      @text.gsub!(GEO_LOCATION_REGEX, '∯')
     end
 
     def replace_ellipsis(line)
       # http://www.dailywritingtips.com/in-search-of-a-4-dot-ellipsis/
       # http://www.thepunctuationguide.com/ellipses.html
-
-      # Rubular: http://rubular.com/r/YBG1dIHTRu
-      line.gsub!(/(\s\.){3}\s/, '♟')
-
-      # Rubular: http://rubular.com/r/2VvZ8wRbd8
-      line.gsub!(/(?<=[a-z])(\.\s){3}\.(\z|$|\n)/, '♝')
-
-      # Rubular: http://rubular.com/r/Hdqpd90owl
-      line.gsub!(/(?<=\S)\.{3}(?=\.\s[A-Z])/, 'ƪ')
-
-      # Rubular: http://rubular.com/r/i60hCK81fz
-      line.gsub!(/\.\.\.(?=\s+[A-Z])/, '☏.')
-      line.gsub!(/\.\.\./, 'ƪ')
+      replace_3_period_ellipsis_with_spaces(line)
+      replace_4_period_ellipsis_with_spaces(line)
+      replace_4_consecutive_period_ellipsis(line)
+      replace_3_consecutive_period_ellipsis(line)
+      replace_other_3_period_ellipsis(line)
       line
+    end
+
+    def replace_3_period_ellipsis_with_spaces(line)
+      line.gsub!(ELLIPSIS_3_SPACE_REGEX, '♟')
+    end
+
+    def replace_4_period_ellipsis_with_spaces(line)
+      line.gsub!(ELLIPSIS_4_SPACE_REGEX, '♝')
+    end
+
+    def replace_4_consecutive_period_ellipsis(line)
+      line.gsub!(ELLIPSIS_4_CONSECUTIVE_REGEX, 'ƪ')
+    end
+
+    def replace_3_consecutive_period_ellipsis(line)
+      line.gsub!(ELLIPSIS_3_CONSECUTIVE_REGEX, '☏.')
+    end
+
+    def replace_other_3_period_ellipsis(line)
+      line.gsub!(/\.\.\./, 'ƪ')
     end
 
     def replace_periods_in_email_addresses(text)
