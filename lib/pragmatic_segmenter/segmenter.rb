@@ -17,6 +17,12 @@ module PragmaticSegmenter
     PUNCT_UR = ['?', '!', '۔', '؟']
 
     SENTENCE_BOUNDARY_AM = /.*?[፧።!\?]|.*?$/
+    SENTENCE_BOUNDARY_AR = /.*?[:\.!\?؟،]|.*?\z|.*?$/
+    SENTENCE_BOUNDARY_EL = /.*?[\.;!\?]|.*?$/
+    SENTENCE_BOUNDARY_FA = /.*?[:\.!\?؟]|.*?\z|.*?$/
+    SENTENCE_BOUNDARY_HI = /.*?[।\|!\?]|.*?$/
+    SENTENCE_BOUNDARY_HY = /.*?[։՜:]|.*?$/
+    SENTENCE_BOUNDARY_MY = /.*?[။၏!\?]|.*?$/
     SENTENCE_BOUNDARY_UR = /.*?[۔؟!\?]|.*?$/
 
     # Rubular: http://rubular.com/r/yqa4Rit8EY
@@ -60,6 +66,14 @@ module PragmaticSegmenter
 
     # Rubular: http://rubular.com/r/f9zTjmkIPb
     EXCLAMATION_POINT_MID_SENTENCE_REGEX = /\!(?=\s[a-z])/
+
+    # Rubular: http://rubular.com/r/NqCqv372Ix
+    QUOTATION_AT_END_OF_SENTENCE_REGEX = /[!?\.][\"\'\u{201d}\u{201c}]\s{1}[A-Z]/
+
+    # Rubular: http://rubular.com/r/JMjlZHAT4g
+    SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX = /(?<=[!?\.][\"\'\u{201d}\u{201c}])\s{1}(?=[A-Z])/
+
+    SENTENCE_BOUNDARY_REGEX = /\u{ff08}(?:[^\u{ff09}])*\u{ff09}(?=\s?[A-Z])|\u{300c}(?:[^\u{300d}])*\u{300d}(?=\s[A-Z])|\((?:[^\)])*\)(?=\s[A-Z])|'(?:[^'])*'(?=\s[A-Z])|"(?:[^"])*"(?=\s[A-Z])|“(?:[^”])*”(?=\s[A-Z])|\S.*?[。．.！!?？ȸȹ☉☈☇☄]/
 
     attr_reader :language, :doc_type
     def initialize(text:, **args)
@@ -280,27 +294,24 @@ module PragmaticSegmenter
         sub_punct(btwn_jp_quote, line)
         sub_punct(btwn_parens, line)
         sub_punct(btwn_jp_parens, line)
-        line = line.gsub(/\?!/, '☉') if line.include?('?!')
-        line = line.gsub(/!\?/, '☈') if line.include?('!?')
-        line = line.gsub(/\?\?/, '☇') if line.include?('??')
-        line = line.gsub(/!!/, '☄') if line.include?('!!')
+        line = replace_double_punctuation(line)
         case
         when language.eql?('ar')
           line.gsub!(/(?<=\d):(?=\d)/, '♭')
           line.gsub!(/،(?=\s\S+،)/, '♬')
-          subline = line.scan(/.*?[:\.!\?؟،]|.*?\z|.*?$/)
+          subline = ar_split_at_sentence_boundary(line)
         when language.eql?('fa')
           line.gsub!(/(?<=\d):(?=\d)/, '♭')
           line.gsub!(/،(?=\s\S+،)/, '♬')
-          subline = line.scan(/.*?[:\.!\?؟]|.*?\z|.*?$/)
+          subline = fa_split_at_sentence_boundary(line)
         when language.eql?('hi')
-          subline = line.scan(/.*?[।\|!\?]|.*?$/)
+          subline = hi_split_at_sentence_boundary(line)
         when language.eql?('hy')
-          subline = line.scan(/.*?[։՜:]|.*?$/)
+          subline = hy_split_at_sentence_boundary(line)
         when language.eql?('el')
-          subline = line.scan(/.*?[\.;!\?]|.*?$/)
+          subline = el_split_at_sentence_boundary(line)
         when language.eql?('my')
-          subline = line.scan(/.*?[။၏!\?]|.*?$/)
+          subline = my_split_at_sentence_boundary(line)
         when language.eql?('am')
           subline = am_split_at_sentence_boundary(line)
         when language.eql?('ur')
@@ -310,7 +321,7 @@ module PragmaticSegmenter
           line = replace_exclamation_point_in_quotation(line)
           line = replace_exclamation_point_before_comma_mid_sentence(line)
           line = replace_exclamation_point_mid_sentence(line)
-          subline = line.scan(/\u{ff08}(?:[^\u{ff09}])*\u{ff09}(?=\s?[A-Z])|\u{300c}(?:[^\u{300d}])*\u{300d}(?=\s[A-Z])|\((?:[^\)])*\)(?=\s[A-Z])|'(?:[^'])*'(?=\s[A-Z])|"(?:[^"])*"(?=\s[A-Z])|“(?:[^”])*”(?=\s[A-Z])|\S.*?[。．.！!?？ȸȹ☉☈☇☄]/)
+          subline = line.scan(SENTENCE_BOUNDARY_REGEX)
         end
         subline.each_with_index do |s_l|
           segments << sub_symbols(s_l)
@@ -320,16 +331,44 @@ module PragmaticSegmenter
         line.gsub!(/∯/, '.')
         segments << line
       end
-      segmented_text = []
-      segments.each do |s|
-        if s =~ /\.“\s[A-Z]/
-          s.scan(/\.“\s[A-Z]/).each do |segment|
-            segmented_text << segment
-          end
-        else
-          segmented_text << s
-        end
-      end
+    end
+
+    def replace_double_punctuation(line)
+      line.gsub(/\?!/, '☉')
+        .gsub(/!\?/, '☈').gsub(/\?\?/, '☇')
+        .gsub(/!!/, '☄')
+    end
+
+    def ar_split_at_sentence_boundary(ar_line)
+      ar_line.scan(SENTENCE_BOUNDARY_AR)
+    end
+
+    def fa_split_at_sentence_boundary(fa_line)
+      fa_line.scan(SENTENCE_BOUNDARY_FA)
+    end
+
+    def hi_split_at_sentence_boundary(hi_line)
+      hi_line.scan(SENTENCE_BOUNDARY_HI)
+    end
+
+    def hy_split_at_sentence_boundary(hy_line)
+      hy_line.scan(SENTENCE_BOUNDARY_HY)
+    end
+
+    def el_split_at_sentence_boundary(el_line)
+      el_line.scan(SENTENCE_BOUNDARY_EL)
+    end
+
+    def my_split_at_sentence_boundary(my_line)
+      my_line.scan(SENTENCE_BOUNDARY_MY)
+    end
+
+    def am_split_at_sentence_boundary(am_line)
+      am_line.scan(SENTENCE_BOUNDARY_AM)
+    end
+
+    def ur_split_at_sentence_boundary(ur_line)
+      ur_line.scan(SENTENCE_BOUNDARY_UR)
     end
 
     def replace_exclamation_point_before_comma_mid_sentence(line)
@@ -346,14 +385,6 @@ module PragmaticSegmenter
 
     def replace_question_mark_in_quotation(line)
       line.gsub(QUESTION_MARK_IN_QUOTATION_REGEX, 'ᓷ')
-    end
-
-    def am_split_at_sentence_boundary(am_line)
-      am_line.scan(SENTENCE_BOUNDARY_AM)
-    end
-
-    def ur_split_at_sentence_boundary(ur_line)
-      ur_line.scan(SENTENCE_BOUNDARY_UR)
     end
 
     def sub_symbols(text)
@@ -477,8 +508,8 @@ module PragmaticSegmenter
         next if line.gsub(/_{3,}/, '').length.eql?(0) || line.length < 2
         line = reinsert_ellipsis(line)
         line = remove_extra_white_space(line)
-        if line =~ /[!?\.][\"\'\“]\s{1}[A-Z]/
-          subline = line.split(/(?<=[!?\.][\"\'\“])\s{1}(?=[A-Z])/)
+        if line =~ QUOTATION_AT_END_OF_SENTENCE_REGEX
+          subline = line.split(SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX)
           subline.each do |s|
             sentence_array << s
           end

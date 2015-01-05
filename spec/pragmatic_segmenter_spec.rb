@@ -858,6 +858,11 @@ RSpec.describe PragmaticSegmenter::Segmenter do
         ps = PragmaticSegmenter::Segmenter.new(text: "Leave me alone! he yelled. I am in the U.S. Army. Charles (Ind.) said he.", language: 'en')
         expect(ps.segment).to eq(["Leave me alone! he yelled.", "I am in the U.S. Army.", "Charles (Ind.) said he."])
       end
+
+      it 'correctly segments text #80' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "She turned to him, “This is great.” She held the book out to show him.", language: 'en')
+        expect(ps.segment).to eq(["She turned to him, “This is great.”", "She held the book out to show him."])
+      end
     end
   end
 
