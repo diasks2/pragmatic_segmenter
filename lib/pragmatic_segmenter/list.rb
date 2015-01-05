@@ -2,48 +2,64 @@
 
 module PragmaticSegmenter
   class List
+    # Rubular: http://rubular.com/r/XcpaJKH0sz
+    ALPHABETICAL_LIST_WITH_PERIODS = /(?<=^)[a-z](?=\.)|(?<=\A)[a-z](?=\.)|(?<=\s)[a-z](?=\.)/i
+
+    # Rubular: http://rubular.com/r/0MIlImeBsC
+    ALPHABETICAL_LIST_WITH_PARENS = /(?<=^)[a-z](?=\))|(?<=\A)[a-z](?=\))|(?<=\s)[a-z](?=\))/i
+
     def initialize(text:)
       @text = text.dup
     end
 
     def add_line_break
-      search_for_lists
+      add_line_breaks_for_alphabetical_list_with_periods
+      add_line_breaks_for_alphabetical_list_with_parens
+      replace_periods_in_numbered_list
+      replace_parens_in_numbered_list
       @text
     end
 
     private
 
-    def search_for_lists
-      search_for_alphabetical_list
+    def replace_periods_in_numbered_list
       regex1 = /\s\d+(?=\.\s)|^\d+(?=\.\s)|\s\d+(?=\.\))|^\d+(?=\.\))|(?<=\s\-)\d+(?=\.\s)|(?<=^\-)\d+(?=\.\s)|(?<=\s\⁃)\d+(?=\.\s)|(?<=^\⁃)\d+(?=\.\s)|(?<=s\-)\d+(?=\.\))|(?<=^\-)\d+(?=\.\))|(?<=\s\⁃)\d+(?=\.\))|(?<=^\⁃)\d+(?=\.\))/
       regex2 = /(?<=\s)\d+\.(?=\s)|^\d+\.(?=\s)|(?<=\s)\d+\.(?=\))|^\d+\.(?=\))|(?<=\s\-)\d+\.(?=\s)|(?<=^\-)\d+\.(?=\s)|(?<=\s\⁃)\d+\.(?=\s)|(?<=^\⁃)\d+\.(?=\s)|(?<=\s\-)\d+\.(?=\))|(?<=^\-)\d+\.(?=\))|(?<=\s\⁃)\d+\.(?=\))|(?<=^\⁃)\d+\.(?=\))/
       scan_lists(regex1, regex2, '♨', true)
-      regex3 = /\d+(?=\)\s)/
-      scan_lists(regex3, regex3, '☝', false)
-      insert_line_break
+      add_line_breaks_for_numbered_list_with_periods
+      @text.gsub!(/♨/, '∯')
     end
 
-    def insert_line_break
-      if @text.include?('♨') &&
+    def add_line_breaks_for_numbered_list_with_periods
+      return unless @text.include?('♨') &&
         @text !~ /♨.+\n.+♨|♨.+\r.+♨/ &&
         @text !~ /for\s\d+♨\s[a-z]/
-          # Rubular: http://rubular.com/r/Wv4qLdoPx7
-          @text.gsub!(/(?<=\S\S|^)\s(?=\S\s*\d+♨)/, "\r")
-          # Rubular: http://rubular.com/r/AizHXC6HxK
-          @text.gsub!(/(?<=\S\S|^)\s(?=\d+♨)/, "\r")
-      end
-      if @text.include?('☝') && @text !~ /☝.+\n.+☝|☝.+\r.+☝/
-        # Rubular: http://rubular.com/r/GE5q6yID2j
-        @text.gsub!(/(?<=\S\S|^)\s(?=\d+☝)/, "\r")
-      end
+        # Rubular: http://rubular.com/r/Wv4qLdoPx7
+        @text.gsub!(/(?<=\S\S|^)\s(?=\S\s*\d+♨)/, "\r")
+        # Rubular: http://rubular.com/r/AizHXC6HxK
+        @text.gsub!(/(?<=\S\S|^)\s(?=\d+♨)/, "\r")
+    end
+
+    def replace_parens_in_numbered_list
+      regex3 = /\d+(?=\)\s)/
+      scan_lists(regex3, regex3, '☝', false)
+      add_line_breaks_for_numbered_list_with_parens
       @text.gsub!(/☝/, '')
-      @text.gsub!(/♨/, '∯')
+    end
+
+    def add_line_breaks_for_numbered_list_with_parens
+      return unless @text.include?('☝') && @text !~ /☝.+\n.+☝|☝.+\r.+☝/
+      # Rubular: http://rubular.com/r/GE5q6yID2j
+      @text.gsub!(/(?<=\S\S|^)\s(?=\d+☝)/, "\r")
     end
 
     def scan_lists(regex1, regex2, replacement, strip)
       list_array = @text.scan(regex1).map(&:to_i)
       list_array.each_with_index do |a, i|
-        next unless (a + 1) == list_array[i + 1] || (a - 1) == list_array[i - 1] || (a.eql?(0) && list_array[i - 1].eql?(9)) || (a.eql?(9) && list_array[i + 1].eql?(0))
+        next unless (a + 1).eql?(list_array[i + 1]) ||
+          (a - 1).eql?(list_array[i - 1]) ||
+          (a.eql?(0) && list_array[i - 1].eql?(9)) ||
+          (a.eql?(9) && list_array[i + 1].eql?(0))
         @text.gsub!(regex2).with_index do |m|
           if a.to_s.eql?(strip ? m.strip.chop : m)
             "#{Regexp.escape(a.to_s)}" + replacement
@@ -54,14 +70,13 @@ module PragmaticSegmenter
       end
     end
 
-    def search_for_alphabetical_list
-      # Rubular: http://rubular.com/r/XcpaJKH0sz
-      regex = /(?<=^)[a-z](?=\.)|(?<=\A)[a-z](?=\.)|(?<=\s)[a-z](?=\.)/i
-      iterate_alphabet_array(regex, false)
+    def add_line_breaks_for_alphabetical_list_with_periods
+      iterate_alphabet_array(ALPHABETICAL_LIST_WITH_PERIODS, false)
+    end
 
-      # Rubular: http://rubular.com/r/0MIlImeBsC
-      regex = /(?<=^)[a-z](?=\))|(?<=\A)[a-z](?=\))|(?<=\s)[a-z](?=\))/i
-      iterate_alphabet_array(regex, true)
+
+    def add_line_breaks_for_alphabetical_list_with_parens
+      iterate_alphabet_array(ALPHABETICAL_LIST_WITH_PARENS, true)
     end
 
     def replace_alphabet_list(a)
