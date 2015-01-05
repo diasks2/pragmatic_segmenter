@@ -142,24 +142,39 @@ module PragmaticSegmenter
             upper = /[[:upper:]]/.match(character.to_s)
             if upper.nil? || prefix.include?(am.downcase.strip)
               if prefix.include?(am.downcase.strip)
-                @text.gsub!(/(?<=#{am.strip})\.(?=\s)/, '∯')
+                @text = replace_prepositive_abbr(@text, am)
               elsif number_abbr.include?(am.downcase.strip)
-                @text.gsub!(/(?<=#{am.strip})\.(?=\s\d)/, '∯')
-                @text.gsub!(/(?<=#{am.strip})\.(?=\s+\()/, '∯')
+                @text = replace_pre_number_abbr(@text, am)
               else
                 if language.eql?('ru')
-                  @text.gsub!(/(?<=\s#{am.strip})\./, '∯')
-                  @text.gsub!(/(?<=\A#{am.strip})\./, '∯')
-                  @text.gsub!(/(?<=^#{am.strip})\./, '∯')
+                  @text = replace_period_of_abbr_ru(@text, am)
                 else
-                  @text.gsub!(/(?<=#{am.strip})\.(?=((\.|:|\?)|(\s([a-z]|I\s|I'm|I'll|\d))))/, '∯')
-                  @text.gsub!(/(?<=#{am.strip})\.(?=,)/, '∯')
+                  @text = replace_period_of_abbr(@text, am)
                 end
               end
             end
           end
         end
       end
+    end
+
+    def replace_pre_number_abbr(txt, abbr)
+      txt.gsub(/(?<=#{abbr.strip})\.(?=\s\d)/, '∯').gsub(/(?<=#{abbr.strip})\.(?=\s+\()/, '∯')
+    end
+
+    def replace_prepositive_abbr(txt, abbr)
+      txt.gsub(/(?<=#{abbr.strip})\.(?=\s)/, '∯')
+    end
+
+    def replace_period_of_abbr(txt, abbr)
+      txt.gsub(/(?<=#{abbr.strip})\.(?=((\.|:|\?)|(\s([a-z]|I\s|I'm|I'll|\d))))/, '∯')
+        .gsub(/(?<=#{abbr.strip})\.(?=,)/, '∯')
+    end
+
+    def replace_period_of_abbr_ru(txt, abbr)
+      txt.gsub(/(?<=\s#{abbr.strip})\./, '∯')
+        .gsub(/(?<=\A#{abbr.strip})\./, '∯')
+        .gsub(/(?<=^#{abbr.strip})\./, '∯')
     end
 
     def replace_single_lowercase_letter_at_start_of_line_de
@@ -204,43 +219,45 @@ module PragmaticSegmenter
     def replace_ellipsis(line)
       # http://www.dailywritingtips.com/in-search-of-a-4-dot-ellipsis/
       # http://www.thepunctuationguide.com/ellipses.html
-      replace_3_period_ellipsis_with_spaces(line)
-      replace_4_period_ellipsis_with_spaces(line)
-      replace_4_consecutive_period_ellipsis(line)
-      replace_3_consecutive_period_ellipsis(line)
-      replace_other_3_period_ellipsis(line)
-      line
+      line = replace_3_period_ellipsis_with_spaces(line)
+      line = replace_4_period_ellipsis_with_spaces(line)
+      line = replace_4_consecutive_period_ellipsis(line)
+      line = replace_3_consecutive_period_ellipsis(line)
+      line = replace_other_3_period_ellipsis(line)
     end
 
     def replace_3_period_ellipsis_with_spaces(line)
-      line.gsub!(ELLIPSIS_3_SPACE_REGEX, '♟')
+      line.gsub(ELLIPSIS_3_SPACE_REGEX, '♟')
     end
 
     def replace_4_period_ellipsis_with_spaces(line)
-      line.gsub!(ELLIPSIS_4_SPACE_REGEX, '♝')
+      line.gsub(ELLIPSIS_4_SPACE_REGEX, '♝')
     end
 
     def replace_4_consecutive_period_ellipsis(line)
-      line.gsub!(ELLIPSIS_4_CONSECUTIVE_REGEX, 'ƪ')
+      line.gsub(ELLIPSIS_4_CONSECUTIVE_REGEX, 'ƪ')
     end
 
     def replace_3_consecutive_period_ellipsis(line)
-      line.gsub!(ELLIPSIS_3_CONSECUTIVE_REGEX, '☏.')
+      line.gsub(ELLIPSIS_3_CONSECUTIVE_REGEX, '☏.')
     end
 
     def replace_other_3_period_ellipsis(line)
-      line.gsub!(/\.\.\./, 'ƪ')
+      line.gsub(/\.\.\./, 'ƪ')
     end
 
-    def replace_periods_in_email_addresses(text)
-      text.gsub!(/(\w)(\.)(\w)/, '\1∮\3')
+    def replace_periods_in_email_addresses(line)
+      line.gsub(/(\w)(\.)(\w)/, '\1∮\3')
+    end
+
+    def replace_single_newline(line)
+      line.gsub(/\n/, 'ȹ')
     end
 
     def analyze_lines(line:, segments:)
-      line.gsub!(/\n/, 'ȹ')
+      line = replace_single_newline(line)
       line = replace_ellipsis(line)
-
-      replace_periods_in_email_addresses(line)
+      line = replace_periods_in_email_addresses(line)
 
       clause_1 = false
       end_punc_check = false
