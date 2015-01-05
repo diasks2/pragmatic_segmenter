@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 require 'pragmatic_segmenter/cleaner'
 require 'pragmatic_segmenter/list'
-require 'pragmatic_segmenter/abbreviation'
+require 'pragmatic_segmenter/abbreviation_replacer'
 require 'pragmatic_segmenter/number'
 
 module PragmaticSegmenter
@@ -28,9 +28,6 @@ module PragmaticSegmenter
 
     WORDS_WITH_EXCLAMATIONS = ['!Xũ', '!Kung', 'ǃʼOǃKung', '!Xuun', '!Kung-Ekoka', 'ǃHu', 'ǃKhung', 'ǃKu', 'ǃung', 'ǃXo', 'ǃXû', 'ǃXung', 'ǃXũ', '!Xun', 'Yahoo!', 'Y!J', 'Yum!']
 
-    # Rubular: http://rubular.com/r/yqa4Rit8EY
-    POSSESSIVE_ABBREVIATION_REGEX = /\.(?='s\s)|\.(?='s$)|\.(?='s\z)/
-
     # Rubular: http://rubular.com/r/G2opjedIm9
     GEO_LOCATION_REGEX = /(?<=[a-zA-z]°)\.(?=\s*\d+)/
 
@@ -45,18 +42,6 @@ module PragmaticSegmenter
 
     # Rubular: http://rubular.com/r/2VvZ8wRbd8
     ELLIPSIS_4_SPACE_REGEX = /(?<=[a-z])(\.\s){3}\.(\z|$|\n)/
-
-    # Rubular: http://rubular.com/r/e3H6kwnr6H
-    SINGLE_UPPERCASE_LETTER_AT_START_OF_LINE_REGEX =  /(?<=^[A-Z])\.(?=\s)/
-
-    # Rubular: http://rubular.com/r/gitvf0YWH4
-    SINGLE_UPPERCASE_LETTER_REGEX = /(?<=\s[A-Z])\.(?=\s)/
-
-    # Rubular: http://rubular.com/r/B4X33QKIL8
-    SINGLE_LOWERCASE_LETTER_DE_REGEX = /(?<=\s[a-z])\.(?=\s)/
-
-    # Rubular: http://rubular.com/r/iUNSkCuso0
-    SINGLE_LOWERCASE_LETTER_AT_START_OF_LINE_DE_REGEX = /(?<=^[a-z])\.(?=\s)/
 
     # Rubular: http://rubular.com/r/aXPUGm6fQh
     QUESTION_MARK_IN_QUOTATION_REGEX = /\?(?=(\'|\"))/
@@ -137,7 +122,7 @@ module PragmaticSegmenter
     def segment
       return [] unless @text
       @text = PragmaticSegmenter::List.new(text: @text).add_line_break
-      process_abbr
+      @text = PragmaticSegmenter::AbbreviationReplacer.new(text: @text, language: language).replace
       @text = PragmaticSegmenter::Number.new(text: @text, language: language).replace
       multi_period_abbr
       abbr_as_sentence_boundary
@@ -146,97 +131,6 @@ module PragmaticSegmenter
     end
 
     private
-
-    def process_abbr
-      original = @text.dup
-      replace_possessive_abbreviations
-      replace_single_uppercase_letter_abbrviation_at_start_of_line
-      replace_single_uppercase_letter_abbreviation
-      replace_single_lowercase_letter_de
-      replace_single_lowercase_letter_at_start_of_line_de
-
-      downcased = @text.downcase
-      abbr = PragmaticSegmenter::Abbreviation.new(language: language)
-      abbr.all.each do |a|
-        next unless downcased.include?(a.strip)
-        abbrev_match = original.scan(/(?:^|\s|\r|\n)#{Regexp.escape(a.strip)}/i)
-        next if abbrev_match.empty?
-        next_word_start = /(?<=#{Regexp.escape(a.strip)} ).{1}/
-        character_array = @text.scan(next_word_start)
-        abbrev_match.each_with_index do |am, index|
-          if language.eql?('de')
-            @text = replace_abbr_de(@text, am)
-          elsif language.eql?('ar') || language.eql?('fa')
-            @text = replace_abbr_ar_fa(@text, am)
-          else
-            character = character_array[index]
-            prefix = abbr.prefix
-            number_abbr = abbr.number
-            upper = /[[:upper:]]/.match(character.to_s)
-            if upper.nil? || prefix.include?(am.downcase.strip)
-              if prefix.include?(am.downcase.strip)
-                @text = replace_prepositive_abbr(@text, am)
-              elsif number_abbr.include?(am.downcase.strip)
-                @text = replace_pre_number_abbr(@text, am)
-              else
-                if language.eql?('ru')
-                  @text = replace_period_of_abbr_ru(@text, am)
-                else
-                  @text = replace_period_of_abbr(@text, am)
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-
-    def replace_abbr_de(txt, abbr)
-      txt.gsub(/(?<=#{abbr})\.(?=\s)/, '∯')
-    end
-
-    def replace_abbr_ar_fa(txt, abbr)
-      txt.gsub(/(?<=#{abbr})\./, '∯')
-    end
-
-    def replace_pre_number_abbr(txt, abbr)
-      txt.gsub(/(?<=#{abbr.strip})\.(?=\s\d)/, '∯').gsub(/(?<=#{abbr.strip})\.(?=\s+\()/, '∯')
-    end
-
-    def replace_prepositive_abbr(txt, abbr)
-      txt.gsub(/(?<=#{abbr.strip})\.(?=\s)/, '∯')
-    end
-
-    def replace_period_of_abbr(txt, abbr)
-      txt.gsub(/(?<=#{abbr.strip})\.(?=((\.|:|\?)|(\s([a-z]|I\s|I'm|I'll|\d))))/, '∯')
-        .gsub(/(?<=#{abbr.strip})\.(?=,)/, '∯')
-    end
-
-    def replace_period_of_abbr_ru(txt, abbr)
-      txt.gsub(/(?<=\s#{abbr.strip})\./, '∯')
-        .gsub(/(?<=\A#{abbr.strip})\./, '∯')
-        .gsub(/(?<=^#{abbr.strip})\./, '∯')
-    end
-
-    def replace_single_lowercase_letter_at_start_of_line_de
-      @text.gsub!(SINGLE_LOWERCASE_LETTER_AT_START_OF_LINE_DE_REGEX, '∯') if language.eql?('de')
-    end
-
-    def replace_single_lowercase_letter_de
-      @text.gsub!(SINGLE_LOWERCASE_LETTER_DE_REGEX, '∯') if language.eql?('de')
-    end
-
-    def replace_single_uppercase_letter_abbrviation_at_start_of_line
-      @text.gsub!(SINGLE_UPPERCASE_LETTER_AT_START_OF_LINE_REGEX, '∯')
-    end
-
-    def replace_single_uppercase_letter_abbreviation
-      @text.gsub!(SINGLE_UPPERCASE_LETTER_REGEX, '∯')
-    end
-
-    def replace_possessive_abbreviations
-      @text.gsub!(POSSESSIVE_ABBREVIATION_REGEX, '∯')
-    end
 
     def abbr_as_sentence_boundary
       # Find the most common cases where abbreviations double as sentence boundaries.
