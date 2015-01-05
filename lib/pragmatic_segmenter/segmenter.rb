@@ -25,7 +25,6 @@ module PragmaticSegmenter
         @text = text.dup
       end
       @language = args[:language] || 'en'
-      # @language = params.fetch(:language, 'en')
       @doc_type = args[:doc_type]
     end
 
@@ -47,7 +46,7 @@ module PragmaticSegmenter
       return [] unless @text
       @text = PragmaticSegmenter::List.new(text: @text).add_line_break
       process_abbr
-      numbers
+      replace_period_related_to_numbers
       multi_period_abbr
       abbr_as_sentence_boundary
       geo_location
@@ -238,9 +237,9 @@ module PragmaticSegmenter
         when language.eql?('my')
           subline = line.scan(/.*?[။၏!\?]|.*?$/)
         when language.eql?('am')
-          subline = line.scan(/.*?[፧።!\?]|.*?$/)
+          subline = am_split_at_sentence_boundary(line)
         when language.eql?('ur')
-          subline = line.scan(/.*?[۔؟!\?]|.*?$/)
+          subline = ur_split_at_sentence_boundary(line)
         else
           line.gsub!(/\?(?=(\'|\"))/, 'ᓷ')
           line.gsub!(/\!(?=(\'|\"))/, 'ᓴ')
@@ -268,56 +267,62 @@ module PragmaticSegmenter
       end
     end
 
+    def am_split_at_sentence_boundary(am_line)
+      am_line.scan(/.*?[፧።!\?]|.*?$/)
+    end
+
+    def ur_split_at_sentence_boundary(ur_line)
+      ur_line.scan(/.*?[۔؟!\?]|.*?$/)
+    end
+
     def sub_symbols(text)
       text.gsub(/∯/, '.').gsub(/♬/, '،').gsub(/♭/, ':').gsub(/ᓰ/, '。').gsub(/ᓱ/, '．')
           .gsub(/ᓳ/, '！').gsub(/ᓴ/, '!').gsub(/ᓷ/, '?').gsub(/ᓸ/, '？').gsub(/☉/, '?!')
           .gsub(/☈/, '!?').gsub(/☇/, '??').gsub(/☄/, '!!').delete('ȸ').gsub(/ȹ/, "\n")
     end
 
-    def numbers_1
+    def replace_period_in_number_1
       # Rubular: http://rubular.com/r/UL9LLoDJMs
       @text.gsub!(/(?<=\d)[.](?=\S)|[.](?=\d)/, '∯')
     end
 
-    def numbers_2
+    def replace_period_in_number_2
       # Rubular: http://rubular.com/r/rf4l1HjtjG
       @text.gsub!(/(?<=\r\d)\.(?=(\s\S)|\))/, '∯')
     end
 
-    def numbers_3
+    def replace_period_in_number_3
        # Rubular: http://rubular.com/r/HPa4sdc6b9
       @text.gsub!(/(?<=^\d)\.(?=(\s\S)|\))/, '∯')
     end
 
-    def numbers_4
+    def replace_period_in_number_4
       # Rubular: http://rubular.com/r/NuvWnKleFl
       @text.gsub!(/(?<=^\d\d)\.(?=(\s\S)|\))/, '∯')
     end
 
-    def de_numbers_1
+    def de_replace_period_in_number_1
       # Rubular: http://rubular.com/r/hZxoyQwKT1
       @text.gsub!(/(?<=\s[0-9]|\s([1-9][0-9]))\.(?=\s)/, '∯')
     end
 
-    def de_numbers_2
+    def de_replace_period_in_number_2
       # Rubular: http://rubular.com/r/ityNMwdghj
       @text.gsub!(/(?<=-[0-9]|-([1-9][0-9]))\.(?=\s)/, '∯')
     end
 
-    def numbers
-      numbers_1
-      numbers_2
-      numbers_3
-      numbers_4
-
+    def replace_period_related_to_numbers
+      replace_period_in_number_1
+      replace_period_in_number_2
+      replace_period_in_number_3
+      replace_period_in_number_4
       if language.eql?('de')
-        de_numbers_1
-        de_numbers_2
+        de_replace_period_in_number_1
+        de_replace_period_in_number_2
       end
     end
 
     def multi_period_abbr
-      # It has a multi-period abbreviation like: U.S.A. or J.C. Penney
       # Rubular: http://rubular.com/r/xDkpFZ0EgH
       mpa = @text.scan(/\b[a-z](?:\.[a-z])+[.]/i)
       unless mpa.empty?
@@ -325,7 +330,10 @@ module PragmaticSegmenter
           @text.gsub!(/#{Regexp.escape(r)}/, "#{r.gsub!('.', '∯')}")
         end
       end
+      replace_period_in_am_pm
+    end
 
+    def replace_period_in_am_pm
       # Rubular: http://rubular.com/r/Vnx3m4Spc8
       @text.gsub!(/(?<=a∯m)∯(?=\s[A-Z])/, '.')
       @text.gsub!(/(?<=A∯M)∯(?=\s[A-Z])/, '.')
