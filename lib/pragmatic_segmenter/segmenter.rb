@@ -274,25 +274,45 @@ module PragmaticSegmenter
           .gsub(/☈/, '!?').gsub(/☇/, '??').gsub(/☄/, '!!').delete('ȸ').gsub(/ȹ/, "\n")
     end
 
-    def numbers
+    def numbers_1
       # Rubular: http://rubular.com/r/UL9LLoDJMs
       @text.gsub!(/(?<=\d)[.](?=\S)|[.](?=\d)/, '∯')
+    end
 
+    def numbers_2
       # Rubular: http://rubular.com/r/rf4l1HjtjG
       @text.gsub!(/(?<=\r\d)\.(?=(\s\S)|\))/, '∯')
+    end
 
-      # Rubular: http://rubular.com/r/HPa4sdc6b9
+    def numbers_3
+       # Rubular: http://rubular.com/r/HPa4sdc6b9
       @text.gsub!(/(?<=^\d)\.(?=(\s\S)|\))/, '∯')
+    end
 
+    def numbers_4
       # Rubular: http://rubular.com/r/NuvWnKleFl
       @text.gsub!(/(?<=^\d\d)\.(?=(\s\S)|\))/, '∯')
+    end
+
+    def de_numbers_1
+      # Rubular: http://rubular.com/r/hZxoyQwKT1
+      @text.gsub!(/(?<=\s[0-9]|\s([1-9][0-9]))\.(?=\s)/, '∯')
+    end
+
+    def de_numbers_2
+      # Rubular: http://rubular.com/r/ityNMwdghj
+      @text.gsub!(/(?<=-[0-9]|-([1-9][0-9]))\.(?=\s)/, '∯')
+    end
+
+    def numbers
+      numbers_1
+      numbers_2
+      numbers_3
+      numbers_4
 
       if language.eql?('de')
-        # Rubular: http://rubular.com/r/hZxoyQwKT1
-        @text.gsub!(/(?<=\s[0-9]|\s([1-9][0-9]))\.(?=\s)/, '∯')
-
-        # Rubular: http://rubular.com/r/ityNMwdghj
-        @text.gsub!(/(?<=-[0-9]|-([1-9][0-9]))\.(?=\s)/, '∯')
+        de_numbers_1
+        de_numbers_2
       end
     end
 
