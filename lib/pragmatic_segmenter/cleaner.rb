@@ -10,7 +10,7 @@ module PragmaticSegmenter
     end
 
     def clean
-      return if @text.nil?
+      return unless @text
       remove_errant_newlines
       replace_newlines
       strip_html

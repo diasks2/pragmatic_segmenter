@@ -24,21 +24,17 @@ module PragmaticSegmenter
     end
 
     def insert_line_break
-      if @text.include?('♨')
-        unless @text =~ /♨.+\n.+♨|♨.+\r.+♨/
-          unless @text =~ /for\s\d+♨\s[a-z]/
-            # Rubular: http://rubular.com/r/Wv4qLdoPx7
-            @text.gsub!(/(?<=\S\S|^)\s(?=\S\s*\d+♨)/, "\r")
-            # Rubular: http://rubular.com/r/AizHXC6HxK
-            @text.gsub!(/(?<=\S\S|^)\s(?=\d+♨)/, "\r")
-          end
-        end
+      if @text.include?('♨') &&
+        @text !~ /♨.+\n.+♨|♨.+\r.+♨/ &&
+        @text !~ /for\s\d+♨\s[a-z]/
+          # Rubular: http://rubular.com/r/Wv4qLdoPx7
+          @text.gsub!(/(?<=\S\S|^)\s(?=\S\s*\d+♨)/, "\r")
+          # Rubular: http://rubular.com/r/AizHXC6HxK
+          @text.gsub!(/(?<=\S\S|^)\s(?=\d+♨)/, "\r")
       end
-      if @text.include?('☝')
-        unless @text =~ /☝.+\n.+☝|☝.+\r.+☝/
-          # Rubular: http://rubular.com/r/GE5q6yID2j
-          @text.gsub!(/(?<=\S\S|^)\s(?=\d+☝)/, "\r")
-        end
+      if @text.include?('☝') && @text !~ /☝.+\n.+☝|☝.+\r.+☝/
+        # Rubular: http://rubular.com/r/GE5q6yID2j
+        @text.gsub!(/(?<=\S\S|^)\s(?=\d+☝)/, "\r")
       end
       @text.gsub!(/☝/, '')
       @text.gsub!(/♨/, '∯')

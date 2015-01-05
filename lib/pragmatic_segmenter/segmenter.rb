@@ -18,17 +18,14 @@ module PragmaticSegmenter
 
     attr_reader :language, :doc_type
     def initialize(text:, **args)
-      return [] if text.nil?
-      if args[:clean].eql?(false)
-        @text = text.dup
-      else
+      return [] unless text
+      if args[:clean].nil? || args[:clean].eql?(true)
         @text = PragmaticSegmenter::Cleaner.new(text: text.dup, language: args[:language], doc_type: args[:doc_type]).clean
-      end
-      if args[:language].nil?
-        @language = 'en'
       else
-        @language = args[:language]
+        @text = text.dup
       end
+      @language = args[:language] || 'en'
+      # @language = params.fetch(:language, 'en')
       @doc_type = args[:doc_type]
     end
 
@@ -47,7 +44,7 @@ module PragmaticSegmenter
     #    clean:      (Boolean) *true unless specified
 
     def segment
-      return [] if @text.nil?
+      return [] unless @text
       @text = PragmaticSegmenter::List.new(text: @text).add_line_break
       process_abbr
       numbers
@@ -314,8 +311,7 @@ module PragmaticSegmenter
     end
 
     def sub_punct(array, content)
-      return if array.nil?
-      return if array.empty?
+      return if !array || array.empty?
       content.gsub!('(', '\\(')
       content.gsub!(')', '\\)')
       content.gsub!(']', '\\]')
@@ -328,55 +324,26 @@ module PragmaticSegmenter
         a.gsub!('[', '\\[')
         a.gsub!('-', '\\-')
 
-        if a.include?('.')
-          sub = a.gsub('.', '∯')
-        else
-          sub = a
-        end
-
+        sub = a.gsub('.', '∯')
         content.gsub!(/#{Regexp.escape(a)}/, "#{sub}")
 
-        if a.include?('。')
-          sub_1 = sub.gsub('。', 'ᓰ')
-        else
-          sub_1 = sub
-        end
+        sub_1 = sub.gsub('。', 'ᓰ')
         content.gsub!(/#{Regexp.escape(sub)}/, "#{sub_1}")
 
-        if a.include?('．')
-          sub_2 = sub_1.gsub('．', 'ᓱ')
-        else
-          sub_2 = sub_1
-        end
+        sub_2 = sub_1.gsub('．', 'ᓱ')
         content.gsub!(/#{Regexp.escape(sub_1)}/, "#{sub_2}")
 
-        if a.include?('！')
-          sub_3 = sub_2.gsub('！', 'ᓳ')
-        else
-          sub_3 = sub_2
-        end
+        sub_3 = sub_2.gsub('！', 'ᓳ')
         content.gsub!(/#{Regexp.escape(sub_2)}/, "#{sub_3}")
-        if a.include?('!')
-          sub_4 = sub_3.gsub('!', 'ᓴ')
-        else
-          sub_4 = sub_3
-        end
+
+        sub_4 = sub_3.gsub('!', 'ᓴ')
         content.gsub!(/#{Regexp.escape(sub_3)}/, "#{sub_4}")
 
-        if a.include?('?')
-          sub_5 = sub_4.gsub('?', 'ᓷ')
-        else
-          sub_5 = sub_4
-        end
+        sub_5 = sub_4.gsub('?', 'ᓷ')
         content.gsub!(/#{Regexp.escape(sub_4)}/, "#{sub_5}")
 
-        if a.include?('？')
-          sub_6 = sub_5.gsub('？', 'ᓸ')
-        else
-          sub_6 = sub_5
-        end
+        sub_6 = sub_5.gsub('？', 'ᓸ')
         content.gsub!(/#{Regexp.escape(sub_5)}/, "#{sub_6}")
-
       end
       content.gsub!('\\(', '(')
       content.gsub!('\\)', ')')
