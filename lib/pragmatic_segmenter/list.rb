@@ -37,7 +37,11 @@ module PragmaticSegmenter
       @text = add_line_breaks_for_alphabetical_list_with_periods(@text)
       @text = add_line_breaks_for_alphabetical_list_with_parens(@text)
       replace_periods_in_numbered_list
+      @text = add_line_breaks_for_numbered_list_with_periods(@text)
+      @text = substitute_list_period(@text)
       replace_parens_in_numbered_list
+      @text = add_line_breaks_for_numbered_list_with_parens(@text)
+      @text = replace_list_marker(@text)
       @text
     end
 
@@ -45,8 +49,6 @@ module PragmaticSegmenter
 
     def replace_periods_in_numbered_list
       scan_lists(NUMBERED_LIST_REGEX_1, NUMBERED_LIST_REGEX_2, '♨', true)
-      @text = add_line_breaks_for_numbered_list_with_periods(@text)
-      @text.gsub!(/♨/, '∯')
     end
 
     def add_line_breaks_for_numbered_list_with_periods(txt)
@@ -56,10 +58,16 @@ module PragmaticSegmenter
       txt.gsub(SPACE_BETWEEN_LIST_ITEMS_1, "\r").gsub(SPACE_BETWEEN_LIST_ITEMS_2, "\r")
     end
 
+    def substitute_list_period(txt)
+      txt.gsub(/♨/, '∯')
+    end
+
+    def replace_list_marker(txt)
+      txt.gsub(/☝/, '')
+    end
+
     def replace_parens_in_numbered_list
       scan_lists(NUMBERED_LIST_PARENS_REGEX, NUMBERED_LIST_PARENS_REGEX, '☝', false)
-      @text = add_line_breaks_for_numbered_list_with_parens(@text)
-      @text.gsub!(/☝/, '')
     end
 
     def add_line_breaks_for_numbered_list_with_parens(txt)
