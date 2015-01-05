@@ -43,8 +43,7 @@ module PragmaticSegmenter
     def add_line_break
       formatted_text = format_alphabetical_lists(text)
       formatted_text = format_numbered_list_with_periods(formatted_text)
-      formatted_text = format_numbered_list_with_parens(formatted_text)
-      formatted_text
+      format_numbered_list_with_parens(formatted_text)
     end
 
     private

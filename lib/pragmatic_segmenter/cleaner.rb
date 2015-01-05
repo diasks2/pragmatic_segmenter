@@ -76,8 +76,7 @@ module PragmaticSegmenter
       clean_text = strip_other_inline_formatting(clean_text)
       clean_text = clean_quotations(clean_text)
       clean_text = clean_quotations_en(clean_text) if language.eql?('en')
-      clean_text = clean_table_of_contents(clean_text)
-      clean_text
+      clean_table_of_contents(clean_text)
     end
 
     private

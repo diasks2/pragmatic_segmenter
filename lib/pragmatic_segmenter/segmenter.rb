@@ -2,6 +2,7 @@
 require 'pragmatic_segmenter/cleaner'
 require 'pragmatic_segmenter/list'
 require 'pragmatic_segmenter/abbreviation'
+require 'pragmatic_segmenter/number'
 
 module PragmaticSegmenter
   # This class segments a text into an array of sentences.
@@ -137,7 +138,7 @@ module PragmaticSegmenter
       return [] unless @text
       @text = PragmaticSegmenter::List.new(text: @text).add_line_break
       process_abbr
-      replace_period_related_to_numbers
+      @text = PragmaticSegmenter::Number.new(text: @text, language: language).replace
       multi_period_abbr
       abbr_as_sentence_boundary
       replace_geo_location_periods
@@ -470,50 +471,10 @@ module PragmaticSegmenter
       line.gsub(QUESTION_MARK_IN_QUOTATION_REGEX, 'ᓷ')
     end
 
-    def sub_symbols(text)
-      text.gsub(/∯/, '.').gsub(/♬/, '،').gsub(/♭/, ':').gsub(/ᓰ/, '。').gsub(/ᓱ/, '．')
+    def sub_symbols(txt)
+      txt.gsub(/∯/, '.').gsub(/♬/, '،').gsub(/♭/, ':').gsub(/ᓰ/, '。').gsub(/ᓱ/, '．')
         .gsub(/ᓳ/, '！').gsub(/ᓴ/, '!').gsub(/ᓷ/, '?').gsub(/ᓸ/, '？').gsub(/☉/, '?!')
         .gsub(/☈/, '!?').gsub(/☇/, '??').gsub(/☄/, '!!').delete('ȸ').gsub(/ȹ/, "\n")
-    end
-
-    def replace_period_in_number_1
-      # Rubular: http://rubular.com/r/UL9LLoDJMs
-      @text.gsub!(/(?<=\d)[.](?=\S)|[.](?=\d)/, '∯')
-    end
-
-    def replace_period_in_number_2
-      # Rubular: http://rubular.com/r/rf4l1HjtjG
-      @text.gsub!(/(?<=\r\d)\.(?=(\s\S)|\))/, '∯')
-    end
-
-    def replace_period_in_number_3
-      # Rubular: http://rubular.com/r/HPa4sdc6b9
-      @text.gsub!(/(?<=^\d)\.(?=(\s\S)|\))/, '∯')
-    end
-
-    def replace_period_in_number_4
-      # Rubular: http://rubular.com/r/NuvWnKleFl
-      @text.gsub!(/(?<=^\d\d)\.(?=(\s\S)|\))/, '∯')
-    end
-
-    def de_replace_period_in_number_1
-      # Rubular: http://rubular.com/r/hZxoyQwKT1
-      @text.gsub!(/(?<=\s[0-9]|\s([1-9][0-9]))\.(?=\s)/, '∯')
-    end
-
-    def de_replace_period_in_number_2
-      # Rubular: http://rubular.com/r/ityNMwdghj
-      @text.gsub!(/(?<=-[0-9]|-([1-9][0-9]))\.(?=\s)/, '∯')
-    end
-
-    def replace_period_related_to_numbers
-      replace_period_in_number_1
-      replace_period_in_number_2
-      replace_period_in_number_3
-      replace_period_in_number_4
-      return unless language.eql?('de')
-      de_replace_period_in_number_1
-      de_replace_period_in_number_2
     end
 
     def multi_period_abbr
