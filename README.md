@@ -26,11 +26,13 @@ ps = PragmaticSegmenter::Segmenter.new(text: text)
 ps.segment
 # => ["Hello world.", "My name is Mr. Smith.", "I work for the U.S. Government and I live in the U.S."]
 
+# Specify a language
 text = "Այսօր երկուշաբթի է: Ես գնում եմ աշխատանքի:"
 ps = PragmaticSegmenter::Segmenter.new(text: text, language: 'hy')
 ps.segment
 # => ["Այսօր երկուշաբթի է:", "Ես գնում եմ աշխատանքի:"]
 
+# Specify a PDF document type
 text = "This is a sentence\ncut off in the middle because pdf."
 ps = PragmaticSegmenter::Segmenter.new(text: text, language: 'en', doc_type: 'pdf')
 ps.segment
@@ -660,8 +662,10 @@ To test the relative performance of different segmentation tools and libraries I
 * Arabic
 * Armenian
 * Burmese
+* Chinese
 * Greek
 * Hindi
+* Japanese
 * Persian
 * Urdu
 
