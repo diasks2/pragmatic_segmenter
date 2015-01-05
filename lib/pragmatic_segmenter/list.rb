@@ -36,10 +36,10 @@ module PragmaticSegmenter
     def add_line_break
       @text = add_line_breaks_for_alphabetical_list_with_periods(@text)
       @text = add_line_breaks_for_alphabetical_list_with_parens(@text)
-      replace_periods_in_numbered_list
+      @text = replace_periods_in_numbered_list(@text)
       @text = add_line_breaks_for_numbered_list_with_periods(@text)
       @text = substitute_list_period(@text)
-      replace_parens_in_numbered_list
+      @text = replace_parens_in_numbered_list(@text)
       @text = add_line_breaks_for_numbered_list_with_parens(@text)
       @text = replace_list_marker(@text)
       @text
@@ -47,8 +47,8 @@ module PragmaticSegmenter
 
     private
 
-    def replace_periods_in_numbered_list
-      scan_lists(NUMBERED_LIST_REGEX_1, NUMBERED_LIST_REGEX_2, '♨', true)
+    def replace_periods_in_numbered_list(txt)
+      scan_lists(NUMBERED_LIST_REGEX_1, NUMBERED_LIST_REGEX_2, '♨', true, txt)
     end
 
     def add_line_breaks_for_numbered_list_with_periods(txt)
@@ -66,8 +66,8 @@ module PragmaticSegmenter
       txt.gsub(/☝/, '')
     end
 
-    def replace_parens_in_numbered_list
-      scan_lists(NUMBERED_LIST_PARENS_REGEX, NUMBERED_LIST_PARENS_REGEX, '☝', false)
+    def replace_parens_in_numbered_list(txt)
+      scan_lists(NUMBERED_LIST_PARENS_REGEX, NUMBERED_LIST_PARENS_REGEX, '☝', false, txt)
     end
 
     def add_line_breaks_for_numbered_list_with_parens(txt)
@@ -75,19 +75,24 @@ module PragmaticSegmenter
       txt.gsub(SPACE_BETWEEN_LIST_ITEMS_3, "\r")
     end
 
-    def scan_lists(regex1, regex2, replacement, strip)
-      list_array = @text.scan(regex1).map(&:to_i)
+    def scan_lists(regex1, regex2, replacement, strip, txt)
+      list_array = txt.scan(regex1).map(&:to_i)
       list_array.each_with_index do |a, i|
         next unless (a + 1).eql?(list_array[i + 1]) ||
                     (a - 1).eql?(list_array[i - 1]) ||
                     (a.eql?(0) && list_array[i - 1].eql?(9)) ||
                     (a.eql?(9) && list_array[i + 1].eql?(0))
-        @text.gsub!(regex2).with_index do |m|
-          if a.to_s.eql?(strip ? m.strip.chop : m)
-            "#{Regexp.escape(a.to_s)}" + replacement
-          else
-            "#{m}"
-          end
+        substitute_found_list_items(txt, regex2, a, strip, replacement)
+      end
+      txt
+    end
+
+    def substitute_found_list_items(txt, regex, a, strip, replacement)
+      txt.gsub!(regex).with_index do |m|
+        if a.to_s.eql?(strip ? m.strip.chop : m)
+          "#{Regexp.escape(a.to_s)}" + replacement
+        else
+          "#{m}"
         end
       end
     end
