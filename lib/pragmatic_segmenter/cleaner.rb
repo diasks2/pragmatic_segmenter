@@ -38,6 +38,12 @@ module PragmaticSegmenter
     # Rubular: http://rubular.com/r/FseyMiiYFT
     NEWLINE_FOLLOWED_BY_PERIOD_REGEX = /\n(?=\.(\s|\n))/
 
+    # Rubular: http://rubular.com/r/8mc1ArOIGy
+    TABLE_OF_CONTENTS_REGEX = /\.{5,}\s*\d+-*\d*/
+
+    # Rubular: http://rubular.com/r/DwNSuZrNtk
+    CONSECUTIVE_PERIODS_REGEX = /\.{5,}/
+
     attr_reader :language, :doc_type
     def initialize(text:, **args)
       @text = text.dup
@@ -54,7 +60,7 @@ module PragmaticSegmenter
       @text = strip_other_inline_formatting(@text)
       @text = clean_quotations(@text)
       @text = clean_quotations_en(@text) if language.eql?('en')
-      clean_table_of_contents
+      @text = clean_table_of_contents(@text)
       @text
     end
 
@@ -121,11 +127,9 @@ module PragmaticSegmenter
       txt.gsub(/`/, "'")
     end
 
-    def clean_table_of_contents
-      # Rubular: http://rubular.com/r/8mc1ArOIGy
-      @text.gsub!(/\.{5,}\s*\d+-*\d*/, "\r")
-      # Rubular: http://rubular.com/r/DwNSuZrNtk
-      @text.gsub!(/\.{5,}/, ' ')
+    def clean_table_of_contents(txt)
+      txt.gsub(TABLE_OF_CONTENTS_REGEX, "\r")
+        .gsub(CONSECUTIVE_PERIODS_REGEX, ' ')
     end
   end
 end
