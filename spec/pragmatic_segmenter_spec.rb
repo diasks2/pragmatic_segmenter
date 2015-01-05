@@ -848,6 +848,16 @@ RSpec.describe PragmaticSegmenter::Segmenter do
         ps = PragmaticSegmenter::Segmenter.new(text: "Hello{b^&gt;1&lt;b^} hello{b^>1<b^}.", language: "en")
         expect(ps.segment).to eq(["Hello hello."])
       end
+
+      it 'correctly segments text #078' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "'Well?' thought Alice to herself, 'after such a fall as this, I shall think nothing of tumbling down stairs? How brave they'll all think me at home! Why, I wouldn't say anything about it, even if I fell off the top of the house!' (Which was very likely true.)", language: 'en')
+        expect(ps.segment).to eq(["'Well?' thought Alice to herself, 'after such a fall as this, I shall think nothing of tumbling down stairs? How brave they'll all think me at home! Why, I wouldn't say anything about it, even if I fell off the top of the house!' (Which was very likely true.)"])
+      end
+
+      it 'correctly segments text #079' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Leave me alone! he yelled. I am in the U.S. Army. Charles (Ind.) said he.", language: 'en')
+        expect(ps.segment).to eq(["Leave me alone! he yelled.", "I am in the U.S. Army.", "Charles (Ind.) said he."])
+      end
     end
   end
 

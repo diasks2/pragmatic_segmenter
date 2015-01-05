@@ -7,14 +7,17 @@ module PragmaticSegmenter
   # This class segments a text into an array of sentences.
   class Segmenter
     PUNCT = ['。', '．', '.', '！', '!', '?', '？']
+    PUNCT_AM = ['።', '፧', '?', '!']
     PUNCT_AR = ['?', '!', ':', '.', '؟', '،']
+    PUNCT_EL = ['.', '!', ';', '?']
     PUNCT_FA = ['?', '!', ':', '.', '؟']
-    PUNCT_UR = ['?', '!', '۔', '؟']
     PUNCT_HI = ['।', '|', '.', '!', '?']
     PUNCT_HY = ['։', '՜', ':']
-    PUNCT_EL = ['.', '!', ';', '?']
     PUNCT_MY = ['။', '၏', '?', '!']
-    PUNCT_AM = ['።', '፧', '?', '!']
+    PUNCT_UR = ['?', '!', '۔', '؟']
+
+    SENTENCE_BOUNDARY_AM = /.*?[፧።!\?]|.*?$/
+    SENTENCE_BOUNDARY_UR = /.*?[۔؟!\?]|.*?$/
 
     # Rubular: http://rubular.com/r/yqa4Rit8EY
     POSSESSIVE_ABBREVIATION_REGEX = /\.(?='s\s)|\.(?='s$)|\.(?='s\z)/
@@ -45,6 +48,18 @@ module PragmaticSegmenter
 
     # Rubular: http://rubular.com/r/iUNSkCuso0
     SINGLE_LOWERCASE_LETTER_AT_START_OF_LINE_DE_REGEX = /(?<=^[a-z])\.(?=\s)/
+
+    # Rubular: http://rubular.com/r/aXPUGm6fQh
+    QUESTION_MARK_IN_QUOTATION_REGEX = /\?(?=(\'|\"))/
+
+    # Rubular: http://rubular.com/r/XS1XXFRfM2
+    EXCLAMATION_POINT_IN_QUOTATION_REGEX = /\!(?=(\'|\"))/
+
+    # Rubular: http://rubular.com/r/sl57YI8LkA
+    EXCLAMATION_POINT_BEFORE_COMMA_MID_SENTENCE_REGEX = /\!(?=\,\s[a-z])/
+
+    # Rubular: http://rubular.com/r/f9zTjmkIPb
+    EXCLAMATION_POINT_MID_SENTENCE_REGEX = /\!(?=\s[a-z])/
 
     attr_reader :language, :doc_type
     def initialize(text:, **args)
@@ -291,10 +306,10 @@ module PragmaticSegmenter
         when language.eql?('ur')
           subline = ur_split_at_sentence_boundary(line)
         else
-          line.gsub!(/\?(?=(\'|\"))/, 'ᓷ')
-          line.gsub!(/\!(?=(\'|\"))/, 'ᓴ')
-          line.gsub!(/\!(?=\s[a-z])/, 'ᓴ')
-          line.gsub!(/\!(?=\,\s[a-z])/, 'ᓴ')
+          line = replace_question_mark_in_quotation(line)
+          line = replace_exclamation_point_in_quotation(line)
+          line = replace_exclamation_point_before_comma_mid_sentence(line)
+          line = replace_exclamation_point_mid_sentence(line)
           subline = line.scan(/\u{ff08}(?:[^\u{ff09}])*\u{ff09}(?=\s?[A-Z])|\u{300c}(?:[^\u{300d}])*\u{300d}(?=\s[A-Z])|\((?:[^\)])*\)(?=\s[A-Z])|'(?:[^'])*'(?=\s[A-Z])|"(?:[^"])*"(?=\s[A-Z])|“(?:[^”])*”(?=\s[A-Z])|\S.*?[。．.！!?？ȸȹ☉☈☇☄]/)
         end
         subline.each_with_index do |s_l|
@@ -317,12 +332,28 @@ module PragmaticSegmenter
       end
     end
 
+    def replace_exclamation_point_before_comma_mid_sentence(line)
+      line.gsub(EXCLAMATION_POINT_BEFORE_COMMA_MID_SENTENCE_REGEX, 'ᓴ')
+    end
+
+    def replace_exclamation_point_mid_sentence(line)
+      line.gsub(EXCLAMATION_POINT_MID_SENTENCE_REGEX, 'ᓴ')
+    end
+
+    def replace_exclamation_point_in_quotation(line)
+      line.gsub(EXCLAMATION_POINT_IN_QUOTATION_REGEX, 'ᓴ')
+    end
+
+    def replace_question_mark_in_quotation(line)
+      line.gsub(QUESTION_MARK_IN_QUOTATION_REGEX, 'ᓷ')
+    end
+
     def am_split_at_sentence_boundary(am_line)
-      am_line.scan(/.*?[፧።!\?]|.*?$/)
+      am_line.scan(SENTENCE_BOUNDARY_AM)
     end
 
     def ur_split_at_sentence_boundary(ur_line)
-      ur_line.scan(/.*?[۔؟!\?]|.*?$/)
+      ur_line.scan(SENTENCE_BOUNDARY_UR)
     end
 
     def sub_symbols(text)
@@ -445,8 +476,7 @@ module PragmaticSegmenter
       segments.each_with_index do |line|
         next if line.gsub(/_{3,}/, '').length.eql?(0) || line.length < 2
         line = reinsert_ellipsis(line)
-        # remove extra white space
-        line.gsub!(/\s{3,}/, ' ')
+        line = remove_extra_white_space(line)
         if line =~ /[!?\.][\"\'\“]\s{1}[A-Z]/
           subline = line.split(/(?<=[!?\.][\"\'\“])\s{1}(?=[A-Z])/)
           subline.each do |s|
@@ -459,13 +489,14 @@ module PragmaticSegmenter
       sentence_array.reject{ |e| e.empty? }
     end
 
+    def remove_extra_white_space(line)
+      line.gsub(/\s{3,}/, ' ')
+    end
+
     def reinsert_ellipsis(line)
-      line.gsub!(/ƪ/, '...')
-      line.gsub!(/♟/, ' . . . ')
-      line.gsub!(/♝/, '. . . .')
-      line.gsub!(/☏/, '..')
-      line.gsub!(/∮/, '.')
-      line
+      line.gsub(/ƪ/, '...').gsub(/♟/, ' . . . ')
+        .gsub(/♝/, '. . . .').gsub(/☏/, '..')
+        .gsub(/∮/, '.')
     end
   end
 end
