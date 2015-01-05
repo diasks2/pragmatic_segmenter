@@ -27,11 +27,9 @@ module PragmaticSegmenter
     end
 
     def replace
-      @text = replace_possessive_abbreviations(@text)
-      @text = replace_single_letter_abbreviations(@text)
-      search_for_abbreviations_in_string
-
-      @text
+      reformatted_text = replace_possessive_abbreviations(text)
+      reformatted_text = replace_single_letter_abbreviations(reformatted_text)
+      search_for_abbreviations_in_string(reformatted_text)
     end
 
     private
@@ -43,9 +41,9 @@ module PragmaticSegmenter
       replace_single_uppercase_letter_abbreviation(new_text)
     end
 
-    def search_for_abbreviations_in_string
-      original = @text.dup
-      downcased = @text.downcase
+    def search_for_abbreviations_in_string(txt)
+      original = txt.dup
+      downcased = txt.downcase
       abbr = PragmaticSegmenter::Abbreviation.new(language: language)
       abbr.all.each do |a|
         next unless downcased.include?(a.strip)
@@ -55,9 +53,9 @@ module PragmaticSegmenter
         character_array = @text.scan(next_word_start)
         abbrev_match.each_with_index do |am, index|
           if language.eql?('de')
-            @text = replace_abbr_de(@text, am)
+            txt = replace_abbr_de(txt, am)
           elsif language.eql?('ar') || language.eql?('fa')
-            @text = replace_abbr_ar_fa(@text, am)
+            txt = replace_abbr_ar_fa(txt, am)
           else
             character = character_array[index]
             prefix = abbr.prefix
@@ -65,20 +63,21 @@ module PragmaticSegmenter
             upper = /[[:upper:]]/.match(character.to_s)
             if upper.nil? || prefix.include?(am.downcase.strip)
               if prefix.include?(am.downcase.strip)
-                @text = replace_prepositive_abbr(@text, am)
+                txt = replace_prepositive_abbr(txt, am)
               elsif number_abbr.include?(am.downcase.strip)
-                @text = replace_pre_number_abbr(@text, am)
+                txt = replace_pre_number_abbr(txt, am)
               else
                 if language.eql?('ru')
-                  @text = replace_period_of_abbr_ru(@text, am)
+                  txt = replace_period_of_abbr_ru(txt, am)
                 else
-                  @text = replace_period_of_abbr(@text, am)
+                  txt = replace_period_of_abbr(txt, am)
                 end
               end
             end
           end
         end
       end
+      txt
     end
 
     def replace_abbr_de(txt, abbr)
