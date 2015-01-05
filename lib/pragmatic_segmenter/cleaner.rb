@@ -1,6 +1,8 @@
 # -*- encoding : utf-8 -*-
 
 module PragmaticSegmenter
+  # This is an opinionated class that removes errant newlines,
+  # xhtml, inline formatting, etc.
   class Cleaner
     # Rubular: http://rubular.com/r/ENrVFMdJ8v
     HTML_TAG_REGEX = /<\/?[^>]*>/
@@ -51,11 +53,23 @@ module PragmaticSegmenter
       @doc_type = args[:doc_type]
     end
 
+    # Clean text of unwanted formatting
+    #
+    # Example:
+    #   >> text = "This is a sentence\ncut off in the middle because pdf."
+    #   >> PragmaticSegmenter::Cleaner(text: text).clean
+    #   => "This is a sentence cut off in the middle because pdf."
+    #
+    # Arguments:
+    #    text:       (String)  *required
+    #    language:   (String)  *optional
+    #                (two-digit ISO 639-1 code e.g. 'en')
+    #    doc_type:   (String)  *optional
+    #                (e.g. 'pdf')
+
     def clean
       return unless text
-      clean_text = remove_newline_in_middle_of_sentence(text)
-      clean_text = remove_newline_in_middle_of_word(clean_text)
-      clean_text = remove_newline_in_middle_of_word_ja(clean_text) if language.eql?('ja')
+      clean_text = remove_all_newlines(text)
       clean_text = replace_double_newlines(clean_text)
       clean_text = replace_newlines(clean_text)
       clean_text = strip_html(clean_text)
@@ -67,6 +81,14 @@ module PragmaticSegmenter
     end
 
     private
+
+    def remove_all_newlines(txt)
+      clean_text = remove_newline_in_middle_of_sentence(txt)
+      clean_text = remove_newline_in_middle_of_word(clean_text)
+      clean_text =
+        remove_newline_in_middle_of_word_ja(clean_text) if language.eql?('ja')
+      clean_text
+    end
 
     def remove_newline_in_middle_of_sentence(txt)
       txt.dup.gsub!(/(?:[^\.])*/) do |match|
@@ -103,8 +125,8 @@ module PragmaticSegmenter
       if doc_type.eql?('pdf')
         txt = remove_pdf_line_breaks(txt)
       else
-        txt = txt.gsub(NEWLINE_FOLLOWED_BY_PERIOD_REGEX, '')
-          .gsub(/\n/, "\r")
+        txt =
+          txt.gsub(NEWLINE_FOLLOWED_BY_PERIOD_REGEX, '').gsub(/\n/, "\r")
       end
       txt
     end
