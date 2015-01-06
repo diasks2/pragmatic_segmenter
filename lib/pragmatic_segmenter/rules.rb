@@ -3,6 +3,9 @@ module PragmaticSegmenter
     # Rubular: http://rubular.com/r/EUbZCNfgei
     EmailRule = Rule.new(/(\w)(\.)(\w)/, '\1∮\3')
 
+    # Rubular: http://rubular.com/r/G2opjedIm9
+    GeoLocationRule = Rule.new(/(?<=[a-zA-z]°)\.(?=\s*\d+)/, '∯')
+
     SingleNewLineRule = Rule.new(/\n/, 'ȹ')
 
     ExtraWhiteSpaceRule = Rule.new(/\s{3,}/, ' ')
