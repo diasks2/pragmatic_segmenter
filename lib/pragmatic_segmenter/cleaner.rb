@@ -88,10 +88,12 @@ module PragmaticSegmenter
                               apply(DoubleNewLineRule)
 
       clean_text = replace_newlines(clean_text)
-      clean_text = clean_text.apply(HtmlRules::All).
-                              apply(InlineFormattingRule).
-                              apply(QuotationsFirstRule).
-                              apply(QuotationsSecondRule)
+      clean_text = clean_text.apply(
+        HtmlRules::All,
+        InlineFormattingRule,
+        QuotationsFirstRule,
+        QuotationsSecondRule
+      )
 
       clean_text = clean_text.apply(EN_QuotationsRule) if language.eql?('en')
       clean_text.apply(TableOfContentsRule).apply(ConsecutivePeriodsRule)
