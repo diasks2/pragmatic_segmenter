@@ -131,7 +131,7 @@ module PragmaticSegmenter
 
       def process_text(line, end_punc_check, segments)
         line << 'ȸ' unless end_punc_check || language.eql?('ar') || language.eql?('fa')
-          PragmaticSegmenter::ExclamationWords.new(text: line).replace
+          PragmaticSegmenter::ExclamationWords.apply_rules(line)
           PragmaticSegmenter::BetweenPunctuation.new(text: line, language: language).replace
           line = line.apply(DoublePuctationFirstRule).
                       apply(DoublePuctationSecondRule).
