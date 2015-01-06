@@ -32,11 +32,15 @@ module PragmaticSegmenter
     end
 
     def replace_non_sentence_boundary_punctuation_fa(txt)
-      txt.gsub(/(?<=\d):(?=\d)/, '♭').gsub(/،(?=\s\S+،)/, '♬')
+      # FIXME: Make named rules for these
+      txt.gsub(/(?<=\d):(?=\d)/, '♭').
+          gsub(/،(?=\s\S+،)/, '♬')
     end
 
     def replace_non_sentence_boundary_punctuation_ar(txt)
-      txt.gsub(/(?<=\d):(?=\d)/, '♭').gsub(/،(?=\s\S+،)/, '♬')
+      # FIXME: Make named rules for these
+      txt.gsub(/(?<=\d):(?=\d)/, '♭').
+          gsub(/،(?=\s\S+،)/, '♬')
     end
 
     def ar_split_at_sentence_boundary(txt)
