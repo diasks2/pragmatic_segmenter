@@ -3,7 +3,7 @@
 module PragmaticSegmenter
   # This class searches for ellipses within a string and
   # replaces the periods.
-  module Ellipsis
+  module EllipsisRules
     # Rubular: http://rubular.com/r/i60hCK81fz
     ThreeConsecutiveRule = Rule.new(/\.\.\.(?=\s+[A-Z])/, '☏.')
 
@@ -18,7 +18,7 @@ module PragmaticSegmenter
 
     OtherThreePeriodRule = Rule.new(/\.\.\./, 'ƪ')
 
-    Rules = [
+    All = [
       ThreeSpaceRule,
       FourSpaceRule,
       FourConsecutiveRule,
