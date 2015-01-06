@@ -12,14 +12,17 @@ module PragmaticSegmenter
     ALPHABETICAL_LIST_WITH_PARENS =
       /(?<=^)[a-z](?=\))|(?<=\A)[a-z](?=\))|(?<=\s)[a-z](?=\))/i
 
+    SubstituteListPeriodRule = Rule.new(/♨/, '∯')
+    ListMarkerRule = Rule.new(/☝/, '')
+
     # Rubular: http://rubular.com/r/Wv4qLdoPx7
-    SPACE_BETWEEN_LIST_ITEMS_1 = /(?<=\S\S|^)\s(?=\S\s*\d+♨)/
+    SpaceBetweenListItemsFirstRule = Rule.new(/(?<=\S\S|^)\s(?=\S\s*\d+♨)/, "\r")
 
     # Rubular: http://rubular.com/r/AizHXC6HxK
-    SPACE_BETWEEN_LIST_ITEMS_2 = /(?<=\S\S|^)\s(?=\d+♨)/
+    SpaceBetweenListItemsSecondRule = Rule.new(/(?<=\S\S|^)\s(?=\d+♨)/, "\r")
 
     # Rubular: http://rubular.com/r/GE5q6yID2j
-    SPACE_BETWEEN_LIST_ITEMS_3 = /(?<=\S\S|^)\s(?=\d+☝)/
+    SpaceBetweenListItemsThirdRule = Rule.new(/(?<=\S\S|^)\s(?=\d+☝)/, "\r")
 
     NUMBERED_LIST_REGEX_1 =
       /\s\d+(?=\.\s)|^\d+(?=\.\s)|\s\d+(?=\.\))|^\d+(?=\.\))|(?<=\s\-)\d+(?=\.\s)|(?<=^\-)\d+(?=\.\s)|(?<=\s\⁃)\d+(?=\.\s)|(?<=^\⁃)\d+(?=\.\s)|(?<=s\-)\d+(?=\.\))|(?<=^\-)\d+(?=\.\))|(?<=\s\⁃)\d+(?=\.\))|(?<=^\⁃)\d+(?=\.\))/
@@ -37,7 +40,7 @@ module PragmaticSegmenter
 
     attr_reader :text
     def initialize(text:)
-      @text = text.dup
+      @text = Text.new(text)
     end
 
     def add_line_break
@@ -51,13 +54,13 @@ module PragmaticSegmenter
     def format_numbered_list_with_parens(txt)
       new_txt = replace_parens_in_numbered_list(txt)
       new_txt = add_line_breaks_for_numbered_list_with_parens(new_txt)
-      replace_list_marker(new_txt)
+      new_txt.apply(ListMarkerRule)
     end
 
     def format_numbered_list_with_periods(txt)
       new_txt = replace_periods_in_numbered_list(txt)
       new_txt = add_line_breaks_for_numbered_list_with_periods(new_txt)
-      substitute_list_period(new_txt)
+      new_txt.apply(SubstituteListPeriodRule)
     end
 
     def format_alphabetical_lists(txt)
@@ -73,16 +76,8 @@ module PragmaticSegmenter
       return txt unless txt.include?('♨') &&
                         txt !~ /♨.+\n.+♨|♨.+\r.+♨/ &&
                         txt !~ /for\s\d+♨\s[a-z]/
-      txt.gsub(SPACE_BETWEEN_LIST_ITEMS_1, "\r")
-        .gsub(SPACE_BETWEEN_LIST_ITEMS_2, "\r")
-    end
-
-    def substitute_list_period(txt)
-      txt.gsub(/♨/, '∯')
-    end
-
-    def replace_list_marker(txt)
-      txt.gsub(/☝/, '')
+      txt.apply(SpaceBetweenListItemsFirstRule).
+          apply(SpaceBetweenListItemsSecondRule)
     end
 
     def replace_parens_in_numbered_list(txt)
@@ -92,7 +87,7 @@ module PragmaticSegmenter
 
     def add_line_breaks_for_numbered_list_with_parens(txt)
       return txt unless txt.include?('☝') && txt !~ /☝.+\n.+☝|☝.+\r.+☝/
-      txt.gsub(SPACE_BETWEEN_LIST_ITEMS_3, "\r")
+      txt.apply(SpaceBetweenListItemsThirdRule)
     end
 
     def scan_lists(regex1, regex2, replacement, strip, txt)
