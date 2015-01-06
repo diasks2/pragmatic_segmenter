@@ -18,6 +18,19 @@ module PragmaticSegmenter
           NUMBER_ABBREVIATIONS
         end
       end
+
+      class Cleaner < PragmaticSegmenter::Cleaner
+        def clean
+          super
+          clean_quotations(@clean_text)
+        end
+
+        private
+
+        def clean_quotations(txt)
+          txt.gsub(/`/, "'")
+        end
+      end
     end
   end
 end
