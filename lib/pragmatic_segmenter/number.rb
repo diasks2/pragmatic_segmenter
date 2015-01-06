@@ -21,7 +21,7 @@ module PragmaticSegmenter
 
     attr_reader :text
     def initialize(text:)
-      @text = text.dup
+      @text = text
     end
 
     def replace

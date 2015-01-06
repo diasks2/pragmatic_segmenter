@@ -58,13 +58,13 @@ module PragmaticSegmenter
       attr_reader :text, :language, :doc_type
       def initialize(text:, **args)
         return [] unless text
+        @language = args[:language] || 'en'
+        @doc_type = args[:doc_type]
         if args[:clean].eql?(false)
           @text = text.dup
         else
           @text = PragmaticSegmenter::Cleaner.new(text: text.dup, language: args[:language], doc_type: args[:doc_type]).clean
         end
-        @language = args[:language] || 'en'
-        @doc_type = args[:doc_type]
       end
 
       def segment
