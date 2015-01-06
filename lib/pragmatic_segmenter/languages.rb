@@ -52,6 +52,13 @@ module PragmaticSegmenter
       DoublePuctationThirdRule = Rule.new(/\?\?/, '☇')
       DoublePuctationForthRule = Rule.new(/!!/, '☄')
 
+      DoublePuctationRules = [
+        DoublePuctationFirstRule,
+        DoublePuctationSecondRule,
+        DoublePuctationThirdRule,
+        DoublePuctationForthRule
+      ]
+
       attr_reader :text, :language, :doc_type
       def initialize(text:, **args)
         return [] unless text
@@ -133,10 +140,7 @@ module PragmaticSegmenter
           PragmaticSegmenter::ExclamationWords.apply_rules(line)
           PragmaticSegmenter::BetweenPunctuation.new(text: line, language: language).replace
           line = line.apply(
-            DoublePuctationFirstRule,
-            DoublePuctationSecondRule,
-            DoublePuctationThirdRule,
-            DoublePuctationForthRule,
+            DoublePuctationRules,
             QuestionMarkInQuotationRule,
             ExclamationPointInQuotationRule,
             ExclamationPointBeforeCommaMidSentenceRule,
