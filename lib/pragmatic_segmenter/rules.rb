@@ -1,5 +1,7 @@
 module PragmaticSegmenter
   module Rules
+    # Rubular: http://rubular.com/r/EUbZCNfgei
+    EmailRule = Rule.new(/(\w)(\.)(\w)/, '\1∮\3')
 
     SingleNewLineRule = Rule.new(/\n/, 'ȹ')
 
