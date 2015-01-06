@@ -35,7 +35,7 @@ module PragmaticSegmenter
     def replace
       @reformatted_text = replace_possessive_abbreviations(text)
       @reformatted_text = PragmaticSegmenter::SingleLetterAbbreviation.new(text: @reformatted_text).replace
-      @reformatted_text = search_for_abbreviations_in_string(@reformatted_text)
+      @reformatted_text = search_for_abbreviations_in_string(@reformatted_text, abbreviations)
       @reformatted_text = replace_multi_period_abbreviations(@reformatted_text)
       @reformatted_text = replace_period_in_am_pm(@reformatted_text)
       replace_abbreviation_as_sentence_boundary(@reformatted_text)
@@ -43,10 +43,9 @@ module PragmaticSegmenter
 
     private
 
-    def search_for_abbreviations_in_string(txt)
+    def search_for_abbreviations_in_string(txt, abbr)
       original = txt.dup
       downcased = txt.downcase
-      abbr = abbreviations
       abbr.all.each do |a|
         next unless downcased.include?(a.strip)
         abbrev_match = original.scan(/(?:^|\s|\r|\n)#{Regexp.escape(a.strip)}/i)
@@ -61,49 +60,24 @@ module PragmaticSegmenter
     end
 
     def scan_for_replacements(txt, am, index, character_array, abbr)
-      if language.eql?('ar') || language.eql?('fa')
-        txt = replace_abbr_ar_fa(txt, am)
-      else
-        character = character_array[index]
-        prepositive = abbr.prepositive
-        number_abbr = abbr.number
-        upper = /[[:upper:]]/.match(character.to_s)
-        if upper.nil? || prepositive.include?(am.downcase.strip)
-          if prepositive.include?(am.downcase.strip)
-            txt = replace_prepositive_abbr(txt, am)
-          elsif number_abbr.include?(am.downcase.strip)
-            txt = replace_pre_number_abbr(txt, am)
-          else
-            if language.eql?('ru')
-              txt = replace_period_of_abbr_ru(txt, am)
-            else
-              txt = replace_period_of_abbr(txt, am)
-            end
-          end
+      character = character_array[index]
+      prepositive = abbr.prepositive
+      number_abbr = abbr.number
+      upper = /[[:upper:]]/.match(character.to_s)
+      if upper.nil? || prepositive.include?(am.downcase.strip)
+        if prepositive.include?(am.downcase.strip)
+          txt = replace_prepositive_abbr(txt, am)
+        elsif number_abbr.include?(am.downcase.strip)
+          txt = replace_pre_number_abbr(txt, am)
+        else
+          txt = replace_period_of_abbr(txt, am)
         end
       end
       txt
     end
 
     def abbreviations
-      case language
-      when 'en'
-        PragmaticSegmenter::Languages::English::Abbreviation.new
-      when 'ar'
-        PragmaticSegmenter::Languages::Arabic::Abbreviation.new
-      when 'de'
-        PragmaticSegmenter::Languages::Deutsch::Abbreviation.new
-      when 'fr'
-        PragmaticSegmenter::Languages::French::Abbreviation.new
-      when 'it'
-        PragmaticSegmenter::Languages::Italian::Abbreviation.new
-      when 'ru'
-        PragmaticSegmenter::Languages::Russian::Abbreviation.new
-      when 'es'
-        PragmaticSegmenter::Languages::Spanish::Abbreviation.new
-      else
-        PragmaticSegmenter::Abbreviation.new
-      end
+      PragmaticSegmenter::Abbreviation.new
     end
 
     def replace_abbreviation_as_sentence_boundary(txt)
@@ -152,10 +126,6 @@ module PragmaticSegmenter
         .gsub(LOWERCASE_AM_REGEX, '.')
     end
 
-    def replace_abbr_ar_fa(txt, abbr)
-      txt.gsub(/(?<=#{abbr})\./, '∯')
-    end
-
     def replace_pre_number_abbr(txt, abbr)
       txt.gsub(/(?<=#{abbr.strip})\.(?=\s\d)/, '∯').gsub(/(?<=#{abbr.strip})\.(?=\s+\()/, '∯')
     end
@@ -167,12 +137,6 @@ module PragmaticSegmenter
     def replace_period_of_abbr(txt, abbr)
       txt.gsub(/(?<=#{abbr.strip})\.(?=((\.|:|\?)|(\s([a-z]|I\s|I'm|I'll|\d))))/, '∯')
         .gsub(/(?<=#{abbr.strip})\.(?=,)/, '∯')
-    end
-
-    def replace_period_of_abbr_ru(txt, abbr)
-      txt.gsub(/(?<=\s#{abbr.strip})\./, '∯')
-        .gsub(/(?<=\A#{abbr.strip})\./, '∯')
-        .gsub(/(?<=^#{abbr.strip})\./, '∯')
     end
 
     def replace_possessive_abbreviations(txt)

@@ -39,6 +39,22 @@ module PragmaticSegmenter
           PUNCT
         end
       end
+
+      class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
+        private
+
+        def scan_for_replacements(txt, am, index, character_array, abbr)
+          replace_abbr(txt, am)
+        end
+
+        def replace_abbr(txt, abbr)
+          txt.gsub(/(?<=#{abbr})\./, '∯')
+        end
+
+        def abbreviations
+          PragmaticSegmenter::Languages::Arabic::Abbreviation.new
+        end
+      end
     end
   end
 end

@@ -31,6 +31,14 @@ module PragmaticSegmenter
           txt.gsub(/`/, "'")
         end
       end
+
+      class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
+        private
+
+        def abbreviations
+          PragmaticSegmenter::Languages::English::Abbreviation.new
+        end
+      end
     end
   end
 end

@@ -16,6 +16,37 @@ module PragmaticSegmenter
           []
         end
       end
+
+      class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
+        private
+
+        def scan_for_replacements(txt, am, index, character_array, abbr)
+          character = character_array[index]
+          prepositive = abbr.prepositive
+          number_abbr = abbr.number
+          upper = /[[:upper:]]/.match(character.to_s)
+          if upper.nil? || prepositive.include?(am.downcase.strip)
+            if prepositive.include?(am.downcase.strip)
+              txt = replace_prepositive_abbr(txt, am)
+            elsif number_abbr.include?(am.downcase.strip)
+              txt = replace_pre_number_abbr(txt, am)
+            else
+              txt = replace_period_of_abbr(txt, am)
+            end
+          end
+          txt
+        end
+
+        def abbreviations
+          PragmaticSegmenter::Languages::Russian::Abbreviation.new
+        end
+
+        def replace_period_of_abbr(txt, abbr)
+          txt.gsub(/(?<=\s#{abbr.strip})\./, '∯')
+            .gsub(/(?<=\A#{abbr.strip})\./, '∯')
+            .gsub(/(?<=^#{abbr.strip})\./, '∯')
+        end
+      end
     end
   end
 end
