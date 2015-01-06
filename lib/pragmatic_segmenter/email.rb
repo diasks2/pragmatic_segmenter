@@ -5,21 +5,14 @@ module PragmaticSegmenter
   # within a string and replaces the periods.
   class Email
     # Rubular: http://rubular.com/r/EUbZCNfgei
-    EMAIL_REGEX = /(\w)(\.)(\w)/
+    EmailRule = Rule.new(/(\w)(\.)(\w)/, '\1∮\3')
 
-    attr_reader :text
     def initialize(text:)
-      @text = text
+      @text = Text.new(text)
     end
 
     def replace
-      replace_periods_in_email_addresses(text)
-    end
-
-    private
-
-    def replace_periods_in_email_addresses(txt)
-      txt.gsub(EMAIL_REGEX, '\1∮\3')
+      @text.apply(EmailRule)
     end
   end
 end
