@@ -132,14 +132,15 @@ module PragmaticSegmenter
         line << 'ȸ' unless end_punc_check || language.eql?('ar') || language.eql?('fa')
           PragmaticSegmenter::ExclamationWords.apply_rules(line)
           PragmaticSegmenter::BetweenPunctuation.new(text: line, language: language).replace
-          line = line.apply(DoublePuctationFirstRule).
-                      apply(DoublePuctationSecondRule).
-                      apply(DoublePuctationThirdRule).
-                      apply(DoublePuctationForthRule).
-                      apply(QuestionMarkInQuotationRule).
-                      apply(ExclamationPointInQuotationRule).
-                      apply(ExclamationPointBeforeCommaMidSentenceRule).
-                      apply(ExclamationPointMidSentenceRule)
+          line = line.apply(
+            DoublePuctationFirstRule,
+            DoublePuctationSecondRule,
+            DoublePuctationThirdRule,
+            DoublePuctationForthRule,
+            QuestionMarkInQuotationRule,
+            ExclamationPointInQuotationRule,
+            ExclamationPointBeforeCommaMidSentenceRule,
+            ExclamationPointMidSentenceRule)
 
           subline = PragmaticSegmenter::SentenceBoundaryPunctuation.new(text: line, language: language).split
           subline.each_with_index do |s_l|
