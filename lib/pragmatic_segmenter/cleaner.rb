@@ -84,8 +84,7 @@ module PragmaticSegmenter
     def remove_all_newlines(txt)
       clean_text = remove_newline_in_middle_of_sentence(txt)
       clean_text = remove_newline_in_middle_of_word(clean_text)
-      clean_text =
-        remove_newline_in_middle_of_word_ja(clean_text) if language.eql?('ja')
+      clean_text = remove_newline_in_middle_of_word_ja(clean_text) if language.eql?('ja')
       clean_text
     end
 
