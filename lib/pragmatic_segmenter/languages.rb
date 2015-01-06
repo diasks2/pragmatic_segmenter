@@ -73,7 +73,7 @@ module PragmaticSegmenter
         else
           reformatted_text = PragmaticSegmenter::Number.new(text: reformatted_text).replace
         end
-        reformatted_text = PragmaticSegmenter::GeoLocation.new(text: reformatted_text).replace
+        reformatted_text = reformatted_text.apply(GeoLocationRule)
         split_lines(reformatted_text)
       end
 
