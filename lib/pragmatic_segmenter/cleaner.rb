@@ -13,9 +13,6 @@ module PragmaticSegmenter
     # Rubular: http://rubular.com/r/V57WnM9Zut
     NEWLINE_IN_MIDDLE_OF_WORD_REGEX = /\n(?=[a-zA-Z]{1,2}\n)/
 
-    # Rubular: http://rubular.com/r/N4kPuJgle7
-    NEWLINE_IN_MIDDLE_OF_WORD_JA_REGEX = /(?<=の)\n(?=\S)/
-
     # Rubular: http://rubular.com/r/3GiRiP2IbD
     NEWLINE_IN_MIDDLE_OF_SENTENCE_REGEX = /(?<=\s)\n(?=([a-z]|\())/
 
@@ -69,23 +66,20 @@ module PragmaticSegmenter
 
     def clean
       return unless text
-      clean_text = remove_all_newlines(text)
-      clean_text = replace_double_newlines(clean_text)
-      clean_text = replace_newlines(clean_text)
-      clean_text = strip_html(clean_text)
-      clean_text = strip_other_inline_formatting(clean_text)
-      clean_text = clean_quotations(clean_text)
-      clean_text = clean_quotations_en(clean_text) if language.eql?('en')
-      clean_table_of_contents(clean_text)
+      @clean_text = remove_all_newlines(text)
+      @clean_text = replace_double_newlines(@clean_text)
+      @clean_text = replace_newlines(@clean_text)
+      @clean_text = strip_html(@clean_text)
+      @clean_text = strip_other_inline_formatting(@clean_text)
+      @clean_text = clean_quotations(@clean_text)
+      @clean_text = clean_table_of_contents(@clean_text)
     end
 
     private
 
     def remove_all_newlines(txt)
       clean_text = remove_newline_in_middle_of_sentence(txt)
-      clean_text = remove_newline_in_middle_of_word(clean_text)
-      clean_text = remove_newline_in_middle_of_word_ja(clean_text) if language.eql?('ja')
-      clean_text
+      remove_newline_in_middle_of_word(clean_text)
     end
 
     def remove_newline_in_middle_of_sentence(txt)
@@ -100,10 +94,6 @@ module PragmaticSegmenter
 
     def remove_newline_in_middle_of_word(txt)
       txt.gsub(NEWLINE_IN_MIDDLE_OF_WORD_REGEX, '')
-    end
-
-    def remove_newline_in_middle_of_word_ja(txt)
-      txt.gsub(NEWLINE_IN_MIDDLE_OF_WORD_JA_REGEX, '')
     end
 
     def strip_html(txt)
@@ -137,10 +127,6 @@ module PragmaticSegmenter
 
     def clean_quotations(txt)
       txt.gsub(/''/, '"').gsub(/``/, '"')
-    end
-
-    def clean_quotations_en(txt)
-      txt.gsub(/`/, "'")
     end
 
     def clean_table_of_contents(txt)
