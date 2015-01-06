@@ -140,8 +140,6 @@ module PragmaticSegmenter
       end
     end
 
-
-
     def replace_single_newline(txt)
       txt.gsub(/\n/, 'ȹ')
     end
