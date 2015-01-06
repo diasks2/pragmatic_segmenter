@@ -118,10 +118,6 @@ module PragmaticSegmenter
 
     private
 
-    def replace_single_newline(line)
-      line.gsub(/\n/, 'ȹ')
-    end
-
     def analyze_lines(line:, segments:)
       line = replace_single_newline(line)
       line = PragmaticSegmenter::Ellipsis.new(text: line).replace
@@ -183,119 +179,123 @@ module PragmaticSegmenter
       end
     end
 
-    def sub_punctuation_between_quotes_and_parens(line)
-      sub_punctuation_between_single_quotes(line)
-      sub_punctuation_between_double_quotes(line)
-      sub_punctuation_between_quotes_ja(line)
-      sub_punctuation_between_parens(line)
-      sub_punctuation_between_parens_ja(line)
-      sub_punctuation_between_quotes_arrow(line)
-      sub_punctuation_between_quotes_slanted(line)
+    def replace_single_newline(txt)
+      txt.gsub(/\n/, 'ȹ')
     end
 
-    def sub_part_of_word_exclamation_points(line)
+    def sub_punctuation_between_quotes_and_parens(txt)
+      sub_punctuation_between_single_quotes(txt)
+      sub_punctuation_between_double_quotes(txt)
+      sub_punctuation_between_quotes_ja(txt)
+      sub_punctuation_between_parens(txt)
+      sub_punctuation_between_parens_ja(txt)
+      sub_punctuation_between_quotes_arrow(txt)
+      sub_punctuation_between_quotes_slanted(txt)
+    end
+
+    def sub_part_of_word_exclamation_points(txt)
       WORDS_WITH_EXCLAMATIONS.each do |exclamation|
-        sub_punct(line.scan(/#{Regexp.escape(exclamation)}/), line)
+        sub_punct(txt.scan(/#{Regexp.escape(exclamation)}/), txt)
       end
     end
 
-    def sub_punctuation_between_parens(line)
-      sub_punct(line.scan(BETWEEN_PARENS_REGEX), line)
+    def sub_punctuation_between_parens(txt)
+      sub_punct(txt.scan(BETWEEN_PARENS_REGEX), txt)
     end
 
-    def sub_punctuation_between_parens_ja(line)
-      sub_punct(line.scan(BETWEEN_PARENS_JA_REGEX), line)
+    def sub_punctuation_between_parens_ja(txt)
+      sub_punct(txt.scan(BETWEEN_PARENS_JA_REGEX), txt)
     end
 
-    def sub_punctuation_between_single_quotes(line)
-      sub_punct(line.scan(BETWEEN_SINGLE_QUOTES_REGEX), line)
+    def sub_punctuation_between_single_quotes(txt)
+      sub_punct(txt.scan(BETWEEN_SINGLE_QUOTES_REGEX), txt)
     end
 
-    def sub_punctuation_between_double_quotes(line)
+    def sub_punctuation_between_double_quotes(txt)
       if language == 'de'
-        btwn_dbl_quote = sub_punctuation_between_double_quotes_de(line)
+        btwn_dbl_quote = sub_punctuation_between_double_quotes_de(txt)
       else
-        btwn_dbl_quote = line.scan(BETWEEN_DOUBLE_QUOTES_REGEX)
+        btwn_dbl_quote = txt.scan(BETWEEN_DOUBLE_QUOTES_REGEX)
       end
-      sub_punct(btwn_dbl_quote, line)
+      sub_punct(btwn_dbl_quote, txt)
     end
 
-    def sub_punctuation_between_quotes_ja(line)
-      sub_punct(line.scan(BETWEEN_QUOTE_JA_REGEX), line)
+    def sub_punctuation_between_quotes_ja(txt)
+      sub_punct(txt.scan(BETWEEN_QUOTE_JA_REGEX), txt)
     end
 
-    def sub_punctuation_between_quotes_arrow(line)
-      sub_punct(line.scan(BETWEEN_QUOTE_ARROW_REGEX), line)
+    def sub_punctuation_between_quotes_arrow(txt)
+      sub_punct(txt.scan(BETWEEN_QUOTE_ARROW_REGEX), txt)
     end
 
-    def sub_punctuation_between_quotes_slanted(line)
-      sub_punct(line.scan(BETWEEN_QUOTE_SLANTED_REGEX), line)
+    def sub_punctuation_between_quotes_slanted(txt)
+      sub_punct(txt.scan(BETWEEN_QUOTE_SLANTED_REGEX), txt)
     end
 
-    def sub_punctuation_between_double_quotes_de(line)
-      if line.include?('„')
-        btwn_dbl_quote = line.scan(BETWEEN_DOUBLE_QUOTES_DE_REGEX)
-        line.scan(SPLIT_DOUBLE_QUOTES_DE_REGEX).each do |q|
+    def sub_punctuation_between_double_quotes_de(txt)
+      if txt.include?('„')
+        btwn_dbl_quote = txt.scan(BETWEEN_DOUBLE_QUOTES_DE_REGEX)
+        txt.scan(SPLIT_DOUBLE_QUOTES_DE_REGEX).each do |q|
           btwn_dbl_quote << q
         end
-      elsif line.include?(',,')
-        btwn_dbl_quote = line.scan(BETWEEN_UNCONVENTIONAL_DOUBLE_QUOTE_DE_REGEX)
+      elsif txt.include?(',,')
+        btwn_dbl_quote = txt.scan(BETWEEN_UNCONVENTIONAL_DOUBLE_QUOTE_DE_REGEX)
       end
       btwn_dbl_quote
     end
 
-    def replace_double_punctuation(line)
-      line.gsub(/\?!/, '☉')
+    def replace_double_punctuation(txt)
+      txt.gsub(/\?!/, '☉')
         .gsub(/!\?/, '☈').gsub(/\?\?/, '☇')
         .gsub(/!!/, '☄')
     end
 
-    def ar_split_at_sentence_boundary(ar_line)
-      ar_line.scan(SENTENCE_BOUNDARY_AR)
+    def ar_split_at_sentence_boundary(txt)
+      txt.scan(SENTENCE_BOUNDARY_AR)
     end
 
-    def fa_split_at_sentence_boundary(fa_line)
-      fa_line.scan(SENTENCE_BOUNDARY_FA)
+    def fa_split_at_sentence_boundary(txt)
+      txt.scan(SENTENCE_BOUNDARY_FA)
     end
 
-    def hi_split_at_sentence_boundary(hi_line)
-      hi_line.scan(SENTENCE_BOUNDARY_HI)
+    def hi_split_at_sentence_boundary(txt)
+      txt.scan(SENTENCE_BOUNDARY_HI)
     end
 
-    def hy_split_at_sentence_boundary(hy_line)
-      hy_line.scan(SENTENCE_BOUNDARY_HY)
+    def hy_split_at_sentence_boundary(txt)
+      txt.scan(SENTENCE_BOUNDARY_HY)
     end
 
-    def el_split_at_sentence_boundary(el_line)
-      el_line.scan(SENTENCE_BOUNDARY_EL)
+    def el_split_at_sentence_boundary(txt)
+      txt.scan(SENTENCE_BOUNDARY_EL)
     end
 
-    def my_split_at_sentence_boundary(my_line)
-      my_line.scan(SENTENCE_BOUNDARY_MY)
+    def my_split_at_sentence_boundary(txt)
+      txt.scan(SENTENCE_BOUNDARY_MY)
     end
 
-    def am_split_at_sentence_boundary(am_line)
-      am_line.scan(SENTENCE_BOUNDARY_AM)
+    def am_split_at_sentence_boundary(txt)
+      txt.scan(SENTENCE_BOUNDARY_AM)
     end
 
-    def ur_split_at_sentence_boundary(ur_line)
-      ur_line.scan(SENTENCE_BOUNDARY_UR)
+    def ur_split_at_sentence_boundary(txt)
+      txt.scan(SENTENCE_BOUNDARY_UR)
     end
 
-    def replace_exclamation_point_before_comma_mid_sentence(line)
-      line.gsub(EXCLAMATION_POINT_BEFORE_COMMA_MID_SENTENCE_REGEX, 'ᓴ')
+    def replace_exclamation_point_before_comma_mid_sentence(txt)
+      txt.gsub(EXCLAMATION_POINT_BEFORE_COMMA_MID_SENTENCE_REGEX, 'ᓴ')
     end
 
-    def replace_exclamation_point_mid_sentence(line)
-      line.gsub(EXCLAMATION_POINT_MID_SENTENCE_REGEX, 'ᓴ')
+    def replace_exclamation_point_mid_sentence(txt)
+      txt.gsub(EXCLAMATION_POINT_MID_SENTENCE_REGEX, 'ᓴ')
     end
 
-    def replace_exclamation_point_in_quotation(line)
-      line.gsub(EXCLAMATION_POINT_IN_QUOTATION_REGEX, 'ᓴ')
+    def replace_exclamation_point_in_quotation(txt)
+      txt.gsub(EXCLAMATION_POINT_IN_QUOTATION_REGEX, 'ᓴ')
     end
 
-    def replace_question_mark_in_quotation(line)
-      line.gsub(QUESTION_MARK_IN_QUOTATION_REGEX, 'ᓷ')
+    def replace_question_mark_in_quotation(txt)
+      txt.gsub(QUESTION_MARK_IN_QUOTATION_REGEX, 'ᓷ')
     end
 
     def sub_symbols(txt)
@@ -351,7 +351,7 @@ module PragmaticSegmenter
       segments = []
       lines = @text.split("\r")
       lines.each do |l|
-        next if l == ''
+        next if l.eql?('')
         analyze_lines(line: l, segments: segments)
       end
       sentence_array = []
