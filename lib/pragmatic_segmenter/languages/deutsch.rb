@@ -94,6 +94,38 @@ module PragmaticSegmenter
           PragmaticSegmenter::Languages::Deutsch::Abbreviation.new
         end
       end
+
+      class BetweenPunctuation < PragmaticSegmenter::BetweenPunctuation
+        # Rubular: http://rubular.com/r/OdcXBsub0w
+        BETWEEN_UNCONVENTIONAL_DOUBLE_QUOTE_DE_REGEX = /,,(?>[^“\\]+|\\{2}|\\.)*“/
+
+        # Rubular: http://rubular.com/r/2UskIupGgP
+        SPLIT_DOUBLE_QUOTES_DE_REGEX = /\A„(?>[^“\\]+|\\{2}|\\.)*“/
+
+        # Rubular: http://rubular.com/r/TkZomF9tTM
+        BETWEEN_DOUBLE_QUOTES_DE_REGEX = /„(?>[^“\\]+|\\{2}|\\.)*“/
+        private
+
+        def sub_punctuation_between_double_quotes(txt)
+          btwn_dbl_quote = sub_punctuation_between_double_quotes_de(txt)
+          PragmaticSegmenter::PunctuationReplacer.new(
+            matches_array: btwn_dbl_quote,
+            text: txt
+          ).replace
+        end
+
+        def sub_punctuation_between_double_quotes_de(txt)
+          if txt.include?('„')
+            btwn_dbl_quote = txt.scan(BETWEEN_DOUBLE_QUOTES_DE_REGEX)
+            txt.scan(SPLIT_DOUBLE_QUOTES_DE_REGEX).each do |q|
+              btwn_dbl_quote << q
+            end
+          elsif txt.include?(',,')
+            btwn_dbl_quote = txt.scan(BETWEEN_UNCONVENTIONAL_DOUBLE_QUOTE_DE_REGEX)
+          end
+          btwn_dbl_quote
+        end
+      end
     end
   end
 end

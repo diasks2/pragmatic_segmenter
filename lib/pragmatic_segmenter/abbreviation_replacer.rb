@@ -27,8 +27,8 @@ module PragmaticSegmenter
     SENTENCE_STARTERS = %w(A Being Did For He How However I In Millions More She That The There They We What When Where Who Why)
 
     attr_reader :text
-    def initialize(text:, **args)
-      @text = text.dup
+    def initialize(text:)
+      @text = text
     end
 
     def replace

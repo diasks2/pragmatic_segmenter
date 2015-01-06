@@ -160,28 +160,35 @@ module PragmaticSegmenter
       def process_text(line, end_punc_check, segments)
         line << 'ȸ' unless end_punc_check || language.eql?('ar') || language.eql?('fa')
           PragmaticSegmenter::ExclamationWords.new(text: line).replace
-          PragmaticSegmenter::BetweenPunctuation.new(text: line, language: language).replace
+          case language
+          when 'de'
+            PragmaticSegmenter::Languages::Deutsch::BetweenPunctuation.new(text: line).replace
+          when 'ja'
+            PragmaticSegmenter::Languages::Japanese::BetweenPunctuation.new(text: line).replace
+          else
+            PragmaticSegmenter::BetweenPunctuation.new(text: line).replace
+          end
           line = replace_double_punctuation(line)
           line = replace_question_mark_in_quotation(line)
           line = replace_exclamation_point_in_quotation(line)
           line = replace_exclamation_point_before_comma_mid_sentence(line)
           line = replace_exclamation_point_mid_sentence(line)
-          case
-          when language.eql?('hi')
+          case language
+          when 'hi'
             subline = PragmaticSegmenter::Languages::Hindi::SentenceBoundaryPunctuation.new(text: line).split
-          when language.eql?('fa')
+          when 'fa'
             subline = PragmaticSegmenter::Languages::Persian::SentenceBoundaryPunctuation.new(text: line).split
-          when language.eql?('el')
+          when 'el'
             subline = PragmaticSegmenter::Languages::Greek::SentenceBoundaryPunctuation.new(text: line).split
-          when language.eql?('am')
+          when 'am'
             subline = PragmaticSegmenter::Languages::Amharic::SentenceBoundaryPunctuation.new(text: line).split
-          when language.eql?('ar')
+          when 'ar'
             subline = PragmaticSegmenter::Languages::Arabic::SentenceBoundaryPunctuation.new(text: line).split
-          when language.eql?('hy')
+          when 'hy'
             subline = PragmaticSegmenter::Languages::Armenian::SentenceBoundaryPunctuation.new(text: line).split
-          when language.eql?('ur')
+          when 'ur'
             subline = PragmaticSegmenter::Languages::Urdu::SentenceBoundaryPunctuation.new(text: line).split
-          when language.eql?('my')
+          when 'my'
             subline = PragmaticSegmenter::Languages::Burmese::SentenceBoundaryPunctuation.new(text: line).split
           else
             subline = PragmaticSegmenter::SentenceBoundaryPunctuation.new(text: line).split
