@@ -18,13 +18,13 @@ module PragmaticSegmenter
 
     OtherThreePeriodRule = Rule.new(/\.\.\./, 'ƪ')
 
-    def self.apply_rules(text)
-      text.apply(ThreeSpaceRule).
-            apply(FourSpaceRule).
-            apply(FourConsecutiveRule).
-            apply(ThreeConsecutiveRule).
-            apply(OtherThreePeriodRule)
+    Rules = [
+      ThreeSpaceRule,
+      FourSpaceRule,
+      FourConsecutiveRule,
+      ThreeConsecutiveRule,
+      OtherThreePeriodRule
+    ]
 
-    end
   end
 end

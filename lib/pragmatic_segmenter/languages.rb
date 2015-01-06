@@ -104,9 +104,10 @@ module PragmaticSegmenter
       end
 
       def analyze_lines(line:, segments:)
-        line = line.apply(SingleNewLineRule)
-        line = PragmaticSegmenter::Ellipsis.apply_rules(line)
-        line = line.apply(EmailRule)
+
+        line = line.apply(SingleNewLineRule).
+                    apply(PragmaticSegmenter::Ellipsis::Rules).
+                    apply(EmailRule)
 
         clause_1 = false
         end_punc_check = false
