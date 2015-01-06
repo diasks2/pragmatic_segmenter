@@ -53,17 +53,14 @@ module PragmaticSegmenter
 
       ExtraWhiteSpaceRule = Rule.new(/\s{3,}/, ' ')
 
-      DoublePuctationFirstRule = Rule.new(/\?!/, '☉')
-      DoublePuctationSecondRule = Rule.new(/!\?/, '☈')
-      DoublePuctationThirdRule = Rule.new(/\?\?/, '☇')
-      DoublePuctationForthRule = Rule.new(/!!/, '☄')
+      module DoublePuctationRules
+        FirstRule = Rule.new(/\?!/, '☉')
+        SecondRule = Rule.new(/!\?/, '☈')
+        ThirdRule = Rule.new(/\?\?/, '☇')
+        ForthRule = Rule.new(/!!/, '☄')
 
-      DoublePuctationRules = [
-        DoublePuctationFirstRule,
-        DoublePuctationSecondRule,
-        DoublePuctationThirdRule,
-        DoublePuctationForthRule
-      ]
+        All = [ FirstRule, SecondRule, ThirdRule, ForthRule ]
+      end
 
       attr_reader :text, :language, :doc_type
       def initialize(text:, **args)
@@ -146,9 +143,10 @@ module PragmaticSegmenter
           PragmaticSegmenter::ExclamationWords.apply_rules(line)
           PragmaticSegmenter::BetweenPunctuation.new(text: line, language: language).replace
           line = line.apply(
-            DoublePuctationRules,
+            DoublePuctationRules::All,
             QuestionMarkInQuotationRule,
-            ExclamationPointRules)
+            ExclamationPointRules
+          )
 
           subline = PragmaticSegmenter::SentenceBoundaryPunctuation.new(text: line, language: language).split
           subline.each_with_index do |s_l|
