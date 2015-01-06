@@ -106,7 +106,7 @@ module PragmaticSegmenter
       def analyze_lines(line:, segments:)
         line = line.apply(SingleNewLineRule)
         line = PragmaticSegmenter::Ellipsis.new(text: line).replace
-        line = PragmaticSegmenter::Email.new(text: line).replace
+        line = line.apply(EmailRule)
 
         clause_1 = false
         end_punc_check = false
