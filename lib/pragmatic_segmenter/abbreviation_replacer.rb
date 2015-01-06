@@ -6,62 +6,66 @@ module PragmaticSegmenter
   # replaces the periods.
   class AbbreviationReplacer
     # Rubular: http://rubular.com/r/yqa4Rit8EY
-    POSSESSIVE_ABBREVIATION_REGEX = /\.(?='s\s)|\.(?='s$)|\.(?='s\z)/
+    PossessiveAbbreviationRule = Rule.new(/\.(?='s\s)|\.(?='s$)|\.(?='s\z)/, '∯')
 
     # Rubular: http://rubular.com/r/e3H6kwnr6H
-    SINGLE_UPPERCASE_LETTER_AT_START_OF_LINE_REGEX =  /(?<=^[A-Z])\.(?=\s)/
+    SingleUpperCaseLetterAtStartOfLineRule = Rule.new(/(?<=^[A-Z])\.(?=\s)/, '∯')
 
     # Rubular: http://rubular.com/r/gitvf0YWH4
-    SINGLE_UPPERCASE_LETTER_REGEX = /(?<=\s[A-Z])\.(?=\s)/
+    SingleUpperCaseLetterRule = Rule.new(/(?<=\s[A-Z])\.(?=\s)/, '∯')
 
     # Rubular: http://rubular.com/r/B4X33QKIL8
-    SINGLE_LOWERCASE_LETTER_DE_REGEX = /(?<=\s[a-z])\.(?=\s)/
+    DE_SingleLowerCaseLetterRule = Rule.new(/(?<=\s[a-z])\.(?=\s)/, '∯')
 
     # Rubular: http://rubular.com/r/iUNSkCuso0
-    SINGLE_LOWERCASE_LETTER_AT_START_OF_LINE_DE_REGEX = /(?<=^[a-z])\.(?=\s)/
+    DE_SingleLowerCaseLetterAtStartOfLineRule = Rule.new(/(?<=^[a-z])\.(?=\s)/, '∯')
 
     # Rubular: http://rubular.com/r/xDkpFZ0EgH
     MULTI_PERIOD_ABBREVIATION_REGEX = /\b[a-z](?:\.[a-z])+[.]/i
 
     # Rubular: http://rubular.com/r/Vnx3m4Spc8
-    UPPERCASE_PM_REGEX = /(?<=P∯M)∯(?=\s[A-Z])/
+    UpperCasePmRule = Rule.new(/(?<=P∯M)∯(?=\s[A-Z])/, '.')
 
     # Rubular: http://rubular.com/r/AJMCotJVbW
-    UPPERCASE_AM_REGEX = /(?<=A∯M)∯(?=\s[A-Z])/
+    UpperCaseAmRule = Rule.new(/(?<=A∯M)∯(?=\s[A-Z])/, '.')
 
     # Rubular: http://rubular.com/r/13q7SnOhgA
-    LOWERCASE_PM_REGEX = /(?<=p∯m)∯(?=\s[A-Z])/
+    LowerCasePmRule = Rule.new(/(?<=p∯m)∯(?=\s[A-Z])/, '.')
 
     # Rubular: http://rubular.com/r/DgUDq4mLz5
-    LOWERCASE_AM_REGEX = /(?<=a∯m)∯(?=\s[A-Z])/
+    LowerCaseAmRule = Rule.new(/(?<=a∯m)∯(?=\s[A-Z])/, '.')
 
     SENTENCE_STARTERS = %w(A Being Did For He How However I In Millions More She That The There They We What When Where Who Why)
 
     attr_reader :text, :language
     def initialize(text:, **args)
-      @text = text.dup
+      @text = Text.new(text)
       @language = args[:language]
     end
 
     def replace
-      reformatted_text = replace_possessive_abbreviations(text)
+      reformatted_text = @text.apply(PossessiveAbbreviationRule)
       reformatted_text = replace_single_letter_abbreviations(reformatted_text)
       reformatted_text = search_for_abbreviations_in_string(reformatted_text)
       reformatted_text = replace_multi_period_abbreviations(reformatted_text)
-      reformatted_text = replace_period_in_am_pm(reformatted_text)
+      reformatted_text = reformatted_text.
+                          apply(UpperCasePmRule).
+                          apply(UpperCaseAmRule).
+                          apply(LowerCasePmRule).
+                          apply(LowerCaseAmRule)
+
       replace_abbreviation_as_sentence_boundary(reformatted_text)
     end
 
     private
 
     def replace_single_letter_abbreviations(txt)
-      new_text =
-        replace_single_uppercase_letter_abbreviation_at_start_of_line(txt)
-      new_text =
-        replace_single_lowercase_letter_de(new_text) if language.eql?('de')
-      new_text =
-        replace_single_lowercase_letter_sol_de(new_text) if language.eql?('de')
-      replace_single_uppercase_letter_abbreviation(new_text)
+      new_text = txt.apply(SingleUpperCaseLetterAtStartOfLineRule)
+      if language.eql?('de')
+        new_text = new_text.apply(DE_SingleLowerCaseLetterRule)
+        new_text = new_text.apply(DE_SingleLowerCaseLetterAtStartOfLineRule)
+      end
+      new_text.apply(SingleUpperCaseLetterRule)
     end
 
     def search_for_abbreviations_in_string(txt)
@@ -142,13 +146,6 @@ module PragmaticSegmenter
       txt
     end
 
-    def replace_period_in_am_pm(txt)
-      txt.gsub(UPPERCASE_PM_REGEX, '.')
-        .gsub(UPPERCASE_AM_REGEX, '.')
-        .gsub(LOWERCASE_PM_REGEX, '.')
-        .gsub(LOWERCASE_AM_REGEX, '.')
-    end
-
     def replace_abbr_de(txt, abbr)
       txt.gsub(/(?<=#{abbr})\.(?=\s)/, '∯')
     end
@@ -174,26 +171,6 @@ module PragmaticSegmenter
       txt.gsub(/(?<=\s#{abbr.strip})\./, '∯')
         .gsub(/(?<=\A#{abbr.strip})\./, '∯')
         .gsub(/(?<=^#{abbr.strip})\./, '∯')
-    end
-
-    def replace_single_lowercase_letter_sol_de(txt)
-      txt.gsub(SINGLE_LOWERCASE_LETTER_AT_START_OF_LINE_DE_REGEX, '∯')
-    end
-
-    def replace_single_lowercase_letter_de(txt)
-      txt.gsub(SINGLE_LOWERCASE_LETTER_DE_REGEX, '∯')
-    end
-
-    def replace_single_uppercase_letter_abbreviation_at_start_of_line(txt)
-      txt.gsub(SINGLE_UPPERCASE_LETTER_AT_START_OF_LINE_REGEX, '∯')
-    end
-
-    def replace_single_uppercase_letter_abbreviation(txt)
-      txt.gsub(SINGLE_UPPERCASE_LETTER_REGEX, '∯')
-    end
-
-    def replace_possessive_abbreviations(txt)
-      txt.gsub(POSSESSIVE_ABBREVIATION_REGEX, '∯')
     end
   end
 end
