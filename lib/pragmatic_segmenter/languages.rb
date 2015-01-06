@@ -37,6 +37,12 @@ module PragmaticSegmenter
       # Rubular: http://rubular.com/r/f9zTjmkIPb
       ExclamationPointMidSentenceRule = Rule.new(/\!(?=\s[a-z])/, 'ᓴ')
 
+      ExclamationPointRules = [
+        ExclamationPointInQuotationRule,
+        ExclamationPointBeforeCommaMidSentenceRule,
+        ExclamationPointMidSentenceRule
+      ]
+
       # Rubular: http://rubular.com/r/NqCqv372Ix
       QUOTATION_AT_END_OF_SENTENCE_REGEX = /[!?\.][\"\'\u{201d}\u{201c}]\s{1}[A-Z]/
 
@@ -142,9 +148,7 @@ module PragmaticSegmenter
           line = line.apply(
             DoublePuctationRules,
             QuestionMarkInQuotationRule,
-            ExclamationPointInQuotationRule,
-            ExclamationPointBeforeCommaMidSentenceRule,
-            ExclamationPointMidSentenceRule)
+            ExclamationPointRules)
 
           subline = PragmaticSegmenter::SentenceBoundaryPunctuation.new(text: line, language: language).split
           subline.each_with_index do |s_l|
