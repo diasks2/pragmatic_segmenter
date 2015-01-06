@@ -28,20 +28,19 @@ module PragmaticSegmenter
       # Rubular: http://rubular.com/r/aXPUGm6fQh
       QuestionMarkInQuotationRule = Rule.new(/\?(?=(\'|\"))/, 'ᓷ')
 
-      # Rubular: http://rubular.com/r/XS1XXFRfM2
-      ExclamationPointInQuotationRule = Rule.new(/\!(?=(\'|\"))/, 'ᓴ')
 
-      # Rubular: http://rubular.com/r/sl57YI8LkA
-      ExclamationPointBeforeCommaMidSentenceRule = Rule.new(/\!(?=\,\s[a-z])/, 'ᓴ')
+      module ExclamationPointRules
+        # Rubular: http://rubular.com/r/XS1XXFRfM2
+        InQuotationRule = Rule.new(/\!(?=(\'|\"))/, 'ᓴ')
 
-      # Rubular: http://rubular.com/r/f9zTjmkIPb
-      ExclamationPointMidSentenceRule = Rule.new(/\!(?=\s[a-z])/, 'ᓴ')
+        # Rubular: http://rubular.com/r/sl57YI8LkA
+        BeforeCommaMidSentenceRule = Rule.new(/\!(?=\,\s[a-z])/, 'ᓴ')
 
-      ExclamationPointRules = [
-        ExclamationPointInQuotationRule,
-        ExclamationPointBeforeCommaMidSentenceRule,
-        ExclamationPointMidSentenceRule
-      ]
+        # Rubular: http://rubular.com/r/f9zTjmkIPb
+        MidSentenceRule = Rule.new(/\!(?=\s[a-z])/, 'ᓴ')
+
+        All = [ InQuotationRule, BeforeCommaMidSentenceRule, MidSentenceRule ]
+      end
 
       # Rubular: http://rubular.com/r/NqCqv372Ix
       QUOTATION_AT_END_OF_SENTENCE_REGEX = /[!?\.][\"\'\u{201d}\u{201c}]\s{1}[A-Z]/
@@ -145,7 +144,7 @@ module PragmaticSegmenter
           line = line.apply(
             DoublePuctationRules::All,
             QuestionMarkInQuotationRule,
-            ExclamationPointRules
+            ExclamationPointRules::All
           )
 
           subline = PragmaticSegmenter::SentenceBoundaryPunctuation.new(text: line, language: language).split
