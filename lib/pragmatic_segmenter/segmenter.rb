@@ -6,6 +6,8 @@ require 'pragmatic_segmenter/number'
 require 'pragmatic_segmenter/ellipsis'
 require 'pragmatic_segmenter/geolocation'
 require 'pragmatic_segmenter/email'
+require 'pragmatic_segmenter/exclamation_words'
+require 'pragmatic_segmenter/punctuation_replacer'
 
 module PragmaticSegmenter
   # This class segments a text into an array of sentences.
@@ -28,8 +30,6 @@ module PragmaticSegmenter
     SENTENCE_BOUNDARY_HY = /.*?[։՜:]|.*?$/
     SENTENCE_BOUNDARY_MY = /.*?[။၏!\?]|.*?$/
     SENTENCE_BOUNDARY_UR = /.*?[۔؟!\?]|.*?$/
-
-    WORDS_WITH_EXCLAMATIONS = ['!Xũ', '!Kung', 'ǃʼOǃKung', '!Xuun', '!Kung-Ekoka', 'ǃHu', 'ǃKhung', 'ǃKu', 'ǃung', 'ǃXo', 'ǃXû', 'ǃXung', 'ǃXũ', '!Xun', 'Yahoo!', 'Y!J', 'Yum!']
 
     # Rubular: http://rubular.com/r/aXPUGm6fQh
     QUESTION_MARK_IN_QUOTATION_REGEX = /\?(?=(\'|\"))/
@@ -81,7 +81,7 @@ module PragmaticSegmenter
 
     SENTENCE_BOUNDARY_REGEX = /\u{ff08}(?:[^\u{ff09}])*\u{ff09}(?=\s?[A-Z])|\u{300c}(?:[^\u{300d}])*\u{300d}(?=\s[A-Z])|\((?:[^\)])*\)(?=\s[A-Z])|'(?:[^'])*'(?=\s[A-Z])|"(?:[^"])*"(?=\s[A-Z])|“(?:[^”])*”(?=\s[A-Z])|\S.*?[。．.！!?？ȸȹ☉☈☇☄]/
 
-    attr_reader :language, :doc_type
+    attr_reader :text, :language, :doc_type
     def initialize(text:, **args)
       return [] unless text
       if args[:clean].nil? || args[:clean].eql?(true)
@@ -108,15 +108,39 @@ module PragmaticSegmenter
     #    clean:      (Boolean) *true unless specified
 
     def segment
-      return [] unless @text
-      @text = PragmaticSegmenter::List.new(text: @text).add_line_break
-      @text = PragmaticSegmenter::AbbreviationReplacer.new(text: @text, language: language).replace
-      @text = PragmaticSegmenter::Number.new(text: @text, language: language).replace
-      @text = PragmaticSegmenter::Geolocation.new(text: @text).replace
-      split_lines
+      return [] unless text
+      reformatted_text = PragmaticSegmenter::List.new(text: text).add_line_break
+      reformatted_text = PragmaticSegmenter::AbbreviationReplacer.new(text: reformatted_text, language: language).replace
+      reformatted_text = PragmaticSegmenter::Number.new(text: reformatted_text, language: language).replace
+      reformatted_text = PragmaticSegmenter::Geolocation.new(text: reformatted_text).replace
+      split_lines(reformatted_text)
     end
 
     private
+
+    def split_lines(txt)
+      segments = []
+      lines = txt.split("\r")
+      lines.each do |l|
+        next if l.eql?('')
+        analyze_lines(line: l, segments: segments)
+      end
+      sentence_array = []
+      segments.each_with_index do |line|
+        next if line.gsub(/_{3,}/, '').length.eql?(0) || line.length < 2
+        line = reinsert_ellipsis(line)
+        line = remove_extra_white_space(line)
+        if line =~ QUOTATION_AT_END_OF_SENTENCE_REGEX
+          subline = line.split(SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX)
+          subline.each do |s|
+            sentence_array << s
+          end
+        else
+          sentence_array << line.tr("\n", '').strip
+        end
+      end
+      sentence_array.reject(&:empty?)
+    end
 
     def analyze_lines(line:, segments:)
       line = replace_single_newline(line)
@@ -137,7 +161,7 @@ module PragmaticSegmenter
       end
       if clause_1
         line << 'ȸ' unless end_punc_check || language.eql?('ar') || language.eql?('fa')
-        sub_part_of_word_exclamation_points(line)
+        PragmaticSegmenter::ExclamationWords.new(text: line).replace
         sub_punctuation_between_quotes_and_parens(line)
         line = replace_double_punctuation(line)
         case
@@ -198,22 +222,25 @@ module PragmaticSegmenter
       sub_punctuation_between_quotes_slanted(txt)
     end
 
-    def sub_part_of_word_exclamation_points(txt)
-      WORDS_WITH_EXCLAMATIONS.each do |exclamation|
-        sub_punct(txt.scan(/#{Regexp.escape(exclamation)}/), txt)
-      end
-    end
-
     def sub_punctuation_between_parens(txt)
-      sub_punct(txt.scan(BETWEEN_PARENS_REGEX), txt)
+      PragmaticSegmenter::PunctuationReplacer.new(
+        matches_array: txt.scan(BETWEEN_PARENS_REGEX),
+        text: txt
+      ).replace
     end
 
     def sub_punctuation_between_parens_ja(txt)
-      sub_punct(txt.scan(BETWEEN_PARENS_JA_REGEX), txt)
+      PragmaticSegmenter::PunctuationReplacer.new(
+        matches_array: txt.scan(BETWEEN_PARENS_JA_REGEX),
+        text: txt
+      ).replace
     end
 
     def sub_punctuation_between_single_quotes(txt)
-      sub_punct(txt.scan(BETWEEN_SINGLE_QUOTES_REGEX), txt)
+      PragmaticSegmenter::PunctuationReplacer.new(
+        matches_array: txt.scan(BETWEEN_SINGLE_QUOTES_REGEX),
+        text: txt
+      ).replace
     end
 
     def sub_punctuation_between_double_quotes(txt)
@@ -222,19 +249,31 @@ module PragmaticSegmenter
       else
         btwn_dbl_quote = txt.scan(BETWEEN_DOUBLE_QUOTES_REGEX)
       end
-      sub_punct(btwn_dbl_quote, txt)
+      PragmaticSegmenter::PunctuationReplacer.new(
+        matches_array: btwn_dbl_quote,
+        text: txt
+      ).replace
     end
 
     def sub_punctuation_between_quotes_ja(txt)
-      sub_punct(txt.scan(BETWEEN_QUOTE_JA_REGEX), txt)
+      PragmaticSegmenter::PunctuationReplacer.new(
+        matches_array: txt.scan(BETWEEN_QUOTE_JA_REGEX),
+        text: txt
+      ).replace
     end
 
     def sub_punctuation_between_quotes_arrow(txt)
-      sub_punct(txt.scan(BETWEEN_QUOTE_ARROW_REGEX), txt)
+      PragmaticSegmenter::PunctuationReplacer.new(
+        matches_array: txt.scan(BETWEEN_QUOTE_ARROW_REGEX),
+        text: txt
+      ).replace
     end
 
     def sub_punctuation_between_quotes_slanted(txt)
-      sub_punct(txt.scan(BETWEEN_QUOTE_SLANTED_REGEX), txt)
+      PragmaticSegmenter::PunctuationReplacer.new(
+        matches_array: txt.scan(BETWEEN_QUOTE_SLANTED_REGEX),
+        text: txt
+      ).replace
     end
 
     def sub_punctuation_between_double_quotes_de(txt)
@@ -307,73 +346,6 @@ module PragmaticSegmenter
       txt.gsub(/∯/, '.').gsub(/♬/, '،').gsub(/♭/, ':').gsub(/ᓰ/, '。').gsub(/ᓱ/, '．')
         .gsub(/ᓳ/, '！').gsub(/ᓴ/, '!').gsub(/ᓷ/, '?').gsub(/ᓸ/, '？').gsub(/☉/, '?!')
         .gsub(/☈/, '!?').gsub(/☇/, '??').gsub(/☄/, '!!').delete('ȸ').gsub(/ȹ/, "\n")
-    end
-
-    def sub_punct(array, content)
-      return if !array || array.empty?
-      content.gsub!('(', '\\(')
-      content.gsub!(')', '\\)')
-      content.gsub!(']', '\\]')
-      content.gsub!('[', '\\[')
-      content.gsub!('-', '\\-')
-      array.each do |a|
-        a.gsub!('(', '\\(')
-        a.gsub!(')', '\\)')
-        a.gsub!(']', '\\]')
-        a.gsub!('[', '\\[')
-        a.gsub!('-', '\\-')
-
-        sub = a.gsub('.', '∯')
-        content.gsub!(/#{Regexp.escape(a)}/, "#{sub}")
-
-        sub_1 = sub.gsub('。', 'ᓰ')
-        content.gsub!(/#{Regexp.escape(sub)}/, "#{sub_1}")
-
-        sub_2 = sub_1.gsub('．', 'ᓱ')
-        content.gsub!(/#{Regexp.escape(sub_1)}/, "#{sub_2}")
-
-        sub_3 = sub_2.gsub('！', 'ᓳ')
-        content.gsub!(/#{Regexp.escape(sub_2)}/, "#{sub_3}")
-
-        sub_4 = sub_3.gsub('!', 'ᓴ')
-        content.gsub!(/#{Regexp.escape(sub_3)}/, "#{sub_4}")
-
-        sub_5 = sub_4.gsub('?', 'ᓷ')
-        content.gsub!(/#{Regexp.escape(sub_4)}/, "#{sub_5}")
-
-        sub_6 = sub_5.gsub('？', 'ᓸ')
-        content.gsub!(/#{Regexp.escape(sub_5)}/, "#{sub_6}")
-      end
-      content.gsub!('\\(', '(')
-      content.gsub!('\\)', ')')
-      content.gsub!('\\[', '[')
-      content.gsub!('\\]', ']')
-      content.gsub!('\\-', '-')
-      content
-    end
-
-    def split_lines
-      segments = []
-      lines = @text.split("\r")
-      lines.each do |l|
-        next if l.eql?('')
-        analyze_lines(line: l, segments: segments)
-      end
-      sentence_array = []
-      segments.each_with_index do |line|
-        next if line.gsub(/_{3,}/, '').length.eql?(0) || line.length < 2
-        line = reinsert_ellipsis(line)
-        line = remove_extra_white_space(line)
-        if line =~ QUOTATION_AT_END_OF_SENTENCE_REGEX
-          subline = line.split(SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX)
-          subline.each do |s|
-            sentence_array << s
-          end
-        else
-          sentence_array << line.tr("\n", '').strip
-        end
-      end
-      sentence_array.reject(&:empty?)
     end
 
     def remove_extra_white_space(line)
