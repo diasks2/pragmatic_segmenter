@@ -26,22 +26,31 @@ module PragmaticSegmenter
       PUNCT_UR = ['?', '!', '۔', '؟']
 
       # Rubular: http://rubular.com/r/aXPUGm6fQh
-      QUESTION_MARK_IN_QUOTATION_REGEX = /\?(?=(\'|\"))/
+      QuestionMarkInQuotationRule = Rule.new(/\?(?=(\'|\"))/, 'ᓷ')
 
       # Rubular: http://rubular.com/r/XS1XXFRfM2
-      EXCLAMATION_POINT_IN_QUOTATION_REGEX = /\!(?=(\'|\"))/
+      ExclamationPointInQuotationRule = Rule.new(/\!(?=(\'|\"))/, 'ᓴ')
 
       # Rubular: http://rubular.com/r/sl57YI8LkA
-      EXCLAMATION_POINT_BEFORE_COMMA_MID_SENTENCE_REGEX = /\!(?=\,\s[a-z])/
+      ExclamationPointBeforeCommaMidSentenceRule = Rule.new(/\!(?=\,\s[a-z])/, 'ᓴ')
 
       # Rubular: http://rubular.com/r/f9zTjmkIPb
-      EXCLAMATION_POINT_MID_SENTENCE_REGEX = /\!(?=\s[a-z])/
+      ExclamationPointMidSentenceRule = Rule.new(/\!(?=\s[a-z])/, 'ᓴ')
 
       # Rubular: http://rubular.com/r/NqCqv372Ix
       QUOTATION_AT_END_OF_SENTENCE_REGEX = /[!?\.][\"\'\u{201d}\u{201c}]\s{1}[A-Z]/
 
       # Rubular: http://rubular.com/r/JMjlZHAT4g
       SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX = /(?<=[!?\.][\"\'\u{201d}\u{201c}])\s{1}(?=[A-Z])/
+
+      SingleNewLineRule = Rule.new(/\n/, 'ȹ')
+
+      ExtraWhiteSpaceRule = Rule.new(/\s{3,}/, ' ')
+
+      DoublePuctationFirstRule = Rule.new(/\?!/, '☉')
+      DoublePuctationSecondRule = Rule.new(/!\?/, '☈')
+      DoublePuctationThirdRule = Rule.new(/\?\?/, '☇')
+      DoublePuctationForthRule = Rule.new(/!!/, '☄')
 
       attr_reader :text, :language, :doc_type
       def initialize(text:, **args)
@@ -81,7 +90,7 @@ module PragmaticSegmenter
         segments.each_with_index do |line|
           next if line.gsub(/_{3,}/, '').length.eql?(0) || line.length < 2
           line = reinsert_ellipsis(line)
-          line = remove_extra_white_space(line)
+          line = line.apply(ExtraWhiteSpaceRule)
           if line =~ QUOTATION_AT_END_OF_SENTENCE_REGEX
             subline = line.split(SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX)
             subline.each do |s|
@@ -95,7 +104,7 @@ module PragmaticSegmenter
       end
 
       def analyze_lines(line:, segments:)
-        line = replace_single_newline(line)
+        line = line.apply(SingleNewLineRule)
         line = PragmaticSegmenter::Ellipsis.new(text: line).replace
         line = PragmaticSegmenter::Email.new(text: line).replace
 
@@ -124,54 +133,30 @@ module PragmaticSegmenter
         line << 'ȸ' unless end_punc_check || language.eql?('ar') || language.eql?('fa')
           PragmaticSegmenter::ExclamationWords.new(text: line).replace
           PragmaticSegmenter::BetweenPunctuation.new(text: line, language: language).replace
-          line = replace_double_punctuation(line)
-          line = replace_question_mark_in_quotation(line)
-          line = replace_exclamation_point_in_quotation(line)
-          line = replace_exclamation_point_before_comma_mid_sentence(line)
-          line = replace_exclamation_point_mid_sentence(line)
+          line = line.apply(DoublePuctationFirstRule).
+                      apply(DoublePuctationSecondRule).
+                      apply(DoublePuctationThirdRule).
+                      apply(DoublePuctationForthRule).
+                      apply(QuestionMarkInQuotationRule).
+                      apply(ExclamationPointInQuotationRule).
+                      apply(ExclamationPointBeforeCommaMidSentenceRule).
+                      apply(ExclamationPointMidSentenceRule)
+
           subline = PragmaticSegmenter::SentenceBoundaryPunctuation.new(text: line, language: language).split
           subline.each_with_index do |s_l|
             segments << sub_symbols(s_l)
           end
       end
 
-      def replace_single_newline(txt)
-        txt.gsub(/\n/, 'ȹ')
-      end
-
-      def replace_double_punctuation(txt)
-        txt.gsub(/\?!/, '☉')
-          .gsub(/!\?/, '☈').gsub(/\?\?/, '☇')
-          .gsub(/!!/, '☄')
-      end
-
-      def replace_exclamation_point_before_comma_mid_sentence(txt)
-        txt.gsub(EXCLAMATION_POINT_BEFORE_COMMA_MID_SENTENCE_REGEX, 'ᓴ')
-      end
-
-      def replace_exclamation_point_mid_sentence(txt)
-        txt.gsub(EXCLAMATION_POINT_MID_SENTENCE_REGEX, 'ᓴ')
-      end
-
-      def replace_exclamation_point_in_quotation(txt)
-        txt.gsub(EXCLAMATION_POINT_IN_QUOTATION_REGEX, 'ᓴ')
-      end
-
-      def replace_question_mark_in_quotation(txt)
-        txt.gsub(QUESTION_MARK_IN_QUOTATION_REGEX, 'ᓷ')
-      end
-
       def sub_symbols(txt)
+        # FIXME: Make named rules for these
         txt.gsub(/∯/, '.').gsub(/♬/, '،').gsub(/♭/, ':').gsub(/ᓰ/, '。').gsub(/ᓱ/, '．')
           .gsub(/ᓳ/, '！').gsub(/ᓴ/, '!').gsub(/ᓷ/, '?').gsub(/ᓸ/, '？').gsub(/☉/, '?!')
           .gsub(/☈/, '!?').gsub(/☇/, '??').gsub(/☄/, '!!').delete('ȸ').gsub(/ȹ/, "\n")
       end
 
-      def remove_extra_white_space(line)
-        line.gsub(/\s{3,}/, ' ')
-      end
-
       def reinsert_ellipsis(line)
+        # FIXME: Make named rules for these
         line.gsub(/ƪ/, '...').gsub(/♟/, ' . . . ')
           .gsub(/♝/, '. . . .').gsub(/☏/, '..')
           .gsub(/∮/, '.')
