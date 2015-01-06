@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+require 'pragmatic_segmenter/types'
 require 'pragmatic_segmenter/languages'
 
 module PragmaticSegmenter
