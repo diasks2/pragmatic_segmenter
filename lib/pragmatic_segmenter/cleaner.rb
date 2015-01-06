@@ -5,50 +5,55 @@ module PragmaticSegmenter
   # xhtml, inline formatting, etc.
   class Cleaner
     # Rubular: http://rubular.com/r/ENrVFMdJ8v
-    HTML_TAG_REGEX = /<\/?[^>]*>/
+    HtmlTagRule = Rule.new(/<\/?[^>]*>/, '')
 
     # Rubular: http://rubular.com/r/XZVqMPJhea
-    ESCAPED_HTML_TAG_REGEX = /&lt;\/?[^gt;]*gt;/
+    EscapedHtmlTagRule = Rule.new(/&lt;\/?[^gt;]*gt;/, '')
 
     # Rubular: http://rubular.com/r/V57WnM9Zut
-    NEWLINE_IN_MIDDLE_OF_WORD_REGEX = /\n(?=[a-zA-Z]{1,2}\n)/
+    NewLineInMiddleOfWordRule = Rule.new(/\n(?=[a-zA-Z]{1,2}\n)/, '')
 
     # Rubular: http://rubular.com/r/N4kPuJgle7
-    NEWLINE_IN_MIDDLE_OF_WORD_JA_REGEX = /(?<=の)\n(?=\S)/
+    JA_NewLineInMiddleOfWord = Rule.new(/(?<=の)\n(?=\S)/, '')
 
     # Rubular: http://rubular.com/r/3GiRiP2IbD
     NEWLINE_IN_MIDDLE_OF_SENTENCE_REGEX = /(?<=\s)\n(?=([a-z]|\())/
 
     # Rubular: http://rubular.com/r/UZAVcwqck8
-    NEWLINE_IN_MIDDLE_OF_SENTENCE_PDF_REGEX = /(?<=[^\n]\s)\n(?=\S)/
+    PDF_NewLineInMiddleOfSentenceRule = Rule.new(/(?<=[^\n]\s)\n(?=\S)/, '')
 
     # Rubular: http://rubular.com/r/eaNwGavmdo
-    NEWLINE_IN_MIDDLE_OF_SENTENCE_PDF_NO_SPACES_REGEX = /\n(?=[a-z])/
+    PDF_NewLineInMiddleOfSentenceNoSpacesRule = Rule.new(/\n(?=[a-z])/, ' ')
 
     # Rubular: http://rubular.com/r/bAJrhyLNeZ
-    INLINE_FORMATTING_REGEX = /\{b\^&gt;\d*&lt;b\^\}|\{b\^>\d*<b\^\}/
+    InlineFormattingRule = Rule.new(/\{b\^&gt;\d*&lt;b\^\}|\{b\^>\d*<b\^\}/, '')
 
     # Rubular: http://rubular.com/r/dMxp5MixFS
-    DOUBLE_NEWLINE_WITH_SPACE_REGEX = /\n \n/
+    DoubleNewLineWithSpaceRule = Rule.new(/\n \n/, "\r")
 
     # Rubular: http://rubular.com/r/H6HOJeA8bq
-    DOUBLE_NEWLINE_REGEX = /\n\n/
+    DoubleNewLineRule = Rule.new(/\n\n/, "\r")
 
     # Rubular: http://rubular.com/r/Gn18aAnLdZ
-    NEWLINE_FOLLOWED_BY_BULLET_REGEX = /\n(?=•)/
+    NewLineFollowedByBulletRule = Rule.new(/\n(?=•)/, "\r")
 
     # Rubular: http://rubular.com/r/FseyMiiYFT
-    NEWLINE_FOLLOWED_BY_PERIOD_REGEX = /\n(?=\.(\s|\n))/
+    NewLineFollowedByPeriodRule = Rule.new(/\n(?=\.(\s|\n))/, '')
 
     # Rubular: http://rubular.com/r/8mc1ArOIGy
-    TABLE_OF_CONTENTS_REGEX = /\.{5,}\s*\d+-*\d*/
+    TableOfContentsRule = Rule.new(/\.{5,}\s*\d+-*\d*/, "\r")
 
     # Rubular: http://rubular.com/r/DwNSuZrNtk
-    CONSECUTIVE_PERIODS_REGEX = /\.{5,}/
+    ConsecutivePeriodsRule = Rule.new(/\.{5,}/, ' ')
+
+    QuotationsFirstRule = Rule.new(/''/, '"')
+    QuotationsSecondRule = Rule.new(/``/, '"')
+
+    EN_QuotationsRule = Rule.new(/`/, "'")
 
     attr_reader :text, :language, :doc_type
     def initialize(text:, **args)
-      @text = text.dup
+      @text = Text.new(text)
       @language = args[:language]
       @doc_type = args[:doc_type]
     end
@@ -70,22 +75,26 @@ module PragmaticSegmenter
     def clean
       return unless text
       clean_text = remove_all_newlines(text)
-      clean_text = replace_double_newlines(clean_text)
+      clean_text = clean_text.apply(DoubleNewLineWithSpaceRule).
+                              apply(DoubleNewLineRule)
+
       clean_text = replace_newlines(clean_text)
-      clean_text = strip_html(clean_text)
-      clean_text = strip_other_inline_formatting(clean_text)
-      clean_text = clean_quotations(clean_text)
-      clean_text = clean_quotations_en(clean_text) if language.eql?('en')
-      clean_table_of_contents(clean_text)
+      clean_text = clean_text.apply(HtmlTagRule).
+                              apply(EscapedHtmlTagRule).
+                              apply(InlineFormattingRule).
+                              apply(QuotationsFirstRule).
+                              apply(QuotationsSecondRule)
+
+      clean_text = clean_text.apply(EN_QuotationsRule) if language.eql?('en')
+      clean_text.apply(TableOfContentsRule).apply(ConsecutivePeriodsRule)
     end
 
     private
 
     def remove_all_newlines(txt)
       clean_text = remove_newline_in_middle_of_sentence(txt)
-      clean_text = remove_newline_in_middle_of_word(clean_text)
-      clean_text =
-        remove_newline_in_middle_of_word_ja(clean_text) if language.eql?('ja')
+      clean_text = clean_text.apply(NewLineInMiddleOfWordRule)
+      clean_text = clean_text.apply(JA_NewLineInMiddleOfWord) if language.eql?('ja')
       clean_text
     end
 
@@ -99,54 +108,15 @@ module PragmaticSegmenter
       txt
     end
 
-    def remove_newline_in_middle_of_word(txt)
-      txt.gsub(NEWLINE_IN_MIDDLE_OF_WORD_REGEX, '')
-    end
-
-    def remove_newline_in_middle_of_word_ja(txt)
-      txt.gsub(NEWLINE_IN_MIDDLE_OF_WORD_JA_REGEX, '')
-    end
-
-    def strip_html(txt)
-      txt.gsub(HTML_TAG_REGEX, '').gsub(ESCAPED_HTML_TAG_REGEX, '')
-    end
-
-    def strip_other_inline_formatting(txt)
-      txt.gsub(INLINE_FORMATTING_REGEX, '')
-    end
-
-    def replace_double_newlines(txt)
-      txt.gsub(DOUBLE_NEWLINE_WITH_SPACE_REGEX, "\r")
-        .gsub(DOUBLE_NEWLINE_REGEX, "\r")
-    end
-
     def replace_newlines(txt)
       if doc_type.eql?('pdf')
-        txt = remove_pdf_line_breaks(txt)
+        txt.apply(NewLineFollowedByBulletRule).
+            apply(PDF_NewLineInMiddleOfSentenceRule).
+            apply(PDF_NewLineInMiddleOfSentenceNoSpacesRule)
       else
-        txt =
-          txt.gsub(NEWLINE_FOLLOWED_BY_PERIOD_REGEX, '').gsub(/\n/, "\r")
+        txt.apply(NewLineFollowedByPeriodRule).
+                  gsub(/\n/, "\r") # FIXME: CONVERT TO RULE!
       end
-      txt
-    end
-
-    def remove_pdf_line_breaks(txt)
-      txt.gsub(NEWLINE_FOLLOWED_BY_BULLET_REGEX, "\r")
-        .gsub(NEWLINE_IN_MIDDLE_OF_SENTENCE_PDF_REGEX, '')
-        .gsub(NEWLINE_IN_MIDDLE_OF_SENTENCE_PDF_NO_SPACES_REGEX, ' ')
-    end
-
-    def clean_quotations(txt)
-      txt.gsub(/''/, '"').gsub(/``/, '"')
-    end
-
-    def clean_quotations_en(txt)
-      txt.gsub(/`/, "'")
-    end
-
-    def clean_table_of_contents(txt)
-      txt.gsub(TABLE_OF_CONTENTS_REGEX, "\r")
-        .gsub(CONSECUTIVE_PERIODS_REGEX, ' ')
     end
   end
 end
