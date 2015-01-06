@@ -71,19 +71,19 @@ module PragmaticSegmenter
         reformatted_text = PragmaticSegmenter::List.new(text: text).add_line_break
         case language
         when 'de'
-          reformatted_text = PragmaticSegmenter::Languages::Deutsch::AbbreviationReplacer.new(text: reformatted_text, language: language).replace
+          reformatted_text = PragmaticSegmenter::Languages::Deutsch::AbbreviationReplacer.new(text: reformatted_text).replace
         when 'ar'
-          reformatted_text = PragmaticSegmenter::Languages::Arabic::AbbreviationReplacer.new(text: reformatted_text, language: language).replace
+          reformatted_text = PragmaticSegmenter::Languages::Arabic::AbbreviationReplacer.new(text: reformatted_text).replace
         when 'fa'
-          reformatted_text = PragmaticSegmenter::Languages::Persian::AbbreviationReplacer.new(text: reformatted_text, language: language).replace
+          reformatted_text = PragmaticSegmenter::Languages::Persian::AbbreviationReplacer.new(text: reformatted_text).replace
         when 'es'
-          reformatted_text = PragmaticSegmenter::Languages::Spanish::AbbreviationReplacer.new(text: reformatted_text, language: language).replace
+          reformatted_text = PragmaticSegmenter::Languages::Spanish::AbbreviationReplacer.new(text: reformatted_text).replace
         when 'ru'
-          reformatted_text = PragmaticSegmenter::Languages::Russian::AbbreviationReplacer.new(text: reformatted_text, language: language).replace
+          reformatted_text = PragmaticSegmenter::Languages::Russian::AbbreviationReplacer.new(text: reformatted_text).replace
         when 'it'
-          reformatted_text = PragmaticSegmenter::Languages::Italian::AbbreviationReplacer.new(text: reformatted_text, language: language).replace
+          reformatted_text = PragmaticSegmenter::Languages::Italian::AbbreviationReplacer.new(text: reformatted_text).replace
         else
-          reformatted_text = PragmaticSegmenter::AbbreviationReplacer.new(text: reformatted_text, language: language).replace
+          reformatted_text = PragmaticSegmenter::AbbreviationReplacer.new(text: reformatted_text).replace
         end
 
         if language.eql?('de')
