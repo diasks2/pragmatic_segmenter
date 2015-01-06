@@ -124,28 +124,11 @@ module PragmaticSegmenter
       @text = PragmaticSegmenter::List.new(text: @text).add_line_break
       @text = PragmaticSegmenter::AbbreviationReplacer.new(text: @text, language: language).replace
       @text = PragmaticSegmenter::Number.new(text: @text, language: language).replace
-      multi_period_abbr
-      abbr_as_sentence_boundary
       replace_geo_location_periods
       split_lines
     end
 
     private
-
-    def abbr_as_sentence_boundary
-      # Find the most common cases where abbreviations double as sentence boundaries.
-      %w(A Being Did For He How However I In Millions More She That The There They We What When Where Who Why).each do |word|
-        @text.gsub!(/U∯S∯\s#{Regexp.escape(word)}\s/, "U∯S\.\s#{Regexp.escape(word)}\s")
-        @text.gsub!(/U\.S∯\s#{Regexp.escape(word)}\s/, "U\.S\.\s#{Regexp.escape(word)}\s")
-        @text.gsub!(/U∯K∯\s#{Regexp.escape(word)}\s/, "U∯K\.\s#{Regexp.escape(word)}\s")
-        @text.gsub!(/U\.K∯\s#{Regexp.escape(word)}\s/, "U\.K\.\s#{Regexp.escape(word)}\s")
-        @text.gsub!(/E∯U∯\s#{Regexp.escape(word)}\s/, "E∯U\.\s#{Regexp.escape(word)}\s")
-        @text.gsub!(/E\.U∯\s#{Regexp.escape(word)}\s/, "E\.U\.\s#{Regexp.escape(word)}\s")
-        @text.gsub!(/U∯S∯A∯\s#{Regexp.escape(word)}\s/, "U∯S∯A\.\s#{Regexp.escape(word)}\s")
-        @text.gsub!(/U\.S\.A∯\s#{Regexp.escape(word)}\s/, "U\.S\.A\.\s#{Regexp.escape(word)}\s")
-        @text.gsub!(/I∯\s#{Regexp.escape(word)}\s/, "I\.\s#{Regexp.escape(word)}\s")
-      end
-    end
 
     def replace_geo_location_periods
       @text.gsub!(GEO_LOCATION_REGEX, '∯')
@@ -369,25 +352,6 @@ module PragmaticSegmenter
       txt.gsub(/∯/, '.').gsub(/♬/, '،').gsub(/♭/, ':').gsub(/ᓰ/, '。').gsub(/ᓱ/, '．')
         .gsub(/ᓳ/, '！').gsub(/ᓴ/, '!').gsub(/ᓷ/, '?').gsub(/ᓸ/, '？').gsub(/☉/, '?!')
         .gsub(/☈/, '!?').gsub(/☇/, '??').gsub(/☄/, '!!').delete('ȸ').gsub(/ȹ/, "\n")
-    end
-
-    def multi_period_abbr
-      # Rubular: http://rubular.com/r/xDkpFZ0EgH
-      mpa = @text.scan(/\b[a-z](?:\.[a-z])+[.]/i)
-      unless mpa.empty?
-        mpa.each do |r|
-          @text.gsub!(/#{Regexp.escape(r)}/, "#{r.gsub!('.', '∯')}")
-        end
-      end
-      replace_period_in_am_pm
-    end
-
-    def replace_period_in_am_pm
-      # Rubular: http://rubular.com/r/Vnx3m4Spc8
-      @text.gsub!(/(?<=a∯m)∯(?=\s[A-Z])/, '.')
-      @text.gsub!(/(?<=A∯M)∯(?=\s[A-Z])/, '.')
-      @text.gsub!(/(?<=p∯m)∯(?=\s[A-Z])/, '.')
-      @text.gsub!(/(?<=P∯M)∯(?=\s[A-Z])/, '.')
     end
 
     def sub_punct(array, content)
