@@ -19,6 +19,10 @@ require 'pragmatic_segmenter/languages/greek'
 require 'pragmatic_segmenter/languages/armenian'
 require 'pragmatic_segmenter/languages/burmese'
 require 'pragmatic_segmenter/languages/urdu'
+require 'pragmatic_segmenter/languages/french'
+require 'pragmatic_segmenter/languages/italian'
+require 'pragmatic_segmenter/languages/spanish'
+require 'pragmatic_segmenter/languages/russian'
 
 module PragmaticSegmenter
   module Languages

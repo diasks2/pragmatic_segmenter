@@ -50,7 +50,25 @@ module PragmaticSegmenter
     def search_for_abbreviations_in_string(txt)
       original = txt.dup
       downcased = txt.downcase
-      abbr = PragmaticSegmenter::Abbreviation.new(language: language)
+      case language
+      when 'en'
+        abbr = PragmaticSegmenter::Languages::English::Abbreviation.new
+      when 'ar'
+        abbr = PragmaticSegmenter::Languages::Arabic::Abbreviation.new
+      when 'de'
+        abbr = PragmaticSegmenter::Languages::Deutsch::Abbreviation.new
+      when 'fr'
+        abbr = PragmaticSegmenter::Languages::French::Abbreviation.new
+      when 'it'
+        abbr = PragmaticSegmenter::Languages::Italian::Abbreviation.new
+      when 'ru'
+        abbr = PragmaticSegmenter::Languages::Russian::Abbreviation.new
+      when 'es'
+        abbr = PragmaticSegmenter::Languages::Spanish::Abbreviation.new
+      else
+        abbr = PragmaticSegmenter::Abbreviation.new
+      end
+
       abbr.all.each do |a|
         next unless downcased.include?(a.strip)
         abbrev_match = original.scan(/(?:^|\s|\r|\n)#{Regexp.escape(a.strip)}/i)
@@ -64,11 +82,11 @@ module PragmaticSegmenter
             txt = replace_abbr_ar_fa(txt, am)
           else
             character = character_array[index]
-            prefix = abbr.prefix
+            prepositive = abbr.prepositive
             number_abbr = abbr.number
             upper = /[[:upper:]]/.match(character.to_s)
-            if upper.nil? || prefix.include?(am.downcase.strip)
-              if prefix.include?(am.downcase.strip)
+            if upper.nil? || prepositive.include?(am.downcase.strip)
+              if prepositive.include?(am.downcase.strip)
                 txt = replace_prepositive_abbr(txt, am)
               elsif number_abbr.include?(am.downcase.strip)
                 txt = replace_pre_number_abbr(txt, am)
