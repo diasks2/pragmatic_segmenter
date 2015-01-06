@@ -69,7 +69,12 @@ module PragmaticSegmenter
       def segment
         return [] unless text
         reformatted_text = PragmaticSegmenter::List.new(text: text).add_line_break
-        reformatted_text = PragmaticSegmenter::AbbreviationReplacer.new(text: reformatted_text, language: language).replace
+        if language.eql?('de')
+          reformatted_text = PragmaticSegmenter::Languages::Deutsch::AbbreviationReplacer.new(text: reformatted_text, language: language).replace
+        else
+          reformatted_text = PragmaticSegmenter::AbbreviationReplacer.new(text: reformatted_text, language: language).replace
+        end
+
         if language.eql?('de')
           reformatted_text = PragmaticSegmenter::Languages::Deutsch::Number.new(text: reformatted_text).replace
         else

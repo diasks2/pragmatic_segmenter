@@ -69,6 +69,32 @@ module PragmaticSegmenter
           NUMBER_ABBREVIATIONS
         end
       end
+
+      class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
+
+        def replace
+          @reformatted_text = replace_possessive_abbreviations(text)
+          @reformatted_text = PragmaticSegmenter::Languages::Deutsch::SingleLetterAbbreviation.new(text: @reformatted_text).replace
+          @reformatted_text = search_for_abbreviations_in_string(@reformatted_text)
+          @reformatted_text = replace_multi_period_abbreviations(@reformatted_text)
+          @reformatted_text = replace_period_in_am_pm(@reformatted_text)
+          replace_abbreviation_as_sentence_boundary(@reformatted_text)
+        end
+
+        private
+
+        def search_for_abbreviations_in_string(txt)
+          super
+        end
+
+        def scan_for_replacements(txt, am, index, character_array, abbr)
+          replace_abbr(txt, am)
+        end
+
+        def replace_abbr(txt, abbr)
+          txt.gsub(/(?<=#{abbr})\.(?=\s)/, '∯')
+        end
+      end
     end
   end
 end

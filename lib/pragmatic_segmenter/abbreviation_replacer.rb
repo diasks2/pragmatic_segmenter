@@ -33,16 +33,12 @@ module PragmaticSegmenter
     end
 
     def replace
-      reformatted_text = replace_possessive_abbreviations(text)
-      if language.eql?('de')
-        reformatted_text = PragmaticSegmenter::Languages::Deutsch::SingleLetterAbbreviation.new(text: reformatted_text).replace
-      else
-        reformatted_text = PragmaticSegmenter::SingleLetterAbbreviation.new(text: reformatted_text).replace
-      end
-      reformatted_text = search_for_abbreviations_in_string(reformatted_text)
-      reformatted_text = replace_multi_period_abbreviations(reformatted_text)
-      reformatted_text = replace_period_in_am_pm(reformatted_text)
-      replace_abbreviation_as_sentence_boundary(reformatted_text)
+      @reformatted_text = replace_possessive_abbreviations(text)
+      @reformatted_text = PragmaticSegmenter::SingleLetterAbbreviation.new(text: @reformatted_text).replace
+      @reformatted_text = search_for_abbreviations_in_string(@reformatted_text)
+      @reformatted_text = replace_multi_period_abbreviations(@reformatted_text)
+      @reformatted_text = replace_period_in_am_pm(@reformatted_text)
+      replace_abbreviation_as_sentence_boundary(@reformatted_text)
     end
 
     private
@@ -50,25 +46,7 @@ module PragmaticSegmenter
     def search_for_abbreviations_in_string(txt)
       original = txt.dup
       downcased = txt.downcase
-      case language
-      when 'en'
-        abbr = PragmaticSegmenter::Languages::English::Abbreviation.new
-      when 'ar'
-        abbr = PragmaticSegmenter::Languages::Arabic::Abbreviation.new
-      when 'de'
-        abbr = PragmaticSegmenter::Languages::Deutsch::Abbreviation.new
-      when 'fr'
-        abbr = PragmaticSegmenter::Languages::French::Abbreviation.new
-      when 'it'
-        abbr = PragmaticSegmenter::Languages::Italian::Abbreviation.new
-      when 'ru'
-        abbr = PragmaticSegmenter::Languages::Russian::Abbreviation.new
-      when 'es'
-        abbr = PragmaticSegmenter::Languages::Spanish::Abbreviation.new
-      else
-        abbr = PragmaticSegmenter::Abbreviation.new
-      end
-
+      abbr = abbreviations
       abbr.all.each do |a|
         next unless downcased.include?(a.strip)
         abbrev_match = original.scan(/(?:^|\s|\r|\n)#{Regexp.escape(a.strip)}/i)
@@ -76,32 +54,56 @@ module PragmaticSegmenter
         next_word_start = /(?<=#{Regexp.escape(a.strip)} ).{1}/
         character_array = @text.scan(next_word_start)
         abbrev_match.each_with_index do |am, index|
-          if language.eql?('de')
-            txt = replace_abbr_de(txt, am)
-          elsif language.eql?('ar') || language.eql?('fa')
-            txt = replace_abbr_ar_fa(txt, am)
+          txt = scan_for_replacements(txt, am, index, character_array, abbr)
+        end
+      end
+      txt
+    end
+
+    def scan_for_replacements(txt, am, index, character_array, abbr)
+      if language.eql?('ar') || language.eql?('fa')
+        txt = replace_abbr_ar_fa(txt, am)
+      else
+        character = character_array[index]
+        prepositive = abbr.prepositive
+        number_abbr = abbr.number
+        upper = /[[:upper:]]/.match(character.to_s)
+        if upper.nil? || prepositive.include?(am.downcase.strip)
+          if prepositive.include?(am.downcase.strip)
+            txt = replace_prepositive_abbr(txt, am)
+          elsif number_abbr.include?(am.downcase.strip)
+            txt = replace_pre_number_abbr(txt, am)
           else
-            character = character_array[index]
-            prepositive = abbr.prepositive
-            number_abbr = abbr.number
-            upper = /[[:upper:]]/.match(character.to_s)
-            if upper.nil? || prepositive.include?(am.downcase.strip)
-              if prepositive.include?(am.downcase.strip)
-                txt = replace_prepositive_abbr(txt, am)
-              elsif number_abbr.include?(am.downcase.strip)
-                txt = replace_pre_number_abbr(txt, am)
-              else
-                if language.eql?('ru')
-                  txt = replace_period_of_abbr_ru(txt, am)
-                else
-                  txt = replace_period_of_abbr(txt, am)
-                end
-              end
+            if language.eql?('ru')
+              txt = replace_period_of_abbr_ru(txt, am)
+            else
+              txt = replace_period_of_abbr(txt, am)
             end
           end
         end
       end
       txt
+    end
+
+    def abbreviations
+      case language
+      when 'en'
+        PragmaticSegmenter::Languages::English::Abbreviation.new
+      when 'ar'
+        PragmaticSegmenter::Languages::Arabic::Abbreviation.new
+      when 'de'
+        PragmaticSegmenter::Languages::Deutsch::Abbreviation.new
+      when 'fr'
+        PragmaticSegmenter::Languages::French::Abbreviation.new
+      when 'it'
+        PragmaticSegmenter::Languages::Italian::Abbreviation.new
+      when 'ru'
+        PragmaticSegmenter::Languages::Russian::Abbreviation.new
+      when 'es'
+        PragmaticSegmenter::Languages::Spanish::Abbreviation.new
+      else
+        PragmaticSegmenter::Abbreviation.new
+      end
     end
 
     def replace_abbreviation_as_sentence_boundary(txt)
@@ -148,10 +150,6 @@ module PragmaticSegmenter
         .gsub(UPPERCASE_AM_REGEX, '.')
         .gsub(LOWERCASE_PM_REGEX, '.')
         .gsub(LOWERCASE_AM_REGEX, '.')
-    end
-
-    def replace_abbr_de(txt, abbr)
-      txt.gsub(/(?<=#{abbr})\.(?=\s)/, '∯')
     end
 
     def replace_abbr_ar_fa(txt, abbr)
