@@ -9,6 +9,7 @@ require 'pragmatic_segmenter/email'
 require 'pragmatic_segmenter/exclamation_words'
 require 'pragmatic_segmenter/punctuation_replacer'
 require 'pragmatic_segmenter/between_punctuation'
+require 'pragmatic_segmenter/sentence_boundary_punctuation'
 
 module PragmaticSegmenter
   # This class segments a text into an array of sentences.
@@ -22,15 +23,6 @@ module PragmaticSegmenter
     PUNCT_HY = ['։', '՜', ':']
     PUNCT_MY = ['။', '၏', '?', '!']
     PUNCT_UR = ['?', '!', '۔', '؟']
-
-    SENTENCE_BOUNDARY_AM = /.*?[፧።!\?]|.*?$/
-    SENTENCE_BOUNDARY_AR = /.*?[:\.!\?؟،]|.*?\z|.*?$/
-    SENTENCE_BOUNDARY_EL = /.*?[\.;!\?]|.*?$/
-    SENTENCE_BOUNDARY_FA = /.*?[:\.!\?؟]|.*?\z|.*?$/
-    SENTENCE_BOUNDARY_HI = /.*?[।\|!\?]|.*?$/
-    SENTENCE_BOUNDARY_HY = /.*?[։՜:]|.*?$/
-    SENTENCE_BOUNDARY_MY = /.*?[။၏!\?]|.*?$/
-    SENTENCE_BOUNDARY_UR = /.*?[۔؟!\?]|.*?$/
 
     # Rubular: http://rubular.com/r/aXPUGm6fQh
     QUESTION_MARK_IN_QUOTATION_REGEX = /\?(?=(\'|\"))/
@@ -49,8 +41,6 @@ module PragmaticSegmenter
 
     # Rubular: http://rubular.com/r/JMjlZHAT4g
     SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX = /(?<=[!?\.][\"\'\u{201d}\u{201c}])\s{1}(?=[A-Z])/
-
-    SENTENCE_BOUNDARY_REGEX = /\u{ff08}(?:[^\u{ff09}])*\u{ff09}(?=\s?[A-Z])|\u{300c}(?:[^\u{300d}])*\u{300d}(?=\s[A-Z])|\((?:[^\)])*\)(?=\s[A-Z])|'(?:[^'])*'(?=\s[A-Z])|"(?:[^"])*"(?=\s[A-Z])|“(?:[^”])*”(?=\s[A-Z])|\S.*?[。．.！!?？ȸȹ☉☈☇☄]/
 
     attr_reader :text, :language, :doc_type
     def initialize(text:, **args)
@@ -135,32 +125,11 @@ module PragmaticSegmenter
         PragmaticSegmenter::ExclamationWords.new(text: line).replace
         PragmaticSegmenter::BetweenPunctuation.new(text: line, language: language).replace
         line = replace_double_punctuation(line)
-        case
-        when language.eql?('ar')
-          line = replace_non_sentence_boundary_punctuation_ar(line)
-          subline = ar_split_at_sentence_boundary(line)
-        when language.eql?('fa')
-          line = replace_non_sentence_boundary_punctuation_fa(line)
-          subline = fa_split_at_sentence_boundary(line)
-        when language.eql?('hi')
-          subline = hi_split_at_sentence_boundary(line)
-        when language.eql?('hy')
-          subline = hy_split_at_sentence_boundary(line)
-        when language.eql?('el')
-          subline = el_split_at_sentence_boundary(line)
-        when language.eql?('my')
-          subline = my_split_at_sentence_boundary(line)
-        when language.eql?('am')
-          subline = am_split_at_sentence_boundary(line)
-        when language.eql?('ur')
-          subline = ur_split_at_sentence_boundary(line)
-        else
-          line = replace_question_mark_in_quotation(line)
-          line = replace_exclamation_point_in_quotation(line)
-          line = replace_exclamation_point_before_comma_mid_sentence(line)
-          line = replace_exclamation_point_mid_sentence(line)
-          subline = line.scan(SENTENCE_BOUNDARY_REGEX)
-        end
+        line = replace_question_mark_in_quotation(line)
+        line = replace_exclamation_point_in_quotation(line)
+        line = replace_exclamation_point_before_comma_mid_sentence(line)
+        line = replace_exclamation_point_mid_sentence(line)
+        subline = PragmaticSegmenter::SentenceBoundaryPunctuation.new(text: line, language: language).split
         subline.each_with_index do |s_l|
           segments << sub_symbols(s_l)
         end
@@ -171,13 +140,7 @@ module PragmaticSegmenter
       end
     end
 
-    def replace_non_sentence_boundary_punctuation_fa(txt)
-      txt.gsub(/(?<=\d):(?=\d)/, '♭').gsub(/،(?=\s\S+،)/, '♬')
-    end
 
-    def replace_non_sentence_boundary_punctuation_ar(txt)
-      txt.gsub(/(?<=\d):(?=\d)/, '♭').gsub(/،(?=\s\S+،)/, '♬')
-    end
 
     def replace_single_newline(txt)
       txt.gsub(/\n/, 'ȹ')
@@ -187,38 +150,6 @@ module PragmaticSegmenter
       txt.gsub(/\?!/, '☉')
         .gsub(/!\?/, '☈').gsub(/\?\?/, '☇')
         .gsub(/!!/, '☄')
-    end
-
-    def ar_split_at_sentence_boundary(txt)
-      txt.scan(SENTENCE_BOUNDARY_AR)
-    end
-
-    def fa_split_at_sentence_boundary(txt)
-      txt.scan(SENTENCE_BOUNDARY_FA)
-    end
-
-    def hi_split_at_sentence_boundary(txt)
-      txt.scan(SENTENCE_BOUNDARY_HI)
-    end
-
-    def hy_split_at_sentence_boundary(txt)
-      txt.scan(SENTENCE_BOUNDARY_HY)
-    end
-
-    def el_split_at_sentence_boundary(txt)
-      txt.scan(SENTENCE_BOUNDARY_EL)
-    end
-
-    def my_split_at_sentence_boundary(txt)
-      txt.scan(SENTENCE_BOUNDARY_MY)
-    end
-
-    def am_split_at_sentence_boundary(txt)
-      txt.scan(SENTENCE_BOUNDARY_AM)
-    end
-
-    def ur_split_at_sentence_boundary(txt)
-      txt.scan(SENTENCE_BOUNDARY_UR)
     end
 
     def replace_exclamation_point_before_comma_mid_sentence(txt)
