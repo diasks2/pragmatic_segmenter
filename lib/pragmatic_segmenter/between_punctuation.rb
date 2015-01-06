@@ -20,10 +20,9 @@ module PragmaticSegmenter
     # Rubular: http://rubular.com/r/6tTityPflI
     BETWEEN_PARENS_REGEX = /\((?>[^\(\)\\]+|\\{2}|\\.)*\)/
 
-    attr_reader :text, :language
-    def initialize(text:, **args)
+    attr_reader :text
+    def initialize(text:)
       @text = text
-      @language = args[:language]
     end
 
     def replace
