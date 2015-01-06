@@ -11,6 +11,14 @@ require 'pragmatic_segmenter/between_punctuation'
 require 'pragmatic_segmenter/sentence_boundary_punctuation'
 require 'pragmatic_segmenter/languages/english'
 require 'pragmatic_segmenter/languages/deutsch'
+require 'pragmatic_segmenter/languages/hindi'
+require 'pragmatic_segmenter/languages/persian'
+require 'pragmatic_segmenter/languages/amharic'
+require 'pragmatic_segmenter/languages/arabic'
+require 'pragmatic_segmenter/languages/greek'
+require 'pragmatic_segmenter/languages/armenian'
+require 'pragmatic_segmenter/languages/burmese'
+require 'pragmatic_segmenter/languages/urdu'
 
 module PragmaticSegmenter
   module Languages
@@ -129,7 +137,26 @@ module PragmaticSegmenter
           line = replace_exclamation_point_in_quotation(line)
           line = replace_exclamation_point_before_comma_mid_sentence(line)
           line = replace_exclamation_point_mid_sentence(line)
-          subline = PragmaticSegmenter::SentenceBoundaryPunctuation.new(text: line, language: language).split
+          case
+          when language.eql?('hi')
+            subline = PragmaticSegmenter::Languages::Hindi::SentenceBoundaryPunctuation.new(text: line).split
+          when language.eql?('fa')
+            subline = PragmaticSegmenter::Languages::Persian::SentenceBoundaryPunctuation.new(text: line).split
+          when language.eql?('el')
+            subline = PragmaticSegmenter::Languages::Greek::SentenceBoundaryPunctuation.new(text: line).split
+          when language.eql?('am')
+            subline = PragmaticSegmenter::Languages::Amharic::SentenceBoundaryPunctuation.new(text: line).split
+          when language.eql?('ar')
+            subline = PragmaticSegmenter::Languages::Arabic::SentenceBoundaryPunctuation.new(text: line).split
+          when language.eql?('hy')
+            subline = PragmaticSegmenter::Languages::Armenian::SentenceBoundaryPunctuation.new(text: line).split
+          when language.eql?('ur')
+            subline = PragmaticSegmenter::Languages::Urdu::SentenceBoundaryPunctuation.new(text: line).split
+          when language.eql?('my')
+            subline = PragmaticSegmenter::Languages::Burmese::SentenceBoundaryPunctuation.new(text: line).split
+          else
+            subline = PragmaticSegmenter::SentenceBoundaryPunctuation.new(text: line).split
+          end
           subline.each_with_index do |s_l|
             segments << sub_symbols(s_l)
           end
