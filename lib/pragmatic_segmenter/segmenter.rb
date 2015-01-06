@@ -137,18 +137,15 @@ module PragmaticSegmenter
       end
       if clause_1
         line << 'ȸ' unless end_punc_check || language.eql?('ar') || language.eql?('fa')
-
         sub_part_of_word_exclamation_points(line)
         sub_punctuation_between_quotes_and_parens(line)
         line = replace_double_punctuation(line)
         case
         when language.eql?('ar')
-          line.gsub!(/(?<=\d):(?=\d)/, '♭')
-          line.gsub!(/،(?=\s\S+،)/, '♬')
+          line = replace_non_sentence_boundary_punctuation_ar(line)
           subline = ar_split_at_sentence_boundary(line)
         when language.eql?('fa')
-          line.gsub!(/(?<=\d):(?=\d)/, '♭')
-          line.gsub!(/،(?=\s\S+،)/, '♬')
+          line = replace_non_sentence_boundary_punctuation_fa(line)
           subline = fa_split_at_sentence_boundary(line)
         when language.eql?('hi')
           subline = hi_split_at_sentence_boundary(line)
@@ -177,6 +174,14 @@ module PragmaticSegmenter
         line.gsub!(/∯/, '.')
         segments << line
       end
+    end
+
+    def replace_non_sentence_boundary_punctuation_fa(txt)
+      txt.gsub(/(?<=\d):(?=\d)/, '♭').gsub(/،(?=\s\S+،)/, '♬')
+    end
+
+    def replace_non_sentence_boundary_punctuation_ar(txt)
+      txt.gsub(/(?<=\d):(?=\d)/, '♭').gsub(/،(?=\s\S+،)/, '♬')
     end
 
     def replace_single_newline(txt)
