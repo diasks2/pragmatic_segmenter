@@ -1,14 +1,23 @@
 # -*- encoding : utf-8 -*-
 
 module PragmaticSegmenter
+  module Rules
+    module HtmlRules
+      # Rubular: http://rubular.com/r/ENrVFMdJ8v
+      HtmlTagRule = Rule.new(/<\/?[^>]*>/, '')
+
+      # Rubular: http://rubular.com/r/XZVqMPJhea
+      EscapedHtmlTagRule = Rule.new(/&lt;\/?[^gt;]*gt;/, '')
+
+      All = [HtmlTagRule, EscapedHtmlTagRule]
+    end
+  end
+
+
   # This is an opinionated class that removes errant newlines,
   # xhtml, inline formatting, etc.
   class Cleaner
-    # Rubular: http://rubular.com/r/ENrVFMdJ8v
-    HtmlTagRule = Rule.new(/<\/?[^>]*>/, '')
-
-    # Rubular: http://rubular.com/r/XZVqMPJhea
-    EscapedHtmlTagRule = Rule.new(/&lt;\/?[^gt;]*gt;/, '')
+    include Rules
 
     # Rubular: http://rubular.com/r/V57WnM9Zut
     NewLineInMiddleOfWordRule = Rule.new(/\n(?=[a-zA-Z]{1,2}\n)/, '')
@@ -79,8 +88,7 @@ module PragmaticSegmenter
                               apply(DoubleNewLineRule)
 
       clean_text = replace_newlines(clean_text)
-      clean_text = clean_text.apply(HtmlTagRule).
-                              apply(EscapedHtmlTagRule).
+      clean_text = clean_text.apply(HtmlRules::All).
                               apply(InlineFormattingRule).
                               apply(QuotationsFirstRule).
                               apply(QuotationsSecondRule)
