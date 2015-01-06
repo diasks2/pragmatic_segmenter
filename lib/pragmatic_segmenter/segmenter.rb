@@ -3,6 +3,7 @@ require 'pragmatic_segmenter/cleaner'
 require 'pragmatic_segmenter/list'
 require 'pragmatic_segmenter/abbreviation_replacer'
 require 'pragmatic_segmenter/number'
+require 'pragmatic_segmenter/ellipsis'
 
 module PragmaticSegmenter
   # This class segments a text into an array of sentences.
@@ -30,18 +31,6 @@ module PragmaticSegmenter
 
     # Rubular: http://rubular.com/r/G2opjedIm9
     GEO_LOCATION_REGEX = /(?<=[a-zA-z]°)\.(?=\s*\d+)/
-
-    # Rubular: http://rubular.com/r/i60hCK81fz
-    ELLIPSIS_3_CONSECUTIVE_REGEX = /\.\.\.(?=\s+[A-Z])/
-
-    # Rubular: http://rubular.com/r/Hdqpd90owl
-    ELLIPSIS_4_CONSECUTIVE_REGEX = /(?<=\S)\.{3}(?=\.\s[A-Z])/
-
-    # Rubular: http://rubular.com/r/YBG1dIHTRu
-    ELLIPSIS_3_SPACE_REGEX = /(\s\.){3}\s/
-
-    # Rubular: http://rubular.com/r/2VvZ8wRbd8
-    ELLIPSIS_4_SPACE_REGEX = /(?<=[a-z])(\.\s){3}\.(\z|$|\n)/
 
     # Rubular: http://rubular.com/r/aXPUGm6fQh
     QUESTION_MARK_IN_QUOTATION_REGEX = /\?(?=(\'|\"))/
@@ -134,36 +123,6 @@ module PragmaticSegmenter
       @text.gsub!(GEO_LOCATION_REGEX, '∯')
     end
 
-    def replace_ellipsis(line)
-      # http://www.dailywritingtips.com/in-search-of-a-4-dot-ellipsis/
-      # http://www.thepunctuationguide.com/ellipses.html
-      line = replace_3_period_ellipsis_with_spaces(line)
-      line = replace_4_period_ellipsis_with_spaces(line)
-      line = replace_4_consecutive_period_ellipsis(line)
-      line = replace_3_consecutive_period_ellipsis(line)
-      replace_other_3_period_ellipsis(line)
-    end
-
-    def replace_3_period_ellipsis_with_spaces(line)
-      line.gsub(ELLIPSIS_3_SPACE_REGEX, '♟')
-    end
-
-    def replace_4_period_ellipsis_with_spaces(line)
-      line.gsub(ELLIPSIS_4_SPACE_REGEX, '♝')
-    end
-
-    def replace_4_consecutive_period_ellipsis(line)
-      line.gsub(ELLIPSIS_4_CONSECUTIVE_REGEX, 'ƪ')
-    end
-
-    def replace_3_consecutive_period_ellipsis(line)
-      line.gsub(ELLIPSIS_3_CONSECUTIVE_REGEX, '☏.')
-    end
-
-    def replace_other_3_period_ellipsis(line)
-      line.gsub(/\.\.\./, 'ƪ')
-    end
-
     def replace_periods_in_email_addresses(line)
       line.gsub(/(\w)(\.)(\w)/, '\1∮\3')
     end
@@ -174,7 +133,7 @@ module PragmaticSegmenter
 
     def analyze_lines(line:, segments:)
       line = replace_single_newline(line)
-      line = replace_ellipsis(line)
+      line = PragmaticSegmenter::Ellipsis.new(text: line).replace
       line = replace_periods_in_email_addresses(line)
 
       clause_1 = false
