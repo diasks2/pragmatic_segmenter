@@ -31,6 +31,14 @@ module PragmaticSegmenter
           []
         end
       end
+
+      class Punctuation < PragmaticSegmenter::Punctuation
+        PUNCT = ['?', '!', ':', '.', '؟', '،']
+
+        def punct
+          PUNCT
+        end
+      end
     end
   end
 end

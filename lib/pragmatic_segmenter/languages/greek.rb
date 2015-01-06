@@ -8,6 +8,14 @@ module PragmaticSegmenter
           text.scan(SENTENCE_BOUNDARY)
         end
       end
+
+      class Punctuation < PragmaticSegmenter::Punctuation
+        PUNCT = ['.', '!', ';', '?']
+
+        def punct
+          PUNCT
+        end
+      end
     end
   end
 end

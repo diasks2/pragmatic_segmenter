@@ -9,6 +9,7 @@ require 'pragmatic_segmenter/exclamation_words'
 require 'pragmatic_segmenter/punctuation_replacer'
 require 'pragmatic_segmenter/between_punctuation'
 require 'pragmatic_segmenter/sentence_boundary_punctuation'
+require 'pragmatic_segmenter/punctuation'
 require 'pragmatic_segmenter/languages/english'
 require 'pragmatic_segmenter/languages/deutsch'
 require 'pragmatic_segmenter/languages/hindi'
@@ -28,16 +29,6 @@ require 'pragmatic_segmenter/languages/japanese'
 module PragmaticSegmenter
   module Languages
     module Common
-      PUNCT = ['。', '．', '.', '！', '!', '?', '？']
-      PUNCT_AM = ['።', '፧', '?', '!']
-      PUNCT_AR = ['?', '!', ':', '.', '؟', '،']
-      PUNCT_EL = ['.', '!', ';', '?']
-      PUNCT_FA = ['?', '!', ':', '.', '؟']
-      PUNCT_HI = ['।', '|', '.', '!', '?']
-      PUNCT_HY = ['։', '՜', ':']
-      PUNCT_MY = ['။', '၏', '?', '!']
-      PUNCT_UR = ['?', '!', '۔', '؟']
-
       # Rubular: http://rubular.com/r/aXPUGm6fQh
       QUESTION_MARK_IN_QUOTATION_REGEX = /\?(?=(\'|\"))/
 
@@ -121,11 +112,21 @@ module PragmaticSegmenter
 
         clause_1 = false
         end_punc_check = false
-        if language
-          punctuation =
-            Segmenter.const_defined?("PUNCT_#{language.upcase}") ? Segmenter.const_get("PUNCT_#{language.upcase}") : PUNCT
+        case language
+        when 'am'
+          punctuation = PragmaticSegmenter::Languages::Amharic::Punctuation.new.punct
+        when 'ar'
+          punctuation = PragmaticSegmenter::Languages::Arabic::Punctuation.new.punct
+        when 'hi'
+          punctuation = PragmaticSegmenter::Languages::Hindi::Punctuation.new.punct
+        when 'hy'
+          punctuation = PragmaticSegmenter::Languages::Armenian::Punctuation.new.punct
+        when 'my'
+          punctuation = PragmaticSegmenter::Languages::Burmese::Punctuation.new.punct
+        when 'ur'
+          punctuation = PragmaticSegmenter::Languages::Urdu::Punctuation.new.punct
         else
-          punctuation = PUNCT
+          punctuation = PragmaticSegmenter::Punctuation.new.punct
         end
         punctuation.each do |p|
           end_punc_check = true if line[-1].include?(p)

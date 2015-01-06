@@ -15,6 +15,14 @@ module PragmaticSegmenter
           txt.gsub(/(?<=\d):(?=\d)/, '♭').gsub(/،(?=\s\S+،)/, '♬')
         end
       end
+
+      class Punctuation < PragmaticSegmenter::Punctuation
+        PUNCT = ['?', '!', ':', '.', '؟']
+
+        def punct
+          PUNCT
+        end
+      end
     end
   end
 end
