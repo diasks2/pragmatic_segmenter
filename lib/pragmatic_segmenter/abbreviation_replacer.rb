@@ -1,5 +1,6 @@
 # -*- encoding : utf-8 -*-
 require 'pragmatic_segmenter/abbreviation'
+require 'pragmatic_segmenter/single_letter_abbreviation'
 
 module PragmaticSegmenter
   # This class searches for periods within an abbreviation and
@@ -7,18 +8,6 @@ module PragmaticSegmenter
   class AbbreviationReplacer
     # Rubular: http://rubular.com/r/yqa4Rit8EY
     POSSESSIVE_ABBREVIATION_REGEX = /\.(?='s\s)|\.(?='s$)|\.(?='s\z)/
-
-    # Rubular: http://rubular.com/r/e3H6kwnr6H
-    SINGLE_UPPERCASE_LETTER_AT_START_OF_LINE_REGEX =  /(?<=^[A-Z])\.(?=\s)/
-
-    # Rubular: http://rubular.com/r/gitvf0YWH4
-    SINGLE_UPPERCASE_LETTER_REGEX = /(?<=\s[A-Z])\.(?=\s)/
-
-    # Rubular: http://rubular.com/r/B4X33QKIL8
-    SINGLE_LOWERCASE_LETTER_DE_REGEX = /(?<=\s[a-z])\.(?=\s)/
-
-    # Rubular: http://rubular.com/r/iUNSkCuso0
-    SINGLE_LOWERCASE_LETTER_AT_START_OF_LINE_DE_REGEX = /(?<=^[a-z])\.(?=\s)/
 
     # Rubular: http://rubular.com/r/xDkpFZ0EgH
     MULTI_PERIOD_ABBREVIATION_REGEX = /\b[a-z](?:\.[a-z])+[.]/i
@@ -45,7 +34,11 @@ module PragmaticSegmenter
 
     def replace
       reformatted_text = replace_possessive_abbreviations(text)
-      reformatted_text = replace_single_letter_abbreviations(reformatted_text)
+      if language.eql?('de')
+        reformatted_text = PragmaticSegmenter::Languages::Deutsch::SingleLetterAbbreviation.new(text: reformatted_text).replace
+      else
+        reformatted_text = PragmaticSegmenter::SingleLetterAbbreviation.new(text: reformatted_text).replace
+      end
       reformatted_text = search_for_abbreviations_in_string(reformatted_text)
       reformatted_text = replace_multi_period_abbreviations(reformatted_text)
       reformatted_text = replace_period_in_am_pm(reformatted_text)
@@ -53,16 +46,6 @@ module PragmaticSegmenter
     end
 
     private
-
-    def replace_single_letter_abbreviations(txt)
-      new_text =
-        replace_single_uppercase_letter_abbreviation_at_start_of_line(txt)
-      new_text =
-        replace_single_lowercase_letter_de(new_text) if language.eql?('de')
-      new_text =
-        replace_single_lowercase_letter_sol_de(new_text) if language.eql?('de')
-      replace_single_uppercase_letter_abbreviation(new_text)
-    end
 
     def search_for_abbreviations_in_string(txt)
       original = txt.dup
@@ -174,22 +157,6 @@ module PragmaticSegmenter
       txt.gsub(/(?<=\s#{abbr.strip})\./, '∯')
         .gsub(/(?<=\A#{abbr.strip})\./, '∯')
         .gsub(/(?<=^#{abbr.strip})\./, '∯')
-    end
-
-    def replace_single_lowercase_letter_sol_de(txt)
-      txt.gsub(SINGLE_LOWERCASE_LETTER_AT_START_OF_LINE_DE_REGEX, '∯')
-    end
-
-    def replace_single_lowercase_letter_de(txt)
-      txt.gsub(SINGLE_LOWERCASE_LETTER_DE_REGEX, '∯')
-    end
-
-    def replace_single_uppercase_letter_abbreviation_at_start_of_line(txt)
-      txt.gsub(SINGLE_UPPERCASE_LETTER_AT_START_OF_LINE_REGEX, '∯')
-    end
-
-    def replace_single_uppercase_letter_abbreviation(txt)
-      txt.gsub(SINGLE_UPPERCASE_LETTER_REGEX, '∯')
     end
 
     def replace_possessive_abbreviations(txt)
