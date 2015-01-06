@@ -4,6 +4,8 @@ require 'pragmatic_segmenter/list'
 require 'pragmatic_segmenter/abbreviation_replacer'
 require 'pragmatic_segmenter/number'
 require 'pragmatic_segmenter/ellipsis'
+require 'pragmatic_segmenter/geolocation'
+require 'pragmatic_segmenter/email'
 
 module PragmaticSegmenter
   # This class segments a text into an array of sentences.
@@ -28,9 +30,6 @@ module PragmaticSegmenter
     SENTENCE_BOUNDARY_UR = /.*?[۔؟!\?]|.*?$/
 
     WORDS_WITH_EXCLAMATIONS = ['!Xũ', '!Kung', 'ǃʼOǃKung', '!Xuun', '!Kung-Ekoka', 'ǃHu', 'ǃKhung', 'ǃKu', 'ǃung', 'ǃXo', 'ǃXû', 'ǃXung', 'ǃXũ', '!Xun', 'Yahoo!', 'Y!J', 'Yum!']
-
-    # Rubular: http://rubular.com/r/G2opjedIm9
-    GEO_LOCATION_REGEX = /(?<=[a-zA-z]°)\.(?=\s*\d+)/
 
     # Rubular: http://rubular.com/r/aXPUGm6fQh
     QUESTION_MARK_IN_QUOTATION_REGEX = /\?(?=(\'|\"))/
@@ -113,19 +112,11 @@ module PragmaticSegmenter
       @text = PragmaticSegmenter::List.new(text: @text).add_line_break
       @text = PragmaticSegmenter::AbbreviationReplacer.new(text: @text, language: language).replace
       @text = PragmaticSegmenter::Number.new(text: @text, language: language).replace
-      replace_geo_location_periods
+      @text = PragmaticSegmenter::Geolocation.new(text: @text).replace
       split_lines
     end
 
     private
-
-    def replace_geo_location_periods
-      @text.gsub!(GEO_LOCATION_REGEX, '∯')
-    end
-
-    def replace_periods_in_email_addresses(line)
-      line.gsub(/(\w)(\.)(\w)/, '\1∮\3')
-    end
 
     def replace_single_newline(line)
       line.gsub(/\n/, 'ȹ')
@@ -134,7 +125,7 @@ module PragmaticSegmenter
     def analyze_lines(line:, segments:)
       line = replace_single_newline(line)
       line = PragmaticSegmenter::Ellipsis.new(text: line).replace
-      line = replace_periods_in_email_addresses(line)
+      line = PragmaticSegmenter::Email.new(text: line).replace
 
       clause_1 = false
       end_punc_check = false
