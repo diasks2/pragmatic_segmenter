@@ -3,7 +3,7 @@ require 'pragmatic_segmenter/list'
 require 'pragmatic_segmenter/abbreviation_replacer'
 require 'pragmatic_segmenter/number'
 require 'pragmatic_segmenter/ellipsis'
-require 'pragmatic_segmenter/geolocation'
+require 'pragmatic_segmenter/geo_location'
 require 'pragmatic_segmenter/email'
 require 'pragmatic_segmenter/exclamation_words'
 require 'pragmatic_segmenter/punctuation_replacer'
@@ -64,7 +64,7 @@ module PragmaticSegmenter
         else
           reformatted_text = PragmaticSegmenter::Number.new(text: reformatted_text).replace
         end
-        reformatted_text = PragmaticSegmenter::Geolocation.new(text: reformatted_text).replace
+        reformatted_text = PragmaticSegmenter::GeoLocation.new(text: reformatted_text).replace
         split_lines(reformatted_text)
       end
 
