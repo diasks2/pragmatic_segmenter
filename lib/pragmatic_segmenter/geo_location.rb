@@ -3,7 +3,7 @@
 module PragmaticSegmenter
   # This class searches for periods related to geolocation
   # within a string and replaces the periods.
-  class Geolocation
+  class GeoLocation
     # Rubular: http://rubular.com/r/G2opjedIm9
     GEO_LOCATION_REGEX = /(?<=[a-zA-z]°)\.(?=\s*\d+)/
 
