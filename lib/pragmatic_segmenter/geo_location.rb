@@ -5,21 +5,15 @@ module PragmaticSegmenter
   # within a string and replaces the periods.
   class GeoLocation
     # Rubular: http://rubular.com/r/G2opjedIm9
-    GEO_LOCATION_REGEX = /(?<=[a-zA-z]°)\.(?=\s*\d+)/
+    GeoLocationRule = Rule.new(/(?<=[a-zA-z]°)\.(?=\s*\d+)/, '∯')
 
     attr_reader :text
     def initialize(text:)
-      @text = text
+      @text = Text.new(text)
     end
 
     def replace
-      replace_geo_location_periods(text)
-    end
-
-    private
-
-    def replace_geo_location_periods(txt)
-      txt.gsub(GEO_LOCATION_REGEX, '∯')
+      @text.apply(GeoLocationRule)
     end
   end
 end
