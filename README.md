@@ -97,6 +97,8 @@ Therefore, I created a set of distinct edge cases to compare segmentation tools 
 
 The Holy Grail of sentence segmentation appears to be **Golden Rule #18** as no segmenter I tested was able to correctly segment that text. The difficulty being that an abbreviation (in this case a.m./A.M./p.m./P.M.) followed by a capitalized abbreviation (such as Mr., Mrs., etc.) or followed by a proper noun such as a name can be both a sentence boundary and a non sentence boundary.
 
+Download the Golden Rules: [[txt](https://s3.amazonaws.com/tm-town-nlp-resources/golden_rules.txt) | [Ruby RSpec](https://s3.amazonaws.com/tm-town-nlp-resources/golden_rules_rspec.rb)]
+
 ####Golden Rules (English)
 
 1.) **Simple period to end sentence**
@@ -654,7 +656,7 @@ Other tools not yet tested:
 
 ## Speed Performance Benchmarks
 
-To test the relative performance of different segmentation tools and libraries I created a simple benchmark test. The test takes the 50 English Golden Rules combined into one string and runs it 100 times through the segmenter. This speed benchmark is by no means the most scientific benchmark, but it should help to give some relative performance data. The tests were done on a Mac Pro 3.7 GHz Quad-Core Intel Xeon E5 running 10.9.5. For Punkt the tests were run using the [Ruby port](https://github.com/lfcipriani/punkt-segmenter). For Standford CoreNLP the tests were run using the [Ruby port](https://github.com/louismullie/stanford-core-nlp). For OpenNLP the tests were run using the [Ruby port](https://github.com/louismullie/open-nlp).
+To test the relative performance of different segmentation tools and libraries I created a simple benchmark test. The test takes the 50 English Golden Rules combined into one string and runs it 100 times through the segmenter. This speed benchmark is by no means the most scientific benchmark, but it should help to give some relative performance data. The tests were done on a Mac Pro 3.7 GHz Quad-Core Intel Xeon E5 running 10.9.5. For Punkt the tests were run using this [Ruby port](https://github.com/lfcipriani/punkt-segmenter), for Standford CoreNLP the tests were run using this [Ruby port](https://github.com/louismullie/stanford-core-nlp), and for OpenNLP the tests were run using this [Ruby port](https://github.com/louismullie/open-nlp).
 
 ## Languages with sentence boundary punctuation that is different than English
 
