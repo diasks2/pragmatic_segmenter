@@ -676,6 +676,7 @@ To test the relative performance of different segmentation tools and libraries I
 
 ##Segmentation Papers and Books
 
+* *Sentence Boundary Detection: A Long Solved Problem?* (Second Edition) - Jonathon Read, Rebecca Dridan, Stephan Oepen, Lars Jørgen Solberg (2012) [[pdf](http://www.aclweb.org/anthology/C12-2096) | [mirror](https://s3.amazonaws.com/tm-town-nlp-resources/C12-2096.pdf)]
 * *Handbook of Natural Language Processing* (Second Edition) - Nitin Indurkhya and Fred J. Damerau (2010) [[amazon](http://www.amazon.com/Handbook-Language-Processing-Learning-Recognition/dp/1420085921)]
 * *Sentence Boundary Detection and the Problem with the U.S.* - Dan Gillick (2009) [[pdf](http://dgillick.com/resource/sbd_naacl_2009.pdf) | [mirror](https://s3.amazonaws.com/tm-town-nlp-resources/sbd_naacl_2009.pdf)]
 * *Thoughts on Word and Sentence Segmentation in Thai* - Wirote Aroonmanakun (2007) [[pdf](http://pioneer.chula.ac.th/~awirote/ling/snlp2007-wirote.pdf) | [mirror](https://s3.amazonaws.com/tm-town-nlp-resources/snlp2007-wirote.pdf)]
