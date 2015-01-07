@@ -1,6 +1,14 @@
 module PragmaticSegmenter
   module Languages
     class Persian
+      class Process < PragmaticSegmenter::Process
+        private
+
+        def replace_abbreviations(txt)
+          PragmaticSegmenter::Languages::Persian::AbbreviationReplacer.new(text: txt).replace
+        end
+      end
+
       class SentenceBoundaryPunctuation < PragmaticSegmenter::SentenceBoundaryPunctuation
         SENTENCE_BOUNDARY = /.*?[:\.!\?؟]|.*?\z|.*?$/
 

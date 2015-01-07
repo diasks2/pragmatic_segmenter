@@ -43,10 +43,9 @@ module PragmaticSegmenter
     # Rubular: http://rubular.com/r/DwNSuZrNtk
     CONSECUTIVE_PERIODS_REGEX = /\.{5,}/
 
-    attr_reader :text, :language, :doc_type
+    attr_reader :text, :doc_type
     def initialize(text:, **args)
       @text = text.dup
-      @language = args[:language]
       @doc_type = args[:doc_type]
     end
 

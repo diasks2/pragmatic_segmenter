@@ -1,6 +1,18 @@
 module PragmaticSegmenter
   module Languages
     class Deutsch
+      class Process < PragmaticSegmenter::Process
+        private
+
+        def replace_numbers(txt)
+          PragmaticSegmenter::Languages::Deutsch::Number.new(text: txt).replace
+        end
+
+        def replace_abbreviations(txt)
+          PragmaticSegmenter::Languages::Deutsch::AbbreviationReplacer.new(text: txt).replace
+        end
+      end
+
       class Number < PragmaticSegmenter::Number
         # Rubular: http://rubular.com/r/hZxoyQwKT1
         NUMBER_PERIOD_SPACE_REGEX = /(?<=\s[0-9]|\s([1-9][0-9]))\.(?=\s)/

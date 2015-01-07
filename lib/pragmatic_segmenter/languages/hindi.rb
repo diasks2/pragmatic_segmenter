@@ -1,6 +1,14 @@
 module PragmaticSegmenter
   module Languages
     class Hindi
+      class Process < PragmaticSegmenter::Process
+        private
+
+        def punctuation_array
+          PragmaticSegmenter::Languages::Hindi::Punctuation.new.punct
+        end
+      end
+
       class SentenceBoundaryPunctuation < PragmaticSegmenter::SentenceBoundaryPunctuation
         SENTENCE_BOUNDARY = /.*?[।\|!\?]|.*?$/
 

@@ -1,6 +1,18 @@
 module PragmaticSegmenter
   module Languages
     class Arabic
+      class Process < PragmaticSegmenter::Process
+        private
+
+        def replace_abbreviations(txt)
+          PragmaticSegmenter::Languages::Arabic::AbbreviationReplacer.new(text: txt).replace
+        end
+
+        def punctuation_array
+          PragmaticSegmenter::Languages::Arabic::Punctuation.new.punct
+        end
+      end
+
       class SentenceBoundaryPunctuation < PragmaticSegmenter::SentenceBoundaryPunctuation
         SENTENCE_BOUNDARY = /.*?[:\.!\?؟،]|.*?\z|.*?$/
 

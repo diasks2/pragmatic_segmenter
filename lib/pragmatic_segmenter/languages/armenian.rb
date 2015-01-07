@@ -1,6 +1,14 @@
 module PragmaticSegmenter
   module Languages
     class Armenian
+      class Process < PragmaticSegmenter::Process
+        private
+
+        def punctuation_array
+          PragmaticSegmenter::Languages::Armenian::Punctuation.new.punct
+        end
+      end
+
       class SentenceBoundaryPunctuation < PragmaticSegmenter::SentenceBoundaryPunctuation
         SENTENCE_BOUNDARY = /.*?[։՜:]|.*?$/
 
