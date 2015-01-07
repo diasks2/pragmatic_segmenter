@@ -7,6 +7,7 @@ Pragmatic Segmenter is a rule-based sentence boundary detection gem that works o
 ##Install  
 
 **Ruby**  
+Supports Ruby 2.1.5 and above  
 ```
 gem install pragmatic_segmenter
 ```
