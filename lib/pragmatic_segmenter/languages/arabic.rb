@@ -4,6 +4,10 @@ module PragmaticSegmenter
       class Process < PragmaticSegmenter::Process
         private
 
+        def sentence_boundary_punctuation(txt)
+          PragmaticSegmenter::Languages::Arabic::SentenceBoundaryPunctuation.new(text: txt).split
+        end
+
         def replace_abbreviations(txt)
           PragmaticSegmenter::Languages::Arabic::AbbreviationReplacer.new(text: txt).replace
         end

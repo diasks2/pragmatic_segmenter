@@ -60,6 +60,10 @@ module PragmaticSegmenter
         PragmaticSegmenter::Languages::Deutsch::Process.new(text: text, language: language, doc_type: doc_type).process
       when 'es'
         PragmaticSegmenter::Languages::Spanish::Process.new(text: text, language: language, doc_type: doc_type).process
+      when 'el'
+        PragmaticSegmenter::Languages::Greek::Process.new(text: text, language: language, doc_type: doc_type).process
+      when 'fa'
+        PragmaticSegmenter::Languages::Persian::Process.new(text: text, language: language, doc_type: doc_type).process
       when 'it'
         PragmaticSegmenter::Languages::Italian::Process.new(text: text, language: language, doc_type: doc_type).process
       when 'ar'

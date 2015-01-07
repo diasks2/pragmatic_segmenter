@@ -96,43 +96,28 @@ module PragmaticSegmenter
 
     def process_text(line, end_punc_check, segments)
       line << 'ȸ' unless end_punc_check || language.eql?('ar') || language.eql?('fa')
-        PragmaticSegmenter::ExclamationWords.new(text: line).replace
-        case language
-        when 'de'
-          PragmaticSegmenter::Languages::Deutsch::BetweenPunctuation.new(text: line).replace
-        when 'ja'
-          PragmaticSegmenter::Languages::Japanese::BetweenPunctuation.new(text: line).replace
-        else
-          PragmaticSegmenter::BetweenPunctuation.new(text: line).replace
-        end
-        line = replace_double_punctuation(line)
-        line = replace_question_mark_in_quotation(line)
-        line = replace_exclamation_point_in_quotation(line)
-        line = replace_exclamation_point_before_comma_mid_sentence(line)
-        line = replace_exclamation_point_mid_sentence(line)
-        case language
-        when 'hi'
-          subline = PragmaticSegmenter::Languages::Hindi::SentenceBoundaryPunctuation.new(text: line).split
-        when 'fa'
-          subline = PragmaticSegmenter::Languages::Persian::SentenceBoundaryPunctuation.new(text: line).split
-        when 'el'
-          subline = PragmaticSegmenter::Languages::Greek::SentenceBoundaryPunctuation.new(text: line).split
-        when 'am'
-          subline = PragmaticSegmenter::Languages::Amharic::SentenceBoundaryPunctuation.new(text: line).split
-        when 'ar'
-          subline = PragmaticSegmenter::Languages::Arabic::SentenceBoundaryPunctuation.new(text: line).split
-        when 'hy'
-          subline = PragmaticSegmenter::Languages::Armenian::SentenceBoundaryPunctuation.new(text: line).split
-        when 'ur'
-          subline = PragmaticSegmenter::Languages::Urdu::SentenceBoundaryPunctuation.new(text: line).split
-        when 'my'
-          subline = PragmaticSegmenter::Languages::Burmese::SentenceBoundaryPunctuation.new(text: line).split
-        else
-          subline = PragmaticSegmenter::SentenceBoundaryPunctuation.new(text: line).split
-        end
-        subline.each_with_index do |s_l|
-          segments << sub_symbols(s_l)
-        end
+      PragmaticSegmenter::ExclamationWords.new(text: line).replace
+      case language
+      when 'de'
+        PragmaticSegmenter::Languages::Deutsch::BetweenPunctuation.new(text: line).replace
+      when 'ja'
+        PragmaticSegmenter::Languages::Japanese::BetweenPunctuation.new(text: line).replace
+      else
+        PragmaticSegmenter::BetweenPunctuation.new(text: line).replace
+      end
+      line = replace_double_punctuation(line)
+      line = replace_question_mark_in_quotation(line)
+      line = replace_exclamation_point_in_quotation(line)
+      line = replace_exclamation_point_before_comma_mid_sentence(line)
+      line = replace_exclamation_point_mid_sentence(line)
+      subline = sentence_boundary_punctuation(line)
+      subline.each_with_index do |s_l|
+        segments << sub_symbols(s_l)
+      end
+    end
+
+    def sentence_boundary_punctuation(txt)
+      PragmaticSegmenter::SentenceBoundaryPunctuation.new(text: txt).split
     end
 
     def replace_single_newline(txt)

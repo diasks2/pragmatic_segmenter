@@ -4,6 +4,10 @@ module PragmaticSegmenter
       class Process < PragmaticSegmenter::Process
         private
 
+        def sentence_boundary_punctuation(txt)
+          PragmaticSegmenter::Languages::Amharic::SentenceBoundaryPunctuation.new(text: txt).split
+        end
+
         def punctuation_array
           PragmaticSegmenter::Languages::Amharic::Punctuation.new.punct
         end
