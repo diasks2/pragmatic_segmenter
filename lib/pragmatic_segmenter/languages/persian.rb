@@ -16,6 +16,9 @@ module PragmaticSegmenter
       class SentenceBoundaryPunctuation < PragmaticSegmenter::SentenceBoundaryPunctuation
         SENTENCE_BOUNDARY = /.*?[:\.!\?؟]|.*?\z|.*?$/
 
+        ReplaceColonBetweenNumbersRule = Rule.new(/(?<=\d):(?=\d)/, '♭')
+        ReplaceNonSentenceBoundaryCommaRule = Rule.new(/،(?=\s\S+،)/, '♬')
+
         def split
           txt = replace_non_sentence_boundary_punctuation(text)
           txt.scan(SENTENCE_BOUNDARY)
@@ -24,7 +27,8 @@ module PragmaticSegmenter
         private
 
         def replace_non_sentence_boundary_punctuation(txt)
-          txt.gsub(/(?<=\d):(?=\d)/, '♭').gsub(/،(?=\s\S+،)/, '♬')
+          txt.apply(ReplaceColonBetweenNumbersRule).
+              apply(ReplaceNonSentenceBoundaryCommaRule)
         end
       end
 
