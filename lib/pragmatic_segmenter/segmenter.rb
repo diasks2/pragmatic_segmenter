@@ -55,33 +55,35 @@ module PragmaticSegmenter
       return [] unless text
       case language
       when 'en'
-        PragmaticSegmenter::Process.new(text: text, language: language, doc_type: doc_type).process
+        PragmaticSegmenter::Process.new(text: text, doc_type: doc_type).process
       when 'de'
-        PragmaticSegmenter::Languages::Deutsch::Process.new(text: text, language: language, doc_type: doc_type).process
+        PragmaticSegmenter::Languages::Deutsch::Process.new(text: text, doc_type: doc_type).process
       when 'es'
-        PragmaticSegmenter::Languages::Spanish::Process.new(text: text, language: language, doc_type: doc_type).process
-      when 'el'
-        PragmaticSegmenter::Languages::Greek::Process.new(text: text, language: language, doc_type: doc_type).process
-      when 'fa'
-        PragmaticSegmenter::Languages::Persian::Process.new(text: text, language: language, doc_type: doc_type).process
+        PragmaticSegmenter::Languages::Spanish::Process.new(text: text, doc_type: doc_type).process
       when 'it'
-        PragmaticSegmenter::Languages::Italian::Process.new(text: text, language: language, doc_type: doc_type).process
-      when 'ar'
-        PragmaticSegmenter::Languages::Arabic::Process.new(text: text, language: language, doc_type: doc_type).process
+        PragmaticSegmenter::Languages::Italian::Process.new(text: text, doc_type: doc_type).process
+      when 'ja'
+        PragmaticSegmenter::Languages::Japanese::Process.new(text: text, doc_type: doc_type).process
+      when 'el'
+        PragmaticSegmenter::Languages::Greek::Process.new(text: text, doc_type: doc_type).process
       when 'ru'
-        PragmaticSegmenter::Languages::Russian::Process.new(text: text, language: language, doc_type: doc_type).process
+        PragmaticSegmenter::Languages::Russian::Process.new(text: text, doc_type: doc_type).process
+      when 'ar'
+        PragmaticSegmenter::Languages::Arabic::Process.new(text: text, doc_type: doc_type).process
       when 'am'
-        PragmaticSegmenter::Languages::Amharic::Process.new(text: text, language: language, doc_type: doc_type).process
+        PragmaticSegmenter::Languages::Amharic::Process.new(text: text, doc_type: doc_type).process
       when 'hi'
-        PragmaticSegmenter::Languages::Hindi::Process.new(text: text, language: language, doc_type: doc_type).process
+        PragmaticSegmenter::Languages::Hindi::Process.new(text: text, doc_type: doc_type).process
       when 'hy'
-        PragmaticSegmenter::Languages::Armenian::Process.new(text: text, language: language, doc_type: doc_type).process
+        PragmaticSegmenter::Languages::Armenian::Process.new(text: text, doc_type: doc_type).process
+      when 'fa'
+        PragmaticSegmenter::Languages::Persian::Process.new(text: text, doc_type: doc_type).process
       when 'my'
-        PragmaticSegmenter::Languages::Burmese::Process.new(text: text, language: language, doc_type: doc_type).process
+        PragmaticSegmenter::Languages::Burmese::Process.new(text: text, doc_type: doc_type).process
       when 'ur'
-        PragmaticSegmenter::Languages::Urdu::Process.new(text: text, language: language, doc_type: doc_type).process
+        PragmaticSegmenter::Languages::Urdu::Process.new(text: text, doc_type: doc_type).process
       else
-        PragmaticSegmenter::Process.new(text: text, language: language, doc_type: doc_type).process
+        PragmaticSegmenter::Process.new(text: text, doc_type: doc_type).process
       end
     end
   end

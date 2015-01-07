@@ -1,6 +1,14 @@
 module PragmaticSegmenter
   module Languages
     class Japanese
+      class Process < PragmaticSegmenter::Process
+        private
+
+        def between_punctutation(txt)
+          PragmaticSegmenter::Languages::Japanese::BetweenPunctuation.new(text: txt).replace
+        end
+      end
+
       class Cleaner < PragmaticSegmenter::Cleaner
         # Rubular: http://rubular.com/r/N4kPuJgle7
         NEWLINE_IN_MIDDLE_OF_WORD_REGEX = /(?<=の)\n(?=\S)/

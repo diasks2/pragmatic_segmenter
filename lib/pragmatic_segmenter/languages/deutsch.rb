@@ -4,6 +4,10 @@ module PragmaticSegmenter
       class Process < PragmaticSegmenter::Process
         private
 
+        def between_punctutation(txt)
+          PragmaticSegmenter::Languages::Deutsch::BetweenPunctuation.new(text: txt).replace
+        end
+
         def replace_numbers(txt)
           PragmaticSegmenter::Languages::Deutsch::Number.new(text: txt).replace
         end

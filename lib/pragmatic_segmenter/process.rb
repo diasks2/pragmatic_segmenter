@@ -21,10 +21,9 @@ module PragmaticSegmenter
     # Rubular: http://rubular.com/r/JMjlZHAT4g
     SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX = /(?<=[!?\.][\"\'\u{201d}\u{201c}])\s{1}(?=[A-Z])/
 
-    attr_reader :text, :language, :doc_type
-    def initialize(text:, language:, doc_type:)
+    attr_reader :text, :doc_type
+    def initialize(text:, doc_type:)
       @text = text
-      @language = language
       @doc_type = doc_type
     end
 
@@ -95,7 +94,7 @@ module PragmaticSegmenter
     end
 
     def process_text(line, end_punc_check, segments)
-      line << 'ȸ' unless end_punc_check || language.eql?('ar') || language.eql?('fa')
+      line << 'ȸ' if !end_punc_check
       PragmaticSegmenter::ExclamationWords.new(text: line).replace
       between_punctutation(line)
       line = replace_double_punctuation(line)
@@ -110,14 +109,7 @@ module PragmaticSegmenter
     end
 
     def between_punctutation(txt)
-      case language
-      when 'de'
-        PragmaticSegmenter::Languages::Deutsch::BetweenPunctuation.new(text: txt).replace
-      when 'ja'
-        PragmaticSegmenter::Languages::Japanese::BetweenPunctuation.new(text: txt).replace
-      else
-        PragmaticSegmenter::BetweenPunctuation.new(text: txt).replace
-      end
+      PragmaticSegmenter::BetweenPunctuation.new(text: txt).replace
     end
 
     def sentence_boundary_punctuation(txt)
