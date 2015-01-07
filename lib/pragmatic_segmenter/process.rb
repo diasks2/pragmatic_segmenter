@@ -97,14 +97,7 @@ module PragmaticSegmenter
     def process_text(line, end_punc_check, segments)
       line << 'ȸ' unless end_punc_check || language.eql?('ar') || language.eql?('fa')
       PragmaticSegmenter::ExclamationWords.new(text: line).replace
-      case language
-      when 'de'
-        PragmaticSegmenter::Languages::Deutsch::BetweenPunctuation.new(text: line).replace
-      when 'ja'
-        PragmaticSegmenter::Languages::Japanese::BetweenPunctuation.new(text: line).replace
-      else
-        PragmaticSegmenter::BetweenPunctuation.new(text: line).replace
-      end
+      between_punctutation(line)
       line = replace_double_punctuation(line)
       line = replace_question_mark_in_quotation(line)
       line = replace_exclamation_point_in_quotation(line)
@@ -113,6 +106,17 @@ module PragmaticSegmenter
       subline = sentence_boundary_punctuation(line)
       subline.each_with_index do |s_l|
         segments << sub_symbols(s_l)
+      end
+    end
+
+    def between_punctutation(txt)
+      case language
+      when 'de'
+        PragmaticSegmenter::Languages::Deutsch::BetweenPunctuation.new(text: txt).replace
+      when 'ja'
+        PragmaticSegmenter::Languages::Japanese::BetweenPunctuation.new(text: txt).replace
+      else
+        PragmaticSegmenter::BetweenPunctuation.new(text: txt).replace
       end
     end
 
