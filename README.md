@@ -1,6 +1,6 @@
 #Pragmatic Segmenter  
 
-[![Gem Version](https://badge.fury.io/rb/pragmatic_segmenter.svg)](http://badge.fury.io/rb/pragmatic_segmenter)
+[![Gem Version](https://badge.fury.io/rb/pragmatic_segmenter.svg)](http://badge.fury.io/rb/pragmatic_segmenter) [![Code Climate](https://codeclimate.com/github/diasks2/pragmatic_segmenter/badges/gpa.svg)](https://codeclimate.com/github/diasks2/pragmatic_segmenter)
 
 Pragmatic Segmenter is a rule-based sentence boundary detection gem that works out-of-the-box across many languages.  
 
