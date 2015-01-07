@@ -46,7 +46,7 @@ ps.segment
 
 # Text cleaning and preprocessing only
 text = "This is a sentence\ncut off in the middle because pdf."
-ps = PragmaticSegmenter::Cleaner.new(text: text, language: 'en', doc_type: 'pdf')
+ps = PragmaticSegmenter::Cleaner.new(text: text, doc_type: 'pdf')
 ps.clean
 # => "This is a sentence cut off in the middle because pdf."
 ```
