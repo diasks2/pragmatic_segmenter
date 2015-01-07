@@ -4,7 +4,6 @@ require 'pragmatic_segmenter/abbreviation_replacer'
 require 'pragmatic_segmenter/number'
 require 'pragmatic_segmenter/ellipsis'
 require 'pragmatic_segmenter/geo_location'
-require 'pragmatic_segmenter/email'
 require 'pragmatic_segmenter/exclamation_words'
 require 'pragmatic_segmenter/punctuation_replacer'
 require 'pragmatic_segmenter/between_punctuation'
@@ -14,6 +13,7 @@ require 'pragmatic_segmenter/punctuation'
 module PragmaticSegmenter
   # This class processing segmenting the text.
   class Process
+    include Rules
     # Rubular: http://rubular.com/r/aXPUGm6fQh
     QUESTION_MARK_IN_QUOTATION_REGEX = /\?(?=(\'|\"))/
 
@@ -85,9 +85,7 @@ module PragmaticSegmenter
     end
 
     def analyze_lines(line, segments, punctuation)
-      line = replace_single_newline(line)
-      line = PragmaticSegmenter::Ellipsis.new(text: line).replace
-      line = PragmaticSegmenter::Email.new(text: line).replace
+      line = line.apply(SingleNewLineRule, EllipsisRules::All, EmailRule)
 
       clause_1 = false
       end_punc_check = false
@@ -125,10 +123,6 @@ module PragmaticSegmenter
 
     def sentence_boundary_punctuation(txt)
       PragmaticSegmenter::SentenceBoundaryPunctuation.new(text: txt).split
-    end
-
-    def replace_single_newline(txt)
-      txt.gsub(/\n/, 'ȹ')
     end
 
     def replace_double_punctuation(txt)
