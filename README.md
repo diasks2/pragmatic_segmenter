@@ -7,7 +7,7 @@ Pragmatic Segmenter is a rule-based sentence boundary detection gem that works o
 ##Install  
 
 **Ruby**  
-Supports Ruby 2.1.5 and above  
+*Supports Ruby 2.1.5 and above*  
 ```
 gem install pragmatic_segmenter
 ```
@@ -24,10 +24,10 @@ gem 'pragmatic_segmenter'
 * To specify a language use its two-digit [ISO 639-1 code](https://www.tm-town.com/languages).  
 
 ```ruby
-text = "Hello world. My name is Mr. Smith. I work for the U.S. Government and I live in the U.S."
+text = "Hello world. My name is Mr. Smith. I work for the U.S. Government and I live in the U.S. I live in New York."
 ps = PragmaticSegmenter::Segmenter.new(text: text)
 ps.segment
-# => ["Hello world.", "My name is Mr. Smith.", "I work for the U.S. Government and I live in the U.S."]
+# => ["Hello world.", "My name is Mr. Smith.", "I work for the U.S. Government and I live in the U.S.", "I live in New York."]
 
 # Specify a language
 text = "Այսօր երկուշաբթի է: Ես գնում եմ աշխատանքի:"
