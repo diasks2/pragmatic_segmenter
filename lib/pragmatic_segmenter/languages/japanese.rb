@@ -11,7 +11,7 @@ module PragmaticSegmenter
 
       class Cleaner < PragmaticSegmenter::Cleaner
         # Rubular: http://rubular.com/r/N4kPuJgle7
-        NEWLINE_IN_MIDDLE_OF_WORD_REGEX = /(?<=の)\n(?=\S)/
+        NewLineInMiddleOfWordRule = Rule.new(/(?<=の)\n(?=\S)/, '')
 
         def clean
           super
@@ -21,7 +21,7 @@ module PragmaticSegmenter
         private
 
         def remove_newline_in_middle_of_word(txt)
-          txt.gsub(NEWLINE_IN_MIDDLE_OF_WORD_REGEX, '')
+          txt.apply(NewLineInMiddleOfWordRule)
         end
       end
 
