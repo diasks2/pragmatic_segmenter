@@ -47,10 +47,10 @@ module PragmaticSegmenter
 
       class SingleLetterAbbreviation < PragmaticSegmenter::SingleLetterAbbreviation
         # Rubular: http://rubular.com/r/B4X33QKIL8
-        SINGLE_LOWERCASE_LETTER_REGEX = /(?<=\s[a-z])\.(?=\s)/
+        SingleLowerCaseLetterRule = Rule.new(/(?<=\s[a-z])\.(?=\s)/, '∯')
 
         # Rubular: http://rubular.com/r/iUNSkCuso0
-        SINGLE_LOWERCASE_LETTER_AT_START_OF_LINE_REGEX = /(?<=^[a-z])\.(?=\s)/
+        SingleLowerCaseLetterAtStartOfLineRule = Rule.new(/(?<=^[a-z])\.(?=\s)/, '∯')
 
         def replace
           super
@@ -61,11 +61,11 @@ module PragmaticSegmenter
         private
 
         def replace_single_lowercase_letter_sol(txt)
-          txt.gsub(SINGLE_LOWERCASE_LETTER_AT_START_OF_LINE_REGEX, '∯')
+          txt.apply(SingleLowerCaseLetterRule)
         end
 
         def replace_single_lowercase_letter(txt)
-          txt.gsub(SINGLE_LOWERCASE_LETTER_REGEX, '∯')
+          txt.apply(SingleLowerCaseLetterAtStartOfLineRule)
         end
       end
 
@@ -88,11 +88,11 @@ module PragmaticSegmenter
 
       class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
         def replace
-          @reformatted_text = replace_possessive_abbreviations(text)
+          @reformatted_text = text.apply(PossessiveAbbreviationRule)
           @reformatted_text = PragmaticSegmenter::Languages::Deutsch::SingleLetterAbbreviation.new(text: @reformatted_text).replace
           @reformatted_text = search_for_abbreviations_in_string(@reformatted_text, abbreviations)
           @reformatted_text = replace_multi_period_abbreviations(@reformatted_text)
-          @reformatted_text = replace_period_in_am_pm(@reformatted_text)
+          @reformatted_text = @reformatted_text.apply(AmPmRules::All)
           replace_abbreviation_as_sentence_boundary(@reformatted_text)
         end
 

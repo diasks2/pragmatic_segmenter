@@ -1,4 +1,15 @@
 # -*- encoding : utf-8 -*-
+require 'pragmatic_segmenter/list'
+require 'pragmatic_segmenter/abbreviation_replacer'
+require 'pragmatic_segmenter/number'
+require 'pragmatic_segmenter/ellipsis'
+require 'pragmatic_segmenter/geo_location'
+require 'pragmatic_segmenter/email'
+require 'pragmatic_segmenter/exclamation_words'
+require 'pragmatic_segmenter/punctuation_replacer'
+require 'pragmatic_segmenter/between_punctuation'
+require 'pragmatic_segmenter/sentence_boundary_punctuation'
+require 'pragmatic_segmenter/punctuation'
 
 module PragmaticSegmenter
   # This class processing segmenting the text.

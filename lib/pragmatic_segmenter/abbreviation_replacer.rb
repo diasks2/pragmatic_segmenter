@@ -7,36 +7,40 @@ module PragmaticSegmenter
   # replaces the periods.
   class AbbreviationReplacer
     # Rubular: http://rubular.com/r/yqa4Rit8EY
-    POSSESSIVE_ABBREVIATION_REGEX = /\.(?='s\s)|\.(?='s$)|\.(?='s\z)/
+    PossessiveAbbreviationRule = Rule.new(/\.(?='s\s)|\.(?='s$)|\.(?='s\z)/, '∯')
 
     # Rubular: http://rubular.com/r/xDkpFZ0EgH
     MULTI_PERIOD_ABBREVIATION_REGEX = /\b[a-z](?:\.[a-z])+[.]/i
 
-    # Rubular: http://rubular.com/r/Vnx3m4Spc8
-    UPPERCASE_PM_REGEX = /(?<=P∯M)∯(?=\s[A-Z])/
+    module AmPmRules
+      # Rubular: http://rubular.com/r/Vnx3m4Spc8
+      UpperCasePmRule = Rule.new(/(?<=P∯M)∯(?=\s[A-Z])/, '.')
 
-    # Rubular: http://rubular.com/r/AJMCotJVbW
-    UPPERCASE_AM_REGEX = /(?<=A∯M)∯(?=\s[A-Z])/
+      # Rubular: http://rubular.com/r/AJMCotJVbW
+      UpperCaseAmRule = Rule.new(/(?<=A∯M)∯(?=\s[A-Z])/, '.')
 
-    # Rubular: http://rubular.com/r/13q7SnOhgA
-    LOWERCASE_PM_REGEX = /(?<=p∯m)∯(?=\s[A-Z])/
+      # Rubular: http://rubular.com/r/13q7SnOhgA
+      LowerCasePmRule = Rule.new(/(?<=p∯m)∯(?=\s[A-Z])/, '.')
 
-    # Rubular: http://rubular.com/r/DgUDq4mLz5
-    LOWERCASE_AM_REGEX = /(?<=a∯m)∯(?=\s[A-Z])/
+      # Rubular: http://rubular.com/r/DgUDq4mLz5
+      LowerCaseAmRule = Rule.new(/(?<=a∯m)∯(?=\s[A-Z])/, '.')
+
+      All = [UpperCasePmRule, UpperCaseAmRule, LowerCasePmRule, LowerCaseAmRule]
+    end
 
     SENTENCE_STARTERS = %w(A Being Did For He How However I In Millions More She That The There They We What When Where Who Why)
 
     attr_reader :text
     def initialize(text:)
-      @text = text
+      @text = Text.new(text)
     end
 
     def replace
-      @reformatted_text = replace_possessive_abbreviations(text)
+      @reformatted_text = text.apply(PossessiveAbbreviationRule)
       @reformatted_text = PragmaticSegmenter::SingleLetterAbbreviation.new(text: @reformatted_text).replace
       @reformatted_text = search_for_abbreviations_in_string(@reformatted_text, abbreviations)
       @reformatted_text = replace_multi_period_abbreviations(@reformatted_text)
-      @reformatted_text = replace_period_in_am_pm(@reformatted_text)
+      @reformatted_text = @reformatted_text.apply(AmPmRules::All)
       replace_abbreviation_as_sentence_boundary(@reformatted_text)
     end
 
