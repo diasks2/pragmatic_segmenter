@@ -4,3 +4,7 @@ rvm:
   - "2.2.0"
 # uncomment this line if your project needs to run something other than `rake`:
 # script: bundle exec rspec spec
+addons:
+  code_climate:
+    repo_token:
+      secure: "OiAufYEMH27BpR1G5Yy7il8ZVkzQ/9327ex9Jo0MljXJLeuakhm6oe/sLmR0GOhOQypKWOmCQ+CNEd9Nn3G8lOlSocxlQCpn0kAsfu8FUz6mYQWE+2x0E2V6snwP/dq40LfjTuy5gXYIID6Al0mQSphcZCgbp1jsu/8E1Apdm0A="
