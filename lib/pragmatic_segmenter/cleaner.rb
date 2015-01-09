@@ -50,6 +50,9 @@ module PragmaticSegmenter
     # Rubular: http://rubular.com/r/DwNSuZrNtk
     ConsecutivePeriodsRule = Rule.new(/\.{5,}/, ' ')
 
+    # http://rubular.com/r/IQ4TPfsbd8
+    ConsecutiveForwardSlashRule = Rule.new(/\/{3}/, '')
+
     ReplaceNewlineWithCarriageReturnRule = Rule.new(/\n/, "\r")
 
     QuotationsFirstRule = Rule.new(/''/, '"')
@@ -135,7 +138,9 @@ module PragmaticSegmenter
     end
 
     def clean_table_of_contents(txt)
-      txt.apply(TableOfContentsRule).apply(ConsecutivePeriodsRule)
+      txt.apply(TableOfContentsRule).
+          apply(ConsecutivePeriodsRule).
+          apply(ConsecutiveForwardSlashRule)
     end
   end
 end
