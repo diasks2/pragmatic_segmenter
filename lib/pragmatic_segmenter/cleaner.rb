@@ -53,6 +53,10 @@ module PragmaticSegmenter
     # Rubular: http://rubular.com/r/IQ4TPfsbd8
     ConsecutiveForwardSlashRule = Rule.new(/\/{3}/, '')
 
+    EscapedCarriageReturnRule = Rule.new(/\\r/, "\r")
+
+    EscapedNewLineRule = Rule.new(/\\n/, "\n")
+
     ReplaceNewlineWithCarriageReturnRule = Rule.new(/\n/, "\r")
 
     QuotationsFirstRule = Rule.new(/''/, '"')
@@ -83,6 +87,7 @@ module PragmaticSegmenter
       @clean_text = remove_all_newlines(text)
       replace_double_newlines(@clean_text)
       replace_newlines(@clean_text)
+      replace_escaped_newlines(@clean_text)
       @clean_text.apply(HtmlRules::All)
       @clean_text.apply(InlineFormattingRule)
       clean_quotations(@clean_text)
@@ -109,6 +114,11 @@ module PragmaticSegmenter
 
     def remove_newline_in_middle_of_word(txt)
       txt.apply(NewLineInMiddleOfWordRule)
+    end
+
+    def replace_escaped_newlines(txt)
+      txt.apply(EscapedNewLineRule).
+          apply(EscapedCarriageReturnRule)
     end
 
     def replace_double_newlines(txt)
