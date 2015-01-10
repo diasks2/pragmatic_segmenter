@@ -47,19 +47,21 @@ module PragmaticSegmenter
       segments.map! {|segment| segment.apply(SubSymbolsRules::All) }
 
       sentence_array = []
-      segments.each do |line|
-        next if consecutive_underscore?(line) || line.length < 2
-        line.apply(ReinsertEllipsisRules::All).apply(ExtraWhiteSpaceRule)
-        if line =~ QUOTATION_AT_END_OF_SENTENCE_REGEX
-          subline = line.split(SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX)
-          subline.each do |s|
-            sentence_array << s
-          end
-        else
-          sentence_array << line.tr("\n", '').strip
-        end
+      segments.each do |txt|
+        post_process_segments(txt, sentence_array)
       end
       sentence_array.reject(&:empty?)
+    end
+
+    def post_process_segments(txt, sentence_array)
+      return if consecutive_underscore?(txt) || txt.length < 2
+      txt.apply(ReinsertEllipsisRules::All).apply(ExtraWhiteSpaceRule)
+      if txt =~ QUOTATION_AT_END_OF_SENTENCE_REGEX
+        sentence_array.concat(txt.split(SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX))
+      else
+        sentence_array << txt.tr("\n", '').strip
+      end
+      sentence_array
     end
 
     def consecutive_underscore?(txt)
