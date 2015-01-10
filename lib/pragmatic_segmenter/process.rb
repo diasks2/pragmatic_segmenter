@@ -36,12 +36,16 @@ module PragmaticSegmenter
     private
 
     def split_lines(txt)
-      segments = []
-      lines = txt.split("\r")
-      lines.each do |l|
-        next if l.eql?('')
-        analyze_lines(l, segments, punctuation_array)
+      segments = txt.split("\r")
+
+      segments.map! do |line|
+        line.apply(SingleNewLineRule, EllipsisRules::All, EmailRule)
       end
+
+      segments = segments.map { |line| analyze_lines(line) }.flatten
+
+      segments.map! {|segment| sub_symbols(segment) }
+
       sentence_array = []
       segments.each_with_index do |line|
         next if line.gsub(/_{3,}/, '').length.eql?(0) || line.length < 2
@@ -59,25 +63,16 @@ module PragmaticSegmenter
       sentence_array.reject(&:empty?)
     end
 
-    def analyze_lines(line, segments, punctuation)
-      line = line.apply(SingleNewLineRule, EllipsisRules::All, EmailRule)
-      clause_1 = false
-      end_punc_check = false
-      punctuation.each do |p|
-        end_punc_check = true if line[-1].include?(p)
-        clause_1 = true if line.include?(p)
-      end
-      if clause_1
-        segments = process_text(line, end_punc_check, segments)
+    def analyze_lines(line)
+      if punctuation_array.any? { |p| line.include?(p) }
+        process_text(line)
       else
-        line.gsub!(/ȹ/, "\n")
-        line.gsub!(/∯/, '.')
-        segments << line
+        line
       end
     end
 
-    def process_text(line, end_punc_check, segments)
-      line << 'ȸ' if !end_punc_check
+    def process_text(line)
+      line << 'ȸ' unless punctuation_array.any? { |p| line[-1].include?(p) }
       PragmaticSegmenter::ExclamationWords.apply_rules(line)
       between_punctutation(line)
       line = line.apply(
@@ -85,10 +80,7 @@ module PragmaticSegmenter
         QuestionMarkInQuotationRule,
         ExclamationPointRules::All
       )
-      subline = sentence_boundary_punctuation(line)
-      subline.each_with_index do |s_l|
-        segments << sub_symbols(s_l)
-      end
+      sentence_boundary_punctuation(line)
     end
 
     def replace_numbers(txt)
@@ -100,7 +92,7 @@ module PragmaticSegmenter
     end
 
     def punctuation_array
-      PragmaticSegmenter::Punctuation.new.punct
+      @punct_arr ||= PragmaticSegmenter::Punctuation.new.punct
     end
 
     def between_punctutation(txt)
