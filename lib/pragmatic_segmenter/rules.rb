@@ -34,5 +34,44 @@ module PragmaticSegmenter
 
       All = [ FirstRule, SecondRule, ThirdRule, ForthRule ]
     end
+
+    module ReinsertEllipsisRules
+      ThreeConsecutivePeriod = Rule.new(/ƪ/, '...')
+      ThreeSpacePeriod = Rule.new(/♟/, ' . . . ')
+      FourSpacePeriod = Rule.new(/♝/, '. . . .')
+      TwoConsecutivePeriod = Rule.new(/☏/, '..')
+      OnePeriod = Rule.new(/∮/, '.')
+
+      All = [ ThreeConsecutivePeriod, ThreeSpacePeriod,
+              FourSpacePeriod, TwoConsecutivePeriod,
+              OnePeriod ]
+    end
+
+    module SubSymbolsRules
+      Period = Rule.new(/∯/, '.')
+      ArabicComma = Rule.new(/♬/, '،')
+      SemiColon = Rule.new(/♭/, ':')
+      FullWidthPeriod = Rule.new(/ᓰ/, '。')
+      SpecialPeriod = Rule.new(/ᓱ/, '．')
+      FullWidthExclamation = Rule.new(/ᓳ/, '！')
+      ExclamationPoint = Rule.new(/ᓴ/, '!')
+      QuestionMark = Rule.new(/ᓷ/, '?')
+      FullWidthQuestionMark = Rule.new(/ᓸ/, '？')
+      MixedDoubleQE = Rule.new(/☉/, '?!')
+      MixedDoubleQQ = Rule.new(/☇/, '??')
+      MixedDoubleEQ = Rule.new(/☈/, '!?')
+      MixedDoubleEE = Rule.new(/☄/, '!!')
+      TemporaryEndingPunctutation = Rule.new('ȸ', '')
+      Newline = Rule.new(/ȹ/, "\n")
+
+      All = [ Period, ArabicComma,
+              SemiColon, FullWidthPeriod,
+              SpecialPeriod, FullWidthExclamation,
+              ExclamationPoint, QuestionMark,
+              FullWidthQuestionMark, MixedDoubleQE,
+              MixedDoubleQQ, MixedDoubleEQ,
+              MixedDoubleEE, TemporaryEndingPunctutation,
+              Newline ]
+    end
   end
 end

@@ -44,13 +44,12 @@ module PragmaticSegmenter
 
       segments = segments.map { |line| analyze_lines(line) }.flatten
 
-      segments.map! {|segment| sub_symbols(segment) }
+      segments.map! {|segment| segment.apply(SubSymbolsRules::All) }
 
       sentence_array = []
-      segments.each_with_index do |line|
+      segments.each do |line|
         next if consecutive_underscore?(line) || line.length < 2
-        line = reinsert_ellipsis(line)
-        line = line.apply(ExtraWhiteSpaceRule)
+        line.apply(ReinsertEllipsisRules::All).apply(ExtraWhiteSpaceRule)
         if line =~ QUOTATION_AT_END_OF_SENTENCE_REGEX
           subline = line.split(SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX)
           subline.each do |s|
@@ -106,18 +105,6 @@ module PragmaticSegmenter
 
     def sentence_boundary_punctuation(txt)
       PragmaticSegmenter::SentenceBoundaryPunctuation.new(text: txt).split
-    end
-
-    def sub_symbols(txt)
-      txt.gsub(/∯/, '.').gsub(/♬/, '،').gsub(/♭/, ':').gsub(/ᓰ/, '。').gsub(/ᓱ/, '．')
-        .gsub(/ᓳ/, '！').gsub(/ᓴ/, '!').gsub(/ᓷ/, '?').gsub(/ᓸ/, '？').gsub(/☉/, '?!')
-        .gsub(/☈/, '!?').gsub(/☇/, '??').gsub(/☄/, '!!').delete('ȸ').gsub(/ȹ/, "\n")
-    end
-
-    def reinsert_ellipsis(line)
-      line.gsub(/ƪ/, '...').gsub(/♟/, ' . . . ')
-        .gsub(/♝/, '. . . .').gsub(/☏/, '..')
-        .gsub(/∮/, '.')
     end
   end
 end
