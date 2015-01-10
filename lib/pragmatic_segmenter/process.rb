@@ -30,15 +30,15 @@ module PragmaticSegmenter
       reformatted_text = replace_abbreviations(reformatted_text)
       reformatted_text = replace_numbers(reformatted_text)
       reformatted_text = reformatted_text.apply(GeoLocationRule)
-      split_lines(reformatted_text)
+      split_into_segments(reformatted_text)
     end
 
     private
 
-    def split_lines(txt)
+    def split_into_segments(txt)
       txt.split("\r")
-         .map! { |line| line.apply(SingleNewLineRule, EllipsisRules::All, EmailRule) }
-         .map { |line| analyze_lines(line) }.flatten
+         .map! { |segment| segment.apply(SingleNewLineRule, EllipsisRules::All, EmailRule) }
+         .map { |segment| check_for_punctuation(segment) }.flatten
          .map! { |segment| segment.apply(SubSymbolsRules::All) }
          .map { |segment| post_process_segments(segment) }
          .flatten.compact.delete_if(&:empty?)
@@ -59,24 +59,24 @@ module PragmaticSegmenter
       txt.gsub(/_{3,}/, '').length.eql?(0)
     end
 
-    def analyze_lines(line)
-      if punctuation_array.any? { |p| line.include?(p) }
-        process_text(line)
+    def check_for_punctuation(txt)
+      if punctuation_array.any? { |p| txt.include?(p) }
+        process_text(txt)
       else
-        line
+        txt
       end
     end
 
-    def process_text(line)
-      line << 'ȸ' unless punctuation_array.any? { |p| line[-1].include?(p) }
-      PragmaticSegmenter::ExclamationWords.apply_rules(line)
-      between_punctutation(line)
-      line = line.apply(
+    def process_text(txt)
+      txt << 'ȸ' unless punctuation_array.any? { |p| txt[-1].include?(p) }
+      PragmaticSegmenter::ExclamationWords.apply_rules(txt)
+      between_punctutation(txt)
+      txt = txt.apply(
         DoublePuctationRules::All,
         QuestionMarkInQuotationRule,
         ExclamationPointRules::All
       )
-      sentence_boundary_punctuation(line)
+      sentence_boundary_punctuation(txt)
     end
 
     def replace_numbers(txt)
