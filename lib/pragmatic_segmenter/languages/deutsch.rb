@@ -17,6 +17,9 @@ module PragmaticSegmenter
         end
       end
 
+      class Cleaner < PragmaticSegmenter::Cleaner
+      end
+
       class Number < PragmaticSegmenter::Number
         # Rubular: http://rubular.com/r/hZxoyQwKT1
         NumberPeriodSpaceRule = Rule.new(/(?<=\s[0-9]|\s([1-9][0-9]))\.(?=\s)/, '∯')

@@ -13,6 +13,9 @@ module PragmaticSegmenter
         end
       end
 
+      class Cleaner < PragmaticSegmenter::Cleaner
+      end
+
       class SentenceBoundaryPunctuation < PragmaticSegmenter::SentenceBoundaryPunctuation
         SENTENCE_BOUNDARY = /.*?[:\.!\?؟]|.*?\z|.*?$/
 

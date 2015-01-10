@@ -1,6 +1,9 @@
 module PragmaticSegmenter
   module Languages
     class English
+      class Process < PragmaticSegmenter::Process
+      end
+
       class Cleaner < PragmaticSegmenter::Cleaner
         def clean
           super
