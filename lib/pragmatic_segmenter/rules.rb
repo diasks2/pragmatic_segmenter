@@ -11,17 +11,17 @@ module PragmaticSegmenter
     ExtraWhiteSpaceRule = Rule.new(/\s{3,}/, ' ')
 
     # Rubular: http://rubular.com/r/aXPUGm6fQh
-    QuestionMarkInQuotationRule = Rule.new(/\?(?=(\'|\"))/, 'ᓷ')
+    QuestionMarkInQuotationRule = Rule.new(/\?(?=(\'|\"))/, '&ᓷ&')
 
     module ExclamationPointRules
       # Rubular: http://rubular.com/r/XS1XXFRfM2
-      InQuotationRule = Rule.new(/\!(?=(\'|\"))/, 'ᓴ')
+      InQuotationRule = Rule.new(/\!(?=(\'|\"))/, '&ᓴ&')
 
       # Rubular: http://rubular.com/r/sl57YI8LkA
-      BeforeCommaMidSentenceRule = Rule.new(/\!(?=\,\s[a-z])/, 'ᓴ')
+      BeforeCommaMidSentenceRule = Rule.new(/\!(?=\,\s[a-z])/, '&ᓴ&')
 
       # Rubular: http://rubular.com/r/f9zTjmkIPb
-      MidSentenceRule = Rule.new(/\!(?=\s[a-z])/, 'ᓴ')
+      MidSentenceRule = Rule.new(/\!(?=\s[a-z])/, '&ᓴ&')
 
       All = [ InQuotationRule, BeforeCommaMidSentenceRule, MidSentenceRule ]
     end
@@ -51,12 +51,12 @@ module PragmaticSegmenter
       Period = Rule.new(/∯/, '.')
       ArabicComma = Rule.new(/♬/, '،')
       SemiColon = Rule.new(/♭/, ':')
-      FullWidthPeriod = Rule.new(/ᓰ/, '。')
-      SpecialPeriod = Rule.new(/ᓱ/, '．')
-      FullWidthExclamation = Rule.new(/ᓳ/, '！')
-      ExclamationPoint = Rule.new(/ᓴ/, '!')
-      QuestionMark = Rule.new(/ᓷ/, '?')
-      FullWidthQuestionMark = Rule.new(/ᓸ/, '？')
+      FullWidthPeriod = Rule.new(/&ᓰ&/, '。')
+      SpecialPeriod = Rule.new(/&ᓱ&/, '．')
+      FullWidthExclamation = Rule.new(/&ᓳ&/, '！')
+      ExclamationPoint = Rule.new(/&ᓴ&/, '!')
+      QuestionMark = Rule.new(/&ᓷ&/, '?')
+      FullWidthQuestionMark = Rule.new(/&ᓸ&/, '？')
       MixedDoubleQE = Rule.new(/☉/, '?!')
       MixedDoubleQQ = Rule.new(/☇/, '??')
       MixedDoubleEQ = Rule.new(/☈/, '!?')
@@ -72,6 +72,28 @@ module PragmaticSegmenter
               MixedDoubleQQ, MixedDoubleEQ,
               MixedDoubleEE, TemporaryEndingPunctutation,
               Newline ]
+    end
+
+    module EscapeRegexReservedCharacters
+      LeftParen = Rule.new('(', '\\(')
+      RightParen = Rule.new(')', '\\)')
+      LeftBracket = Rule.new('[', '\\[')
+      RightBracket = Rule.new(']', '\\]')
+      Dash = Rule.new('-', '\\-')
+
+      All = [ LeftParen, RightParen,
+              LeftBracket, RightBracket, Dash ]
+    end
+
+    module SubEscapedRegexReservedCharacters
+      LeftParen = Rule.new('\\(', '(')
+      RightParen = Rule.new('\\)', ')')
+      LeftBracket = Rule.new('\\[', '[')
+      RightBracket = Rule.new('\\]', ']')
+      Dash = Rule.new('\\-', '-')
+
+      All = [ LeftParen, RightParen,
+              LeftBracket, RightBracket, Dash ]
     end
   end
 end
