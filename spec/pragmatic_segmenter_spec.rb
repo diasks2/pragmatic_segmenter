@@ -873,6 +873,11 @@ RSpec.describe PragmaticSegmenter::Segmenter do
         ps = PragmaticSegmenter::Segmenter.new(text: 'Hello World. \r\n Hello.', language: 'en')
         expect(ps.segment).to eq(["Hello World.", "Hello."])
       end
+
+      it 'correctly segments text #082' do
+        ps = PragmaticSegmenter::Segmenter.new(text: 'Hello World. \ r \ nHello.', language: 'en')
+        expect(ps.segment).to eq(["Hello World.", "Hello."])
+      end
     end
   end
 

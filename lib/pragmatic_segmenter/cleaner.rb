@@ -54,8 +54,10 @@ module PragmaticSegmenter
     ConsecutiveForwardSlashRule = Rule.new(/\/{3}/, '')
 
     EscapedCarriageReturnRule = Rule.new(/\\r/, "\r")
+    TypoEscapedCarriageReturnRule = Rule.new(/\\\ r/, "\r")
 
     EscapedNewLineRule = Rule.new(/\\n/, "\n")
+    TypoEscapedNewLineRule = Rule.new(/\\\ n/, "\n")
 
     ReplaceNewlineWithCarriageReturnRule = Rule.new(/\n/, "\r")
 
@@ -118,7 +120,9 @@ module PragmaticSegmenter
 
     def replace_escaped_newlines(txt)
       txt.apply(EscapedNewLineRule).
-          apply(EscapedCarriageReturnRule)
+          apply(EscapedCarriageReturnRule).
+          apply(TypoEscapedNewLineRule).
+          apply(TypoEscapedCarriageReturnRule)
     end
 
     def replace_double_newlines(txt)
