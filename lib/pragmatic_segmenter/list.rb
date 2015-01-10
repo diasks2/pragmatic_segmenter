@@ -124,14 +124,12 @@ module PragmaticSegmenter
       txt.gsub!(ALPHABETICAL_LIST_LETTERS_AND_PERIODS_REGEX).with_index do |m|
         a.eql?(m.chomp('.')) ? "\r#{Regexp.escape(a.to_s)}∯" : "#{m}"
       end
-      txt
     end
 
     def replace_alphabet_list_parens(a, txt)
       txt.gsub!(EXTRACT_ALPHABETICAL_LIST_LETTERS_REGEX).with_index do |m|
         a.eql?(m) ? "\r#{Regexp.escape(a.to_s)}" : "#{m}"
       end
-      txt
     end
 
     def replace_correct_alphabet_list(a, txt, parens)

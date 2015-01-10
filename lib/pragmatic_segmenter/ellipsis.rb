@@ -30,7 +30,6 @@ module PragmaticSegmenter
         ThreeConsecutiveRule,
         OtherThreePeriodRule
       ]
-
     end
   end
 end

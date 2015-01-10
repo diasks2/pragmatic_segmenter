@@ -25,11 +25,11 @@ module PragmaticSegmenter
     end
 
     def replace
-      @formatted_text = @text.apply(PeriodBeforeNumberRule).
-          apply(NumberAfterPeriodBeforeLetterRule).
-          apply(NewLineNumberPeriodSpaceLetterRule).
-          apply(StartLineNumberPeriodRule).
-          apply(StartLineTwoDigitNumberPeriodRule)
+      @text.apply(PeriodBeforeNumberRule).
+            apply(NumberAfterPeriodBeforeLetterRule).
+            apply(NewLineNumberPeriodSpaceLetterRule).
+            apply(StartLineNumberPeriodRule).
+            apply(StartLineTwoDigitNumberPeriodRule)
     end
   end
 end

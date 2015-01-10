@@ -29,7 +29,7 @@ module PragmaticSegmenter
 
         def replace
           super
-          @formatted_text.apply(NumberPeriodSpaceRule).apply(NegativeNumberPeriodSpaceRule)
+          @text.apply(NumberPeriodSpaceRule).apply(NegativeNumberPeriodSpaceRule)
         end
       end
 

@@ -25,6 +25,5 @@ module PragmaticSegmenter
     def cleaner_class
       Object.const_get("PragmaticSegmenter::Languages::#{LANGUAGE_CODES[language] || 'Common'}::Cleaner")
     end
-
   end
 end

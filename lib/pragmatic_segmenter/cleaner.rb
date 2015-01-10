@@ -118,13 +118,11 @@ module PragmaticSegmenter
 
     def replace_newlines(txt)
       if doc_type.eql?('pdf')
-        txt = remove_pdf_line_breaks(txt)
+        remove_pdf_line_breaks(txt)
       else
-        txt =
-          txt.apply(NewLineFollowedByPeriodRule).
-              apply(ReplaceNewlineWithCarriageReturnRule)
+        txt.apply(NewLineFollowedByPeriodRule).
+            apply(ReplaceNewlineWithCarriageReturnRule)
       end
-      txt
     end
 
     def remove_pdf_line_breaks(txt)
