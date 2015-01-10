@@ -50,7 +50,7 @@ module PragmaticSegmenter
     # Rubular: http://rubular.com/r/DwNSuZrNtk
     ConsecutivePeriodsRule = Rule.new(/\.{5,}/, ' ')
 
-    # http://rubular.com/r/IQ4TPfsbd8
+    # Rubular: http://rubular.com/r/IQ4TPfsbd8
     ConsecutiveForwardSlashRule = Rule.new(/\/{3}/, '')
 
     ReplaceNewlineWithCarriageReturnRule = Rule.new(/\n/, "\r")
@@ -81,12 +81,13 @@ module PragmaticSegmenter
     def clean
       return unless text
       @clean_text = remove_all_newlines(text)
-      @clean_text = replace_double_newlines(@clean_text)
-      @clean_text = replace_newlines(@clean_text)
-      @clean_text = @clean_text.apply(HtmlRules::All)
-      @clean_text = @clean_text.apply(InlineFormattingRule)
-      @clean_text = clean_quotations(@clean_text)
-      @clean_text = clean_table_of_contents(@clean_text)
+      replace_double_newlines(@clean_text)
+      replace_newlines(@clean_text)
+      @clean_text.apply(HtmlRules::All)
+      @clean_text.apply(InlineFormattingRule)
+      clean_quotations(@clean_text)
+      clean_table_of_contents(@clean_text)
+      clean_consecutive_characters(@clean_text)
     end
 
     private
@@ -140,6 +141,11 @@ module PragmaticSegmenter
     def clean_table_of_contents(txt)
       txt.apply(TableOfContentsRule).
           apply(ConsecutivePeriodsRule).
+          apply(ConsecutiveForwardSlashRule)
+    end
+
+    def clean_consecutive_characters(txt)
+      txt.apply(ConsecutivePeriodsRule).
           apply(ConsecutiveForwardSlashRule)
     end
   end

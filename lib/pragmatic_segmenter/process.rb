@@ -48,7 +48,7 @@ module PragmaticSegmenter
 
       sentence_array = []
       segments.each_with_index do |line|
-        next if line.gsub(/_{3,}/, '').length.eql?(0) || line.length < 2
+        next if consecutive_underscore?(line) || line.length < 2
         line = reinsert_ellipsis(line)
         line = line.apply(ExtraWhiteSpaceRule)
         if line =~ QUOTATION_AT_END_OF_SENTENCE_REGEX
@@ -61,6 +61,11 @@ module PragmaticSegmenter
         end
       end
       sentence_array.reject(&:empty?)
+    end
+
+    def consecutive_underscore?(txt)
+      # Rubular: http://rubular.com/r/fTF2Ff3WBL
+      txt.gsub(/_{3,}/, '').length.eql?(0)
     end
 
     def analyze_lines(line)
