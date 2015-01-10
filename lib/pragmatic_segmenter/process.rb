@@ -36,32 +36,22 @@ module PragmaticSegmenter
     private
 
     def split_lines(txt)
-      segments = txt.split("\r")
-
-      segments.map! do |line|
-        line.apply(SingleNewLineRule, EllipsisRules::All, EmailRule)
-      end
-
-      segments = segments.map { |line| analyze_lines(line) }.flatten
-
-      segments.map! {|segment| segment.apply(SubSymbolsRules::All) }
-
-      sentence_array = []
-      segments.each do |txt|
-        post_process_segments(txt, sentence_array)
-      end
-      sentence_array.reject(&:empty?)
+      txt.split("\r")
+         .map! { |line| line.apply(SingleNewLineRule, EllipsisRules::All, EmailRule) }
+         .map { |line| analyze_lines(line) }.flatten
+         .map! { |segment| segment.apply(SubSymbolsRules::All) }
+         .map { |segment| post_process_segments(segment) }
+         .flatten.compact.delete_if(&:empty?)
     end
 
-    def post_process_segments(txt, sentence_array)
+    def post_process_segments(txt)
       return if consecutive_underscore?(txt) || txt.length < 2
       txt.apply(ReinsertEllipsisRules::All).apply(ExtraWhiteSpaceRule)
       if txt =~ QUOTATION_AT_END_OF_SENTENCE_REGEX
-        sentence_array.concat(txt.split(SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX))
+        txt.split(SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX)
       else
-        sentence_array << txt.tr("\n", '').strip
+        txt.tr("\n", '').strip
       end
-      sentence_array
     end
 
     def consecutive_underscore?(txt)
