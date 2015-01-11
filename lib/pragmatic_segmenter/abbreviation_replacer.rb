@@ -28,7 +28,7 @@ module PragmaticSegmenter
       All = [UpperCasePmRule, UpperCaseAmRule, LowerCasePmRule, LowerCaseAmRule]
     end
 
-    SENTENCE_STARTERS = %w(A Being Did For He How However I In Millions More She That The There They We What When Where Who Why)
+    SENTENCE_STARTERS = %w(A Being Did For He How However I In It Millions More She That The There They We What When Where Who Why)
 
     attr_reader :text
     def initialize(text:)
@@ -109,6 +109,8 @@ module PragmaticSegmenter
               .gsub(/U∯S∯A∯\s#{Regexp.escape(word)}\s/, "U∯S∯A\.\s#{Regexp.escape(word)}\s")
               .gsub(/U\.S\.A∯\s#{Regexp.escape(word)}\s/, "U\.S\.A\.\s#{Regexp.escape(word)}\s")
               .gsub(/I∯\s#{Regexp.escape(word)}\s/, "I\.\s#{Regexp.escape(word)}\s")
+              .gsub(/i.v∯\s#{Regexp.escape(word)}\s/, "i\.v\.\s#{Regexp.escape(word)}\s")
+              .gsub(/I.V∯\s#{Regexp.escape(word)}\s/, "I\.V\.\s#{Regexp.escape(word)}\s")
       end
       txt
     end

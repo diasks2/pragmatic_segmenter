@@ -883,6 +883,11 @@ RSpec.describe PragmaticSegmenter::Segmenter do
         ps = PragmaticSegmenter::Segmenter.new(text: 'Hello World. \ r \ nHello.', language: 'en')
         expect(ps.segment).to eq(["Hello World.", "Hello."])
       end
+
+      it "correctly segments text #083" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "The nurse gave him the i.v. in his vein. She gave him the i.v. It was a great I.V. that she gave him. She gave him the I.V. It was night.", language: "en")
+        expect(ps.segment).to eq(["The nurse gave him the i.v. in his vein.", "She gave him the i.v.", "It was a great I.V. that she gave him.", "She gave him the I.V.", "It was night."])
+      end
     end
   end
 

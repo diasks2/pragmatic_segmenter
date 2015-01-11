@@ -733,6 +733,10 @@ To test the relative performance of different segmentation tools and libraries I
 * Add rule for escaped newlines that include a space between the slash and character   
 * Add Golden Rule #52 and code to make it pass  
 
+**Yet to be Released Version 0.0.7**  
+* Add change log to README  
+* Add passing spec for new end of sentence abbreviation (EN)  
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.
