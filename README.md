@@ -407,6 +407,12 @@ One further habit which was somewhat weakened . . . was that of combining words 
 => ["One further habit which was somewhat weakened . . . was that of combining words into self-interpreting compounds.", ". . . The practice was not abandoned. . . ."]
 ```
 
+52.) **No whitespace in between sentences** *Credit: Don_Patrick*
+```
+Hello world.Today is Tuesday.Mr. Smith went to the store and bought 1,000.That is a lot.
+=> ["Hello world.", "Today is Tuesday.", "Mr. Smith went to the store and bought 1,000.", "That is a lot."]
+```
+
 ####Golden Rules (German)
 
 1.) **Quotation at end of sentence**
