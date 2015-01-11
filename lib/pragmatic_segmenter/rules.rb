@@ -36,15 +36,15 @@ module PragmaticSegmenter
     end
 
     module ReinsertEllipsisRules
-      ThreeConsecutivePeriod = Rule.new(/ƪ/, '...')
-      ThreeSpacePeriod = Rule.new(/♟/, ' . . . ')
-      FourSpacePeriod = Rule.new(/♝/, '. . . .')
-      TwoConsecutivePeriod = Rule.new(/☏/, '..')
-      OnePeriod = Rule.new(/∮/, '.')
+      SubThreeConsecutivePeriod = Rule.new(/ƪ/, '...')
+      SubThreeSpacePeriod = Rule.new(/♟/, ' . . . ')
+      SubFourSpacePeriod = Rule.new(/♝/, '. . . .')
+      SubTwoConsecutivePeriod = Rule.new(/☏/, '..')
+      SubOnePeriod = Rule.new(/∮/, '.')
 
-      All = [ ThreeConsecutivePeriod, ThreeSpacePeriod,
-              FourSpacePeriod, TwoConsecutivePeriod,
-              OnePeriod ]
+      All = [ SubThreeConsecutivePeriod, SubThreeSpacePeriod,
+              SubFourSpacePeriod, SubTwoConsecutivePeriod,
+              SubOnePeriod ]
     end
 
     module SubSymbolsRules
@@ -86,14 +86,14 @@ module PragmaticSegmenter
     end
 
     module SubEscapedRegexReservedCharacters
-      LeftParen = Rule.new('\\(', '(')
-      RightParen = Rule.new('\\)', ')')
-      LeftBracket = Rule.new('\\[', '[')
-      RightBracket = Rule.new('\\]', ']')
-      Dash = Rule.new('\\-', '-')
+      SubLeftParen = Rule.new('\\(', '(')
+      SubRightParen = Rule.new('\\)', ')')
+      SubLeftBracket = Rule.new('\\[', '[')
+      SubRightBracket = Rule.new('\\]', ']')
+      SubDash = Rule.new('\\-', '-')
 
-      All = [ LeftParen, RightParen,
-              LeftBracket, RightBracket, Dash ]
+      All = [ SubLeftParen, SubRightParen,
+              SubLeftBracket, SubRightBracket, SubDash ]
     end
   end
 end
