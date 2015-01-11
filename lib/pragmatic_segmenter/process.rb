@@ -29,7 +29,8 @@ module PragmaticSegmenter
       reformatted_text = PragmaticSegmenter::List.new(text: text).add_line_break
       reformatted_text = replace_abbreviations(reformatted_text)
       reformatted_text = replace_numbers(reformatted_text)
-      reformatted_text = reformatted_text.apply(GeoLocationRule)
+      reformatted_text.apply(AbbreviationsWithMultiplePeriodsAndEmailRule)
+      reformatted_text.apply(GeoLocationRule)
       split_into_segments(reformatted_text)
     end
 
@@ -37,7 +38,7 @@ module PragmaticSegmenter
 
     def split_into_segments(txt)
       txt.split("\r")
-         .map! { |segment| segment.apply(SingleNewLineRule, EllipsisRules::All, EmailRule) }
+         .map! { |segment| segment.apply(SingleNewLineRule, EllipsisRules::All) }
          .map { |segment| check_for_punctuation(segment) }.flatten
          .map! { |segment| segment.apply(SubSymbolsRules::All) }
          .map { |segment| post_process_segments(segment) }

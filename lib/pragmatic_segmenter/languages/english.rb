@@ -15,13 +15,17 @@ module PragmaticSegmenter
         def clean_quotations(txt)
           txt.gsub(/`/, "'")
         end
+
+        def abbreviations
+          []
+        end
       end
 
       class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
         private
 
         def abbreviations
-          PragmaticSegmenter::Languages::English::Abbreviation.new
+          PragmaticSegmenter::Abbreviation.new
         end
       end
     end

@@ -32,7 +32,6 @@ module PragmaticSegmenter
       @language = args[:language] || 'en'
       @doc_type = args[:doc_type]
       @text = text.dup
-
       unless args[:clean].eql?(false)
         @text = cleaner_class.new(text: @text, doc_type: args[:doc_type]).clean
       end
@@ -40,7 +39,6 @@ module PragmaticSegmenter
 
     def segment
       return [] unless text
-
       process_class.new(text: text, doc_type: doc_type).process
     end
   end

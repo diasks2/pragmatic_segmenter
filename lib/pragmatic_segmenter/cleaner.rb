@@ -17,6 +17,14 @@ module PragmaticSegmenter
   # xhtml, inline formatting, etc.
   class Cleaner
     include Rules
+    URL_EMAIL_KEYWORDS = ['@', 'http', '.com', 'net', 'www', '//']
+
+    # Rubular: http://rubular.com/r/6dt98uI76u
+    NO_SPACE_BETWEEN_SENTENCES_REGEX = /(?<=[a-z])\.(?=[A-Z])/
+
+    # Rubular: http://rubular.com/r/l6KN6rH5XE
+    NO_SPACE_BETWEEN_SENTENCES_DIGIT_REGEX = /(?<=\d)\.(?=[A-Z])/
+
     # Rubular: http://rubular.com/r/V57WnM9Zut
     NewLineInMiddleOfWordRule = Rule.new(/\n(?=[a-zA-Z]{1,2}\n)/, '')
 
@@ -52,6 +60,12 @@ module PragmaticSegmenter
 
     # Rubular: http://rubular.com/r/IQ4TPfsbd8
     ConsecutiveForwardSlashRule = Rule.new(/\/{3}/, '')
+
+    # Rubular: http://rubular.com/r/6dt98uI76u
+    NoSpaceBetweenSentencesRule = Rule.new(NO_SPACE_BETWEEN_SENTENCES_REGEX, '. ')
+
+    # Rubular: http://rubular.com/r/l6KN6rH5XE
+    NoSpaceBetweenSentencesDigitRule = Rule.new(NO_SPACE_BETWEEN_SENTENCES_DIGIT_REGEX, '. ')
 
     EscapedCarriageReturnRule = Rule.new(/\\r/, "\r")
     TypoEscapedCarriageReturnRule = Rule.new(/\\\ r/, "\r")
@@ -94,10 +108,35 @@ module PragmaticSegmenter
       @clean_text.apply(InlineFormattingRule)
       clean_quotations(@clean_text)
       clean_table_of_contents(@clean_text)
+      check_for_no_space_in_between_sentences(@clean_text)
       clean_consecutive_characters(@clean_text)
     end
 
     private
+
+    def check_for_no_space_in_between_sentences(txt)
+      words = txt.split(' ')
+      words.each do |word|
+        search_for_connected_sentences(word, txt, NO_SPACE_BETWEEN_SENTENCES_REGEX, NoSpaceBetweenSentencesRule)
+        search_for_connected_sentences(word, txt, NO_SPACE_BETWEEN_SENTENCES_DIGIT_REGEX, NoSpaceBetweenSentencesDigitRule)
+      end
+      txt
+    end
+
+    def search_for_connected_sentences(word, txt, regex, rule)
+      if word =~ regex
+        unless URL_EMAIL_KEYWORDS.any? { |web| word =~ /#{web}/ }
+          unless abbreviations.any? { |abbr| word =~ /#{abbr}/i }
+            new_word = word.dup.apply(rule)
+            txt.gsub!(/#{Regexp.escape(word)}/, new_word)
+          end
+        end
+      end
+    end
+
+    def abbreviations
+      @abbr ||= PragmaticSegmenter::Abbreviation.new.all
+    end
 
     def remove_all_newlines(txt)
       clean_text = remove_newline_in_middle_of_sentence(txt)

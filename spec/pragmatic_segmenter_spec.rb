@@ -258,6 +258,11 @@ RSpec.describe PragmaticSegmenter::Segmenter do
       ps = PragmaticSegmenter::Segmenter.new(text: "One further habit which was somewhat weakened . . . was that of combining words into self-interpreting compounds. . . . The practice was not abandoned. . . .", language: "en")
       expect(ps.segment).to eq(["One further habit which was somewhat weakened . . . was that of combining words into self-interpreting compounds.", ". . . The practice was not abandoned. . . ."])
     end
+
+    it "No whitespace in between sentences #052" do
+      ps = PragmaticSegmenter::Segmenter.new(text: "Hello world.Today is Tuesday.Mr. Smith went to the store and bought 1,000.That is a lot.", language: "en")
+      expect(ps.segment).to eq(["Hello world.", "Today is Tuesday.", "Mr. Smith went to the store and bought 1,000.", "That is a lot."])
+    end
   end
 
   context "Golden Rules (languages other than English)" do
