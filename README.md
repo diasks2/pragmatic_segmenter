@@ -707,6 +707,32 @@ To test the relative performance of different segmentation tools and libraries I
 * Add abbreviation lists for any languages that do not currently have one (only relevant for languages that have the concept of abbreviations with periods)
 * Get Golden Rule #18 passing - Handling of a.m. or p.m. followed by a capitalized non sentence starter (ex. "At 5 p.m. Mr. Smith went to the bank. He left the bank at 6 p.m. Next he went to the store." --> ["At 5 p.m. Mr. Smith went to the bank.", "He left the bank at 6 p.m.", "Next he went to the store."])
 
+## Change Log
+
+**Version 0.0.1**  
+* Initial Release  
+
+**Version 0.0.2**  
+* Major design refactor  
+
+**Version 0.0.3**
+* Add travis.yml  
+* Add Code Climate  
+* Update README  
+
+**Version 0.0.4**  
+* Add `ConsecutiveForwardSlashRule` to cleaner  
+* Refactor `segmenter.rb` and `process.rb`  
+
+**Version 0.0.5**  
+* Make symbol substitution safer  
+* Refactor `process.rb`  
+* Update cleaner with escaped newline rules  
+
+**Version 0.0.6**  
+* Add rule for escaped newlines that include a space between the slash and character   
+* Add Golden Rule #52 and code to make it pass  
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.
