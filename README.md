@@ -641,14 +641,14 @@ Hola Srta. Ledesma. Buenos días, soy el Lic. Naser Pastoriza, y él es mi padre
 
 Name                                                                 | Programming Language | License                                             | GRS (English) | GRS (Other Languages)† | Speed‡
 ---------------------------------------------------------------------| -------------------- | --------------------------------------------------- | ------------- | ---------------------- | -------
-Pragmatic Segmenter                                                  | Ruby                 | [MIT](http://opensource.org/licenses/MIT)           | 98.04%        | 100.00%                | 3.84 s
-[TactfulTokenizer](https://github.com/zencephalon/Tactful_Tokenizer) | Ruby                 | [GNU GPLv3](http://www.gnu.org/copyleft/gpl.html)   | 66.67%        | 45.45%                 | 46.32 s
-[OpenNLP](https://opennlp.apache.org/)                               | Java                 | [APLv2](http://www.apache.org/licenses/LICENSE-2.0) | 60.78%        | 42.42%                 | 1.27 s
-[Standford CoreNLP](http://nlp.stanford.edu/software/corenlp.shtml)  | Java                 | [GNU GPLv3](http://www.gnu.org/copyleft/gpl.html)   | 58.82%        | 27.27%                 | 0.92 s
-[Splitta](http://www.nltk.org/_modules/nltk/tokenize/punkt.html)     | Python               | [APLv2](http://www.apache.org/licenses/LICENSE-2.0) | 56.86%        | 33.33%                 | N/A
-[Punkt](http://www.nltk.org/_modules/nltk/tokenize/punkt.html)       | Python               | [APLv2](http://www.apache.org/licenses/LICENSE-2.0) | 47.06%        | 45.45%                 | 1.79 s
-[SRX English](https://github.com/apohllo/srx-english)                | Ruby                 | [GNU GPLv3](http://www.gnu.org/copyleft/gpl.html)   | 29.41%        | 24.24%                 | 6.19 s
-[Scapel](https://github.com/louismullie/scalpel)                     | Ruby                 | [GNU GPLv3](http://www.gnu.org/copyleft/gpl.html)   | 27.45%        | 15.15%                 | 0.13 s
+Pragmatic Segmenter                                                  | Ruby                 | [MIT](http://opensource.org/licenses/MIT)           | 98.08%        | 100.00%                | 3.84 s
+[TactfulTokenizer](https://github.com/zencephalon/Tactful_Tokenizer) | Ruby                 | [GNU GPLv3](http://www.gnu.org/copyleft/gpl.html)   | 65.38%        | 45.45%                 | 46.32 s
+[OpenNLP](https://opennlp.apache.org/)                               | Java                 | [APLv2](http://www.apache.org/licenses/LICENSE-2.0) | 59.62%        | 42.42%                 | 1.27 s
+[Standford CoreNLP](http://nlp.stanford.edu/software/corenlp.shtml)  | Java                 | [GNU GPLv3](http://www.gnu.org/copyleft/gpl.html)   | 59.62%        | 27.27%                 | 0.92 s
+[Splitta](http://www.nltk.org/_modules/nltk/tokenize/punkt.html)     | Python               | [APLv2](http://www.apache.org/licenses/LICENSE-2.0) | 55.77%        | 33.33%                 | N/A
+[Punkt](http://www.nltk.org/_modules/nltk/tokenize/punkt.html)       | Python               | [APLv2](http://www.apache.org/licenses/LICENSE-2.0) | 46.15%        | 45.45%                 | 1.79 s
+[SRX English](https://github.com/apohllo/srx-english)                | Ruby                 | [GNU GPLv3](http://www.gnu.org/copyleft/gpl.html)   | 30.77%        | 24.24%                 | 6.19 s
+[Scapel](https://github.com/louismullie/scalpel)                     | Ruby                 | [GNU GPLv3](http://www.gnu.org/copyleft/gpl.html)   | 28.85%        | 15.15%                 | 0.13 s
 
 †GRS (Other Languages) is the total of the Golden Rules listed above for all languages other than English. This metric by no means includes all languages, only the ones that have Golden Rules listed above.  
 ‡ Speed is based on the performance benchmark results detailed in the section "Speed Performance Benchmarks" below. The number is an average of 10 runs.
