@@ -738,6 +738,9 @@ To test the relative performance of different segmentation tools and libraries I
 * Add passing spec for new end of sentence abbreviation (EN)  
 * Add roman numeral list support  
 
+**Version 0.0.8**  
+* Fix error in `list.rb`  
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.

@@ -161,7 +161,8 @@ module PragmaticSegmenter
     def other_items_replacement(a, i, alphabet, list_array, txt, parens)
       return if alphabet & list_array == [] ||
         !alphabet.include?(list_array[i - 1]) ||
-        !alphabet.include?(a)
+        !alphabet.include?(a) ||
+        !alphabet.include?(list_array[i + 1])
       return if alphabet.index(list_array[i + 1]) - alphabet.index(a) != 1 &&
                 (alphabet.index(list_array[i - 1]) - alphabet.index(a)).abs != 1
       replace_correct_alphabet_list(a, txt, parens)
