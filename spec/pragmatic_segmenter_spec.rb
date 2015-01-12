@@ -913,6 +913,11 @@ RSpec.describe PragmaticSegmenter::Segmenter do
         ps = PragmaticSegmenter::Segmenter.new(text: "A) Hello world. \nB) Hello world.\nC) Hello world.\nD) Hello world.\nE) Hello world.\nF) Hello world.", language: "en")
         expect(ps.segment).to eq(["A) Hello world.", "B) Hello world.", "C) Hello world.", "D) Hello world.", "E) Hello world.", "F) Hello world."])
       end
+
+      it "correctly segments text #089" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "The GmbH & Co. KG is a limited partnership with, typically, the sole general partner being a limited liability company.")
+        expect(ps.segment).to eq(["The GmbH & Co. KG is a limited partnership with, typically, the sole general partner being a limited liability company."])
+      end
     end
   end
 

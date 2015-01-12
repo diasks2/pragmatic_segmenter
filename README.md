@@ -744,6 +744,9 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.0.9**  
 * Improve handling of alphabetical and roman numeral lists  
 
+**Version 0.1.0**  
+* Add Kommanditgesellschaft Rule  
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.

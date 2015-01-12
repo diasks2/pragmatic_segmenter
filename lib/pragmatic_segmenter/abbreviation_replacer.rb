@@ -9,6 +9,9 @@ module PragmaticSegmenter
     # Rubular: http://rubular.com/r/yqa4Rit8EY
     PossessiveAbbreviationRule = Rule.new(/\.(?='s\s)|\.(?='s$)|\.(?='s\z)/, '∯')
 
+    # Rubular: http://rubular.com/r/NEv265G2X2
+    KommanditgesellschaftRule = Rule.new(/(?<=Co)\.(?=\sKG)/, '∯')
+
     # Rubular: http://rubular.com/r/xDkpFZ0EgH
     MULTI_PERIOD_ABBREVIATION_REGEX = /\b[a-z](?:\.[a-z])+[.]/i
 
@@ -37,6 +40,7 @@ module PragmaticSegmenter
 
     def replace
       @reformatted_text = text.apply(PossessiveAbbreviationRule)
+      @reformatted_text = text.apply(KommanditgesellschaftRule)
       @reformatted_text = PragmaticSegmenter::SingleLetterAbbreviation.new(text: @reformatted_text).replace
       @reformatted_text = search_for_abbreviations_in_string(@reformatted_text, abbreviations)
       @reformatted_text = replace_multi_period_abbreviations(@reformatted_text)
