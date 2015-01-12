@@ -6,11 +6,11 @@ module PragmaticSegmenter
   class List
     # Rubular: http://rubular.com/r/XcpaJKH0sz
     ALPHABETICAL_LIST_WITH_PERIODS =
-      /(?<=^)[a-z](?=\.)|(?<=\A)[a-z](?=\.)|(?<=\s)[a-z](?=\.)/i
+      /(?<=^)[a-z](?=\.)|(?<=\A)[a-z](?=\.)|(?<=\s)[a-z](?=\.)/
 
-    # Rubular: http://rubular.com/r/0MIlImeBsC
+    # Rubular: http://rubular.com/r/Gu5rQapywf
     ALPHABETICAL_LIST_WITH_PARENS =
-      /(?<=^)[a-z](?=\))|(?<=\A)[a-z](?=\))|(?<=\s)[a-z](?=\))/i
+      /(?<=\()[a-z]+(?=\))|(?<=^)[a-z]+(?=\))|(?<=\A)[a-z]+(?=\))|(?<=\s)[a-z]+(?=\))/i
 
     SubstituteListPeriodRule = Rule.new(/♨/, '∯')
     ListMarkerRule = Rule.new(/☝/, '')
@@ -30,9 +30,9 @@ module PragmaticSegmenter
       /(?<=\s)\d+\.(?=\s)|^\d+\.(?=\s)|(?<=\s)\d+\.(?=\))|^\d+\.(?=\))|(?<=\s\-)\d+\.(?=\s)|(?<=^\-)\d+\.(?=\s)|(?<=\s\⁃)\d+\.(?=\s)|(?<=^\⁃)\d+\.(?=\s)|(?<=\s\-)\d+\.(?=\))|(?<=^\-)\d+\.(?=\))|(?<=\s\⁃)\d+\.(?=\))|(?<=^\⁃)\d+\.(?=\))/
     NUMBERED_LIST_PARENS_REGEX = /\d+(?=\)\s)/
 
-    # Rubular: http://rubular.com/r/0MIlImeBsC
+    # Rubular: http://rubular.com/r/NsNFSqrNvJ
     EXTRACT_ALPHABETICAL_LIST_LETTERS_REGEX =
-      /(?<=^)[a-z](?=\))|(?<=\A)[a-z](?=\))|(?<=\s)[a-z](?=\))/i
+      /(?<=\()[a-z]+(?=\))|(?<=^)[a-z]+(?=\))|(?<=\A)[a-z]+(?=\))|(?<=\s)[a-z]+(?=\))/i
 
     # Rubular: http://rubular.com/r/wMpnVedEIb
     ALPHABETICAL_LIST_LETTERS_AND_PERIODS_REGEX =
@@ -45,6 +45,7 @@ module PragmaticSegmenter
 
     def add_line_break
       formatted_text = format_alphabetical_lists(text)
+      formatted_text = format_roman_numeral_lists(formatted_text)
       formatted_text = format_numbered_list_with_periods(formatted_text)
       format_numbered_list_with_parens(formatted_text)
     end
@@ -64,8 +65,13 @@ module PragmaticSegmenter
     end
 
     def format_alphabetical_lists(txt)
-      new_txt = add_line_breaks_for_alphabetical_list_with_periods(txt)
-      add_line_breaks_for_alphabetical_list_with_parens(new_txt)
+      new_txt = add_line_breaks_for_alphabetical_list_with_periods(txt, false)
+      add_line_breaks_for_alphabetical_list_with_parens(new_txt, false)
+    end
+
+    def format_roman_numeral_lists(txt)
+      new_txt = add_line_breaks_for_alphabetical_list_with_periods(txt, true)
+      add_line_breaks_for_alphabetical_list_with_parens(new_txt, true)
     end
 
     def replace_periods_in_numbered_list(txt)
@@ -112,12 +118,12 @@ module PragmaticSegmenter
       end
     end
 
-    def add_line_breaks_for_alphabetical_list_with_periods(txt)
-      iterate_alphabet_array(ALPHABETICAL_LIST_WITH_PERIODS, false, txt)
+    def add_line_breaks_for_alphabetical_list_with_periods(txt, roman_numeral)
+      iterate_alphabet_array(ALPHABETICAL_LIST_WITH_PERIODS, false, txt, roman_numeral)
     end
 
-    def add_line_breaks_for_alphabetical_list_with_parens(txt)
-      iterate_alphabet_array(ALPHABETICAL_LIST_WITH_PARENS, true, txt)
+    def add_line_breaks_for_alphabetical_list_with_parens(txt, roman_numeral)
+      iterate_alphabet_array(ALPHABETICAL_LIST_WITH_PARENS, true, txt, roman_numeral)
     end
 
     def replace_alphabet_list(a, txt)
@@ -128,7 +134,11 @@ module PragmaticSegmenter
 
     def replace_alphabet_list_parens(a, txt)
       txt.gsub!(EXTRACT_ALPHABETICAL_LIST_LETTERS_REGEX).with_index do |m|
-        a.eql?(m) ? "\r#{Regexp.escape(a.to_s)}" : "#{m}"
+        if txt =~ /\(#{Regexp.escape(m.to_s)}\)/i
+          a.eql?(m.dup.downcase) ? "\rȸ(#{Regexp.escape(m.to_s)}" : "#{m}"
+        else
+          a.eql?(m.dup.downcase) ? "\r#{Regexp.escape(m.to_s)}" : "#{m}"
+        end
       end
     end
 
@@ -141,19 +151,29 @@ module PragmaticSegmenter
     end
 
     def last_array_item_replacement(a, i, alphabet, list_array, txt, parens)
+      return if alphabet & list_array == [] ||
+        !alphabet.include?(list_array[i - 1]) ||
+        !alphabet.include?(a)
       return if (alphabet.index(list_array[i - 1]) - alphabet.index(a)).abs != 1
       replace_correct_alphabet_list(a, txt, parens)
     end
 
     def other_items_replacement(a, i, alphabet, list_array, txt, parens)
+      return if alphabet & list_array == [] ||
+        !alphabet.include?(list_array[i - 1]) ||
+        !alphabet.include?(a)
       return if alphabet.index(list_array[i + 1]) - alphabet.index(a) != 1 &&
                 (alphabet.index(list_array[i - 1]) - alphabet.index(a)).abs != 1
       replace_correct_alphabet_list(a, txt, parens)
     end
 
-    def iterate_alphabet_array(regex, parens, txt)
+    def iterate_alphabet_array(regex, parens, txt, roman_numeral)
       list_array = txt.scan(regex).map(&:downcase)
-      alphabet = ('a'..'z').to_a
+      if roman_numeral
+        alphabet = %w(i ii iii iv v vi vii viii ix x xi xii xiii xiv x xi xii xiii xv xvi xvii xviii xix xx)
+      else
+        alphabet = ('a'..'z').to_a
+      end
       list_array.each_with_index do |a, i|
         if i.eql?(list_array.length - 1)
           last_array_item_replacement(a, i, alphabet, list_array, txt, parens)
