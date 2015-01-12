@@ -747,6 +747,9 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.1.0**  
 * Add Kommanditgesellschaft Rule  
 
+**Version 0.1.1**  
+* Fix handling of German dates  
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.

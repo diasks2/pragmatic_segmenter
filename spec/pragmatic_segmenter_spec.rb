@@ -1508,6 +1508,11 @@ RSpec.describe PragmaticSegmenter::Segmenter do
         ps = PragmaticSegmenter::Segmenter.new(text: "s. vorherige Anmerkung.", language: 'de')
         expect(ps.segment).to eq(["s. vorherige Anmerkung."])
       end
+
+      it 'correctly segments text #033' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Mit Inkrafttreten des Mindestlohngesetzes (MiLoG) zum 01. Januar 2015 werden in Bezug auf den Einsatz von Leistungs.", language: 'de')
+        expect(ps.segment).to eq(["Mit Inkrafttreten des Mindestlohngesetzes (MiLoG) zum 01. Januar 2015 werden in Bezug auf den Einsatz von Leistungs."])
+      end
     end
   end
 

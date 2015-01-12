@@ -32,9 +32,20 @@ module PragmaticSegmenter
         # Rubular: http://rubular.com/r/ityNMwdghj
         NegativeNumberPeriodSpaceRule = Rule.new(/(?<=-[0-9]|-([1-9][0-9]))\.(?=\s)/, '∯')
 
+        DE_MONTHS = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember']
+
         def replace
           super
           @text.apply(NumberPeriodSpaceRule).apply(NegativeNumberPeriodSpaceRule)
+          replace_period_in_deutsch_dates(@text)
+        end
+
+        def replace_period_in_deutsch_dates(txt)
+          DE_MONTHS.each do |month|
+            # Rubular: http://rubular.com/r/zlqgj7G5dA
+            txt.gsub!(/(?<=\d)\.(?=\s*#{Regexp.escape(month)})/, '∯')
+          end
+          txt
         end
       end
 
