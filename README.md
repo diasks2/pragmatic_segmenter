@@ -741,6 +741,9 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.0.8**  
 * Fix error in `list.rb`  
 
+**Version 0.0.9**  
+* Improve handling of alphabetical and roman numeral lists  
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.

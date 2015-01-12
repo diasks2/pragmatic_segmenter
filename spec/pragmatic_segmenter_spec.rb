@@ -900,7 +900,7 @@ RSpec.describe PragmaticSegmenter::Segmenter do
       end
 
       it "correctly segments text #086" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "(a) Hello world. \n(b) Hello world.\n(c) Hello world.\n(d) Hello world.\n(e) Hello world.\n(f) Hello world.", language: "en")
+        ps = PragmaticSegmenter::Segmenter.new(text: "(a) Hello world. (b) Hello world. (c) Hello world. (d) Hello world. (e) Hello world.\n(f) Hello world.", language: "en")
         expect(ps.segment).to eq(["(a) Hello world.", "(b) Hello world.", "(c) Hello world.", "(d) Hello world.", "(e) Hello world.", "(f) Hello world."])
       end
 

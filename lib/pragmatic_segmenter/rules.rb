@@ -61,6 +61,7 @@ module PragmaticSegmenter
       MixedDoubleQQ = Rule.new(/☇/, '??')
       MixedDoubleEQ = Rule.new(/☈/, '!?')
       MixedDoubleEE = Rule.new(/☄/, '!!')
+      LeftParens = Rule.new(/&✂&/, '(')
       TemporaryEndingPunctutation = Rule.new('ȸ', '')
       Newline = Rule.new(/ȹ/, "\n")
 
@@ -70,7 +71,8 @@ module PragmaticSegmenter
               ExclamationPoint, QuestionMark,
               FullWidthQuestionMark, MixedDoubleQE,
               MixedDoubleQQ, MixedDoubleEQ,
-              MixedDoubleEE, TemporaryEndingPunctutation,
+              MixedDoubleEE, LeftParens,
+              TemporaryEndingPunctutation,
               Newline ]
     end
 

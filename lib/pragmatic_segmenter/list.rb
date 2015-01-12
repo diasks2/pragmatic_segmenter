@@ -32,7 +32,7 @@ module PragmaticSegmenter
 
     # Rubular: http://rubular.com/r/NsNFSqrNvJ
     EXTRACT_ALPHABETICAL_LIST_LETTERS_REGEX =
-      /(?<=\()[a-z]+(?=\))|(?<=^)[a-z]+(?=\))|(?<=\A)[a-z]+(?=\))|(?<=\s)[a-z]+(?=\))/i
+      /\([a-z]+(?=\))|(?<=^)[a-z]+(?=\))|(?<=\A)[a-z]+(?=\))|(?<=\s)[a-z]+(?=\))/i
 
     # Rubular: http://rubular.com/r/wMpnVedEIb
     ALPHABETICAL_LIST_LETTERS_AND_PERIODS_REGEX =
@@ -134,10 +134,10 @@ module PragmaticSegmenter
 
     def replace_alphabet_list_parens(a, txt)
       txt.gsub!(EXTRACT_ALPHABETICAL_LIST_LETTERS_REGEX).with_index do |m|
-        if txt =~ /\(#{Regexp.escape(m.to_s)}\)/i
-          a.eql?(m.dup.downcase) ? "\rȸ(#{Regexp.escape(m.to_s)}" : "#{m}"
+        if m.include?('(')
+          a.eql?(m.dup.downcase.gsub!(/\(/, '')) ? "\r&✂&#{Regexp.escape(m.gsub!(/\(/, ''))}" : "#{m}"
         else
-          a.eql?(m.dup.downcase) ? "\r#{Regexp.escape(m.to_s)}" : "#{m}"
+          a.eql?(m.dup.downcase) ? "\r#{Regexp.escape(m)}" : "#{m}"
         end
       end
     end
@@ -175,6 +175,7 @@ module PragmaticSegmenter
       else
         alphabet = ('a'..'z').to_a
       end
+      list_array.delete_if { |item| !alphabet.any? { |a| a.include?(item) } }
       list_array.each_with_index do |a, i|
         if i.eql?(list_array.length - 1)
           last_array_item_replacement(a, i, alphabet, list_array, txt, parens)
