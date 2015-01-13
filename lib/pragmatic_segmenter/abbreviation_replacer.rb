@@ -136,16 +136,19 @@ module PragmaticSegmenter
     end
 
     def replace_pre_number_abbr(txt, abbr)
-      txt.gsub(/(?<=#{abbr.strip})\.(?=\s\d)/, '∯').gsub(/(?<=#{abbr.strip})\.(?=\s+\()/, '∯')
+      txt.gsub(/(?<=\s#{abbr.strip})\.(?=\s\d)|(?<=^#{abbr.strip})\.(?=\s\d)/, '∯')
+         .gsub(/(?<=\s#{abbr.strip})\.(?=\s+\()|(?<=^#{abbr.strip})\.(?=\s+\()/, '∯')
+
     end
 
     def replace_prepositive_abbr(txt, abbr)
-      txt.gsub(/(?<=#{abbr.strip})\.(?=\s)/, '∯')
+      txt.gsub(/(?<=\s#{abbr.strip})\.(?=\s)|(?<=^#{abbr.strip})\.(?=\s)/, '∯')
+         .gsub(/(?<=\s#{abbr.strip})\.(?=:\d+)|(?<=^#{abbr.strip})\.(?=:\d+)/, '∯')
     end
 
     def replace_period_of_abbr(txt, abbr)
-      txt.gsub(/(?<=#{abbr.strip})\.(?=((\.|:|\?)|(\s([a-z]|I\s|I'm|I'll|\d))))/, '∯')
-         .gsub(/(?<=#{abbr.strip})\.(?=,)/, '∯')
+      txt.gsub(/(?<=\s#{abbr.strip})\.(?=((\.|\:|\?)|(\s([a-z]|I\s|I'm|I'll|\d))))|(?<=^#{abbr.strip})\.(?=((\.|\:|\?)|(\s([a-z]|I\s|I'm|I'll|\d))))/, '∯')
+         .gsub(/(?<=\s#{abbr.strip})\.(?=,)|(?<=^#{abbr.strip})\.(?=,)/, '∯')
     end
 
     def replace_possessive_abbreviations(txt)

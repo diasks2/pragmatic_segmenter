@@ -923,6 +923,11 @@ RSpec.describe PragmaticSegmenter::Segmenter do
         ps = PragmaticSegmenter::Segmenter.new(text: "[?][footnoteRef:6] This is a footnote.")
         expect(ps.segment).to eq(["[?][footnoteRef:6] This is a footnote."])
       end
+
+      it "correctly segments text #091" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "[15:  12:32]  [16:  firma? 13:28]")
+        expect(ps.segment).to eq(["[15:  12:32]  [16:  firma? 13:28]"])
+      end
     end
   end
 

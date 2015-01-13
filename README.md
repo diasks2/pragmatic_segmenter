@@ -754,6 +754,9 @@ To test the relative performance of different segmentation tools and libraries I
 * Fix missing abbreviations  
 * Add footnote rule to `cleaner.rb`  
 
+**Version 0.1.3**  
+* Improve punctuation in bracket replacement  
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.
