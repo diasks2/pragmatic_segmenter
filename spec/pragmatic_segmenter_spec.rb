@@ -928,6 +928,11 @@ RSpec.describe PragmaticSegmenter::Segmenter do
         ps = PragmaticSegmenter::Segmenter.new(text: "[15:  12:32]  [16:  firma? 13:28]")
         expect(ps.segment).to eq(["[15:  12:32]  [16:  firma? 13:28]"])
       end
+
+      it "correctly segments text #092" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "\"It's a good thing that the water is really calm,\" I answered ironically.")
+        expect(ps.segment).to eq(["\"It's a good thing that the water is really calm,\" I answered ironically."])
+      end
     end
   end
 

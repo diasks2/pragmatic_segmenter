@@ -760,6 +760,9 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.1.4**  
 * Fix missing abbreviations  
 
+**Version 0.1.5**  
+* Fix comma at end of quoatation bug  
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.
