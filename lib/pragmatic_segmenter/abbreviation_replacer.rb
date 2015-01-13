@@ -145,7 +145,7 @@ module PragmaticSegmenter
 
     def replace_period_of_abbr(txt, abbr)
       txt.gsub(/(?<=#{abbr.strip})\.(?=((\.|:|\?)|(\s([a-z]|I\s|I'm|I'll|\d))))/, '∯')
-        .gsub(/(?<=#{abbr.strip})\.(?=,)/, '∯')
+         .gsub(/(?<=#{abbr.strip})\.(?=,)/, '∯')
     end
 
     def replace_possessive_abbreviations(txt)

@@ -750,6 +750,10 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.1.1**  
 * Fix handling of German dates  
 
+**Version 0.1.2**  
+* Fix missing abbreviations  
+* Add footnote rule to `cleaner.rb`  
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.

@@ -61,6 +61,9 @@ module PragmaticSegmenter
     # Rubular: http://rubular.com/r/IQ4TPfsbd8
     ConsecutiveForwardSlashRule = Rule.new(/\/{3}/, '')
 
+    # Rubular: http://rubular.com/r/gEjxQ0HmSD
+    FootnoteRule = Rule.new(/\[\?\]/, '[&ᓷ&]')
+
     # Rubular: http://rubular.com/r/6dt98uI76u
     NoSpaceBetweenSentencesRule = Rule.new(NO_SPACE_BETWEEN_SENTENCES_REGEX, '. ')
 
@@ -105,7 +108,7 @@ module PragmaticSegmenter
       replace_newlines(@clean_text)
       replace_escaped_newlines(@clean_text)
       @clean_text.apply(HtmlRules::All)
-      @clean_text.apply(InlineFormattingRule)
+      @clean_text.apply(InlineFormattingRule, FootnoteRule)
       clean_quotations(@clean_text)
       clean_table_of_contents(@clean_text)
       check_for_no_space_in_between_sentences(@clean_text)

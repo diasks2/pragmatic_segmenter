@@ -918,6 +918,11 @@ RSpec.describe PragmaticSegmenter::Segmenter do
         ps = PragmaticSegmenter::Segmenter.new(text: "The GmbH & Co. KG is a limited partnership with, typically, the sole general partner being a limited liability company.")
         expect(ps.segment).to eq(["The GmbH & Co. KG is a limited partnership with, typically, the sole general partner being a limited liability company."])
       end
+
+      it "correctly segments text #090" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "[?][footnoteRef:6] This is a footnote.")
+        expect(ps.segment).to eq(["[?][footnoteRef:6] This is a footnote."])
+      end
     end
   end
 
