@@ -757,6 +757,9 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.1.3**  
 * Improve punctuation in bracket replacement  
 
+**Version 0.1.4**  
+* Fix missing abbreviations  
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.
