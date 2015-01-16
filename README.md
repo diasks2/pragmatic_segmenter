@@ -761,7 +761,10 @@ To test the relative performance of different segmentation tools and libraries I
 * Fix missing abbreviations  
 
 **Version 0.1.5**  
-* Fix comma at end of quoatation bug  
+* Fix comma at end of quotation bug  
+
+**Version 0.1.6**  
+* Fix bug in numbered list finder (ignore longer digits)   
 
 ## Contributing
 

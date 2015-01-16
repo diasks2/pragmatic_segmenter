@@ -16,19 +16,19 @@ module PragmaticSegmenter
     ListMarkerRule = Rule.new(/☝/, '')
 
     # Rubular: http://rubular.com/r/Wv4qLdoPx7
-    SpaceBetweenListItemsFirstRule = Rule.new(/(?<=\S\S|^)\s(?=\S\s*\d+♨)/, "\r")
+    SpaceBetweenListItemsFirstRule = Rule.new(/(?<=\S\S|^)\s(?=\S\s*\d{1,2}♨)/, "\r")
 
     # Rubular: http://rubular.com/r/AizHXC6HxK
-    SpaceBetweenListItemsSecondRule = Rule.new(/(?<=\S\S|^)\s(?=\d+♨)/, "\r")
+    SpaceBetweenListItemsSecondRule = Rule.new(/(?<=\S\S|^)\s(?=\d{1,2}♨)/, "\r")
 
     # Rubular: http://rubular.com/r/GE5q6yID2j
-    SpaceBetweenListItemsThirdRule = Rule.new(/(?<=\S\S|^)\s(?=\d+☝)/, "\r")
+    SpaceBetweenListItemsThirdRule = Rule.new(/(?<=\S\S|^)\s(?=\d{1,2}☝)/, "\r")
 
     NUMBERED_LIST_REGEX_1 =
-      /\s\d+(?=\.\s)|^\d+(?=\.\s)|\s\d+(?=\.\))|^\d+(?=\.\))|(?<=\s\-)\d+(?=\.\s)|(?<=^\-)\d+(?=\.\s)|(?<=\s\⁃)\d+(?=\.\s)|(?<=^\⁃)\d+(?=\.\s)|(?<=s\-)\d+(?=\.\))|(?<=^\-)\d+(?=\.\))|(?<=\s\⁃)\d+(?=\.\))|(?<=^\⁃)\d+(?=\.\))/
+      /\s\d{1,2}(?=\.\s)|^\d{1,2}(?=\.\s)|\s\d{1,2}(?=\.\))|^\d{1,2}(?=\.\))|(?<=\s\-)\d{1,2}(?=\.\s)|(?<=^\-)\d{1,2}(?=\.\s)|(?<=\s\⁃)\d{1,2}(?=\.\s)|(?<=^\⁃)\d{1,2}(?=\.\s)|(?<=s\-)\d{1,2}(?=\.\))|(?<=^\-)\d{1,2}(?=\.\))|(?<=\s\⁃)\d{1,2}(?=\.\))|(?<=^\⁃)\d{1,2}(?=\.\))/
     NUMBERED_LIST_REGEX_2 =
-      /(?<=\s)\d+\.(?=\s)|^\d+\.(?=\s)|(?<=\s)\d+\.(?=\))|^\d+\.(?=\))|(?<=\s\-)\d+\.(?=\s)|(?<=^\-)\d+\.(?=\s)|(?<=\s\⁃)\d+\.(?=\s)|(?<=^\⁃)\d+\.(?=\s)|(?<=\s\-)\d+\.(?=\))|(?<=^\-)\d+\.(?=\))|(?<=\s\⁃)\d+\.(?=\))|(?<=^\⁃)\d+\.(?=\))/
-    NUMBERED_LIST_PARENS_REGEX = /\d+(?=\)\s)/
+      /(?<=\s)\d{1,2}\.(?=\s)|^\d{1,2}\.(?=\s)|(?<=\s)\d{1,2}\.(?=\))|^\d{1,2}\.(?=\))|(?<=\s\-)\d{1,2}\.(?=\s)|(?<=^\-)\d{1,2}\.(?=\s)|(?<=\s\⁃)\d{1,2}\.(?=\s)|(?<=^\⁃)\d{1,2}\.(?=\s)|(?<=\s\-)\d{1,2}\.(?=\))|(?<=^\-)\d{1,2}\.(?=\))|(?<=\s\⁃)\d{1,2}\.(?=\))|(?<=^\⁃)\d{1,2}\.(?=\))/
+    NUMBERED_LIST_PARENS_REGEX = /\d{1,2}(?=\)\s)/
 
     # Rubular: http://rubular.com/r/NsNFSqrNvJ
     EXTRACT_ALPHABETICAL_LIST_LETTERS_REGEX =
@@ -81,7 +81,7 @@ module PragmaticSegmenter
     def add_line_breaks_for_numbered_list_with_periods(txt)
       return txt unless txt.include?('♨') &&
                         txt !~ /♨.+\n.+♨|♨.+\r.+♨/ &&
-                        txt !~ /for\s\d+♨\s[a-z]/
+                        txt !~ /for\s\d{1,2}♨\s[a-z]/
       txt.apply(SpaceBetweenListItemsFirstRule).
           apply(SpaceBetweenListItemsSecondRule)
     end

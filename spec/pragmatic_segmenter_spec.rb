@@ -933,6 +933,11 @@ RSpec.describe PragmaticSegmenter::Segmenter do
         ps = PragmaticSegmenter::Segmenter.new(text: "\"It's a good thing that the water is really calm,\" I answered ironically.")
         expect(ps.segment).to eq(["\"It's a good thing that the water is really calm,\" I answered ironically."])
       end
+
+      it "correctly segments text #093" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "December 31, 1988. Hello world. It's great! \nBorn April 05, 1989.")
+        expect(ps.segment).to eq(["December 31, 1988.", "Hello world.", "It's great!", "Born April 05, 1989."])
+      end
     end
   end
 
