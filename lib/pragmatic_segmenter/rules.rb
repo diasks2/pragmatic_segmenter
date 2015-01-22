@@ -8,6 +8,8 @@ module PragmaticSegmenter
 
     SingleNewLineRule = Rule.new(/\n/, 'ȹ')
 
+    SubSingleQuoteRule = Rule.new(/&⎋&/, "'")
+
     ExtraWhiteSpaceRule = Rule.new(/\s{3,}/, ' ')
 
     # Rubular: http://rubular.com/r/aXPUGm6fQh

@@ -130,9 +130,9 @@ module PragmaticSegmenter
 
     def replace_period_in_am_pm(txt)
       txt.gsub(UPPERCASE_PM_REGEX, '.')
-        .gsub(UPPERCASE_AM_REGEX, '.')
-        .gsub(LOWERCASE_PM_REGEX, '.')
-        .gsub(LOWERCASE_AM_REGEX, '.')
+         .gsub(UPPERCASE_AM_REGEX, '.')
+         .gsub(LOWERCASE_PM_REGEX, '.')
+         .gsub(LOWERCASE_AM_REGEX, '.')
     end
 
     def replace_pre_number_abbr(txt, abbr)

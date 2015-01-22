@@ -14,10 +14,16 @@ module PragmaticSegmenter
   class Process
     include Rules
     # Rubular: http://rubular.com/r/NqCqv372Ix
-    QUOTATION_AT_END_OF_SENTENCE_REGEX = /[!?\.][\"\'\u{201d}\u{201c}]\s{1}[A-Z]/
+    QUOTATION_AT_END_OF_SENTENCE_REGEX = /[!?\.-][\"\'\u{201d}\u{201c}]\s{1}[A-Z]/
+
+    # Rubular: http://rubular.com/r/6flGnUMEVl
+    PARENS_BETWEEN_DOUBLE_QUOTES_REGEX = /["”]\s\(.*\)\s["“]/
+
+    # Rubular: http://rubular.com/r/TYzr4qOW1Q
+    BETWEEN_DOUBLE_QUOTES_REGEX = /"(?:[^"])*[^,]"|“(?:[^”])*[^,]”/
 
     # Rubular: http://rubular.com/r/JMjlZHAT4g
-    SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX = /(?<=[!?\.][\"\'\u{201d}\u{201c}])\s{1}(?=[A-Z])/
+    SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX = /(?<=[!?\.-][\"\'\u{201d}\u{201c}])\s{1}(?=[A-Z])/
 
     attr_reader :text, :doc_type
     def initialize(text:, doc_type:)
@@ -37,12 +43,13 @@ module PragmaticSegmenter
     private
 
     def split_into_segments(txt)
-      txt.split("\r")
+      check_for_parens_between_quotes(txt).split("\r")
          .map! { |segment| segment.apply(SingleNewLineRule, EllipsisRules::All) }
          .map { |segment| check_for_punctuation(segment) }.flatten
          .map! { |segment| segment.apply(SubSymbolsRules::All) }
          .map { |segment| post_process_segments(segment) }
          .flatten.compact.delete_if(&:empty?)
+         .map! { |segment| segment.apply(SubSingleQuoteRule) }
     end
 
     def post_process_segments(txt)
@@ -52,6 +59,13 @@ module PragmaticSegmenter
         txt.split(SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX)
       else
         txt.tr("\n", '').strip
+      end
+    end
+
+    def check_for_parens_between_quotes(txt)
+      return txt unless txt =~ PARENS_BETWEEN_DOUBLE_QUOTES_REGEX
+      txt.gsub!(PARENS_BETWEEN_DOUBLE_QUOTES_REGEX) do |match|
+        match.gsub!(/\s(?=\()/, "\r").gsub!(/(?<=\))\s/, "\r")
       end
     end
 

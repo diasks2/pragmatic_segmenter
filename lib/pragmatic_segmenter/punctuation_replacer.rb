@@ -29,6 +29,7 @@ module PragmaticSegmenter
         sub_4 = sub_characters(txt, sub_3, '!', '&ᓴ&')
         sub_5 = sub_characters(txt, sub_4, '?', '&ᓷ&')
         sub_6 = sub_characters(txt, sub_5, '？', '&ᓸ&')
+        sub_7 = sub_characters(txt, sub_6, "'", '&⎋&')
       end
       txt.apply(SubEscapedRegexReservedCharacters::All)
     end

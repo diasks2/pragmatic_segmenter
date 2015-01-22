@@ -766,6 +766,11 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.1.6**  
 * Fix bug in numbered list finder (ignore longer digits)   
 
+**Version 0.1.7**  
+* Add Alice in Wonderland specs  
+* Fix parenthesis between double quotations bug  
+* Fix split after quotation ending in dash bug      
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.
