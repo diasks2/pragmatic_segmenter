@@ -49,7 +49,8 @@ module PragmaticSegmenter
     def sub_punctuation_between_single_quotes(txt)
       PragmaticSegmenter::PunctuationReplacer.new(
         matches_array: txt.scan(BETWEEN_SINGLE_QUOTES_REGEX),
-        text: txt
+        text: txt,
+        match_type: 'single'
       ).replace
     end
 

@@ -1498,6 +1498,11 @@ RSpec.describe PragmaticSegmenter::Segmenter do
         ps = PragmaticSegmenter::Segmenter.new(text: "\"Dinah'll miss me very much to-night, I should think!\" (Dinah was the cat.) \"I hope they'll remember her saucer of milk at tea-time. Dinah, my dear, I wish you were down here with me!\"")
         expect(ps.segment).to eq(["\"Dinah'll miss me very much to-night, I should think!\"", "(Dinah was the cat.)", "\"I hope they'll remember her saucer of milk at tea-time. Dinah, my dear, I wish you were down here with me!\""])
       end
+
+      it "correctly segments text #098" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Hello. 'This is a test of single quotes.' A new sentence.")
+        expect(ps.segment).to eq(["Hello.", "'This is a test of single quotes.'", "A new sentence."])
+      end
     end
   end
 

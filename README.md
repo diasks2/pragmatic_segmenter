@@ -769,7 +769,10 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.1.7**  
 * Add Alice in Wonderland specs  
 * Fix parenthesis between double quotations bug  
-* Fix split after quotation ending in dash bug      
+* Fix split after quotation ending in dash bug  
+
+**Version 0.1.8**  
+* Fix bug in splitting new sentence after single quotes  
 
 ## Contributing
 
