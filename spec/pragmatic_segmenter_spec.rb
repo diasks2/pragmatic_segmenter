@@ -456,6 +456,18 @@ RSpec.describe PragmaticSegmenter::Segmenter do
         expect(ps.segment).to eq(["کیا حال ہے؟", "ميرا نام ___ ەے۔", "میں حالا تاوان دےدوں؟"])
       end
     end
+
+    context "Golden Rules (Dutch)" do
+      it "Sentence starting with a number #001" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Hij schoot op de JP8-brandstof toen de Surface-to-Air (sam)-missiles op hem af kwamen. 81 procent van de schoten was raak.", language: 'nl')
+        expect(ps.segment).to eq(["Hij schoot op de JP8-brandstof toen de Surface-to-Air (sam)-missiles op hem af kwamen.", "81 procent van de schoten was raak."])
+      end
+
+      it "Sentence starting with an ellipsis #002" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "81 procent van de schoten was raak. ...en toen barste de hel los.", language: 'nl')
+        expect(ps.segment).to eq(["81 procent van de schoten was raak.", "...en toen barste de hel los."])
+      end
+    end
   end
 
   context 'Language: English (en)' do
@@ -2490,6 +2502,24 @@ RSpec.describe PragmaticSegmenter::Segmenter do
       it 'correctly segments text #001' do
         ps = PragmaticSegmenter::Segmenter.new(text: "安永已聯繫周怡安親屬，協助辦理簽證相關事宜，周怡安家屬1月1日晚間搭乘東方航空班機抵達上海，他們步入入境大廳時神情落寞、不發一語。周怡安來自台中，去年剛從元智大學畢業，同年9月加入安永。", language: 'zh')
         expect(ps.segment).to eq(["安永已聯繫周怡安親屬，協助辦理簽證相關事宜，周怡安家屬1月1日晚間搭乘東方航空班機抵達上海，他們步入入境大廳時神情落寞、不發一語。", "周怡安來自台中，去年剛從元智大學畢業，同年9月加入安永。"])
+      end
+    end
+  end
+
+  context 'Language: Dutch (nl)' do
+    describe '#segment' do
+      it 'correctly segments text #001' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Afkorting aanw. vnw.", language: 'nl')
+        expect(ps.segment).to eq(["Afkorting aanw. vnw."])
+      end
+    end
+  end
+
+  context 'Language: Polish (pl)' do
+    describe '#segment' do
+      it 'correctly segments text #001' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "To słowo bałt. jestskrótem.", language: 'pl')
+        expect(ps.segment).to eq(["To słowo bałt. jestskrótem."])
       end
     end
   end

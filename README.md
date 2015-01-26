@@ -642,13 +642,13 @@ Hola Srta. Ledesma. Buenos días, soy el Lic. Naser Pastoriza, y él es mi padre
 Name                                                                 | Programming Language | License                                             | GRS (English) | GRS (Other Languages)† | Speed‡
 ---------------------------------------------------------------------| -------------------- | --------------------------------------------------- | ------------- | ---------------------- | -------
 Pragmatic Segmenter                                                  | Ruby                 | [MIT](http://opensource.org/licenses/MIT)           | 98.08%        | 100.00%                | 3.84 s
-[TactfulTokenizer](https://github.com/zencephalon/Tactful_Tokenizer) | Ruby                 | [GNU GPLv3](http://www.gnu.org/copyleft/gpl.html)   | 65.38%        | 45.45%                 | 46.32 s
-[OpenNLP](https://opennlp.apache.org/)                               | Java                 | [APLv2](http://www.apache.org/licenses/LICENSE-2.0) | 59.62%        | 42.42%                 | 1.27 s
-[Standford CoreNLP](http://nlp.stanford.edu/software/corenlp.shtml)  | Java                 | [GNU GPLv3](http://www.gnu.org/copyleft/gpl.html)   | 59.62%        | 27.27%                 | 0.92 s
-[Splitta](http://www.nltk.org/_modules/nltk/tokenize/punkt.html)     | Python               | [APLv2](http://www.apache.org/licenses/LICENSE-2.0) | 55.77%        | 33.33%                 | N/A
-[Punkt](http://www.nltk.org/_modules/nltk/tokenize/punkt.html)       | Python               | [APLv2](http://www.apache.org/licenses/LICENSE-2.0) | 46.15%        | 45.45%                 | 1.79 s
-[SRX English](https://github.com/apohllo/srx-english)                | Ruby                 | [GNU GPLv3](http://www.gnu.org/copyleft/gpl.html)   | 30.77%        | 24.24%                 | 6.19 s
-[Scapel](https://github.com/louismullie/scalpel)                     | Ruby                 | [GNU GPLv3](http://www.gnu.org/copyleft/gpl.html)   | 28.85%        | 15.15%                 | 0.13 s
+[TactfulTokenizer](https://github.com/zencephalon/Tactful_Tokenizer) | Ruby                 | [GNU GPLv3](http://www.gnu.org/copyleft/gpl.html)   | 65.38%        | 48.57%                 | 46.32 s
+[OpenNLP](https://opennlp.apache.org/)                               | Java                 | [APLv2](http://www.apache.org/licenses/LICENSE-2.0) | 59.62%        | 45.71%                 | 1.27 s
+[Standford CoreNLP](http://nlp.stanford.edu/software/corenlp.shtml)  | Java                 | [GNU GPLv3](http://www.gnu.org/copyleft/gpl.html)   | 59.62%        | 31.43%                 | 0.92 s
+[Splitta](http://www.nltk.org/_modules/nltk/tokenize/punkt.html)     | Python               | [APLv2](http://www.apache.org/licenses/LICENSE-2.0) | 55.77%        | 37.14%                 | N/A
+[Punkt](http://www.nltk.org/_modules/nltk/tokenize/punkt.html)       | Python               | [APLv2](http://www.apache.org/licenses/LICENSE-2.0) | 46.15%        | 48.57%                 | 1.79 s
+[SRX English](https://github.com/apohllo/srx-english)                | Ruby                 | [GNU GPLv3](http://www.gnu.org/copyleft/gpl.html)   | 30.77%        | 28.57%                 | 6.19 s
+[Scapel](https://github.com/louismullie/scalpel)                     | Ruby                 | [GNU GPLv3](http://www.gnu.org/copyleft/gpl.html)   | 28.85%        | 20.00%                 | 0.13 s
 
 †GRS (Other Languages) is the total of the Golden Rules listed above for all languages other than English. This metric by no means includes all languages, only the ones that have Golden Rules listed above.  
 ‡ Speed is based on the performance benchmark results detailed in the section "Speed Performance Benchmarks" below. The number is an average of 10 runs.
@@ -659,6 +659,9 @@ Other tools not yet tested:
 * [trtok](https://github.com/jirkamarsik/trainable-tokenizer)
 * [segtok](https://pypi.python.org/pypi/segtok/1.1.0)
 * [LingPipe](http://alias-i.com/lingpipe/demos/tutorial/sentences/read-me.html)
+* [Elephant](http://gmb.let.rug.nl/elephant/experiments.php)
+* [Ucto: Unicode Tokenizer](http://ilk.uvt.nl/ucto/)
+* [tokenizer](http://moin.delph-in.net/WeSearch/DocumentParsing)
 
 ## Speed Performance Benchmarks
 
@@ -682,6 +685,7 @@ To test the relative performance of different segmentation tools and libraries I
 
 ##Segmentation Papers and Books
 
+* *Elephant: Sequence Labeling for Word and Sentence Segmentation* - Kilian Evang, Valerio Basile, Grzegorz Chrupała and Johan Bos (2013) [[pdf](http://www.aclweb.org/anthology/D13-1146) | [mirror](https://s3.amazonaws.com/tm-town-nlp-resources/Elephant-+Sequence+Labeling+for+Word+and+Sentence+Segmentation.pdf)]
 * *Sentence Boundary Detection: A Long Solved Problem?* (Second Edition) - Jonathon Read, Rebecca Dridan, Stephan Oepen, Lars Jørgen Solberg (2012) [[pdf](http://www.aclweb.org/anthology/C12-2096) | [mirror](https://s3.amazonaws.com/tm-town-nlp-resources/C12-2096.pdf)]
 * *Handbook of Natural Language Processing* (Second Edition) - Nitin Indurkhya and Fred J. Damerau (2010) [[amazon](http://www.amazon.com/Handbook-Language-Processing-Learning-Recognition/dp/1420085921)]
 * *Sentence Boundary Detection and the Problem with the U.S.* - Dan Gillick (2009) [[pdf](http://dgillick.com/resource/sbd_naacl_2009.pdf) | [mirror](https://s3.amazonaws.com/tm-town-nlp-resources/sbd_naacl_2009.pdf)]
@@ -773,6 +777,12 @@ To test the relative performance of different segmentation tools and libraries I
 
 **Version 0.1.8**  
 * Fix bug in splitting new sentence after single quotes  
+
+**Version 0.2.0**  
+* Add Dutch Golden rules and abbreviations  
+* Update README with additional tools  
+* Update segmentation test scores in README with results of new Golden Rule tests  
+* Add Polish abbreviations  
 
 ## Contributing
 
