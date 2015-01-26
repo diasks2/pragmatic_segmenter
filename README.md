@@ -793,7 +793,7 @@ To test the relative performance of different segmentation tools and libraries I
 * Fix bug in splitting new sentence after single quotes  
 
 **Version 0.2.0**  
-* Add Dutch Golden rules and abbreviations  
+* Add Dutch Golden Rules and abbreviations  
 * Update README with additional tools  
 * Update segmentation test scores in README with results of new Golden Rule tests  
 * Add Polish abbreviations  
