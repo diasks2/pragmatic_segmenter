@@ -637,6 +637,20 @@ Hola Srta. Ledesma. Buenos días, soy el Lic. Naser Pastoriza, y él es mi padre
 => ["کیا حال ہے؟", "ميرا نام ___ ەے۔", "میں حالا تاوان دےدوں؟"]
 ```
 
+####Golden Rules (Dutch)
+
+1.) **Sentence starting with a number**
+```
+Hij schoot op de JP8-brandstof toen de Surface-to-Air (sam)-missiles op hem af kwamen. 81 procent van de schoten was raak.
+=> ["Hij schoot op de JP8-brandstof toen de Surface-to-Air (sam)-missiles op hem af kwamen.", "81 procent van de schoten was raak."]
+```
+
+2.) **Sentence starting with an ellipsis**
+```
+81 procent van de schoten was raak. ...en toen barste de hel los.
+=> ["81 procent van de schoten was raak.", "...en toen barste de hel los."]
+```
+
 ## Comparison of Segmentation Tools, Libraries and Algorithms
 
 Name                                                                 | Programming Language | License                                             | GRS (English) | GRS (Other Languages)† | Speed‡
