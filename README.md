@@ -676,6 +676,7 @@ Other tools not yet tested:
 * [Elephant](http://gmb.let.rug.nl/elephant/experiments.php)
 * [Ucto: Unicode Tokenizer](http://ilk.uvt.nl/ucto/)
 * [tokenizer](http://moin.delph-in.net/WeSearch/DocumentParsing)
+* [spaCy](http://honnibal.github.io/spaCy/)
 
 ## Speed Performance Benchmarks
 
