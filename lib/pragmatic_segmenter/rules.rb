@@ -28,7 +28,7 @@ module PragmaticSegmenter
       All = [ InQuotationRule, BeforeCommaMidSentenceRule, MidSentenceRule ]
     end
 
-    module DoublePuctationRules
+    module DoublePunctuationRules
       FirstRule = Rule.new(/\?!/, '☉')
       SecondRule = Rule.new(/!\?/, '☈')
       ThirdRule = Rule.new(/\?\?/, '☇')
@@ -64,6 +64,7 @@ module PragmaticSegmenter
       MixedDoubleEQ = Rule.new(/☈/, '!?')
       MixedDoubleEE = Rule.new(/☄/, '!!')
       LeftParens = Rule.new(/&✂&/, '(')
+      RightParens = Rule.new(/&⌬&/, ')')
       TemporaryEndingPunctutation = Rule.new('ȸ', '')
       Newline = Rule.new(/ȹ/, "\n")
 
@@ -74,7 +75,7 @@ module PragmaticSegmenter
               FullWidthQuestionMark, MixedDoubleQE,
               MixedDoubleQQ, MixedDoubleEQ,
               MixedDoubleEE, LeftParens,
-              TemporaryEndingPunctutation,
+              RightParens, TemporaryEndingPunctutation,
               Newline ]
     end
 

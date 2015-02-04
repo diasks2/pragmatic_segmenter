@@ -25,6 +25,9 @@ module PragmaticSegmenter
     # Rubular: http://rubular.com/r/JMjlZHAT4g
     SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX = /(?<=[!?\.-][\"\'\u{201d}\u{201c}])\s{1}(?=[A-Z])/
 
+    # Rubular: http://rubular.com/r/mQ8Es9bxtk
+    CONTINUOUS_PUNCTUATION_REGEX = /(?<=\S)(!|\?){3,}(?=(\s|\z|$))/
+
     attr_reader :text, :doc_type
     def initialize(text:, doc_type:)
       @text = text
@@ -35,6 +38,7 @@ module PragmaticSegmenter
       reformatted_text = PragmaticSegmenter::List.new(text: text).add_line_break
       reformatted_text = replace_abbreviations(reformatted_text)
       reformatted_text = replace_numbers(reformatted_text)
+      reformatted_text = replace_continuous_punctuation(reformatted_text)
       reformatted_text.apply(AbbreviationsWithMultiplePeriodsAndEmailRule)
       reformatted_text.apply(GeoLocationRule)
       split_into_segments(reformatted_text)
@@ -69,6 +73,13 @@ module PragmaticSegmenter
       end
     end
 
+    def replace_continuous_punctuation(txt)
+      return txt unless txt =~ CONTINUOUS_PUNCTUATION_REGEX
+      txt.gsub!(CONTINUOUS_PUNCTUATION_REGEX) do |match|
+        match.gsub!(/!/, '&ᓴ&').gsub!(/\?/, '&ᓷ&')
+      end
+    end
+
     def consecutive_underscore?(txt)
       # Rubular: http://rubular.com/r/fTF2Ff3WBL
       txt.gsub(/_{3,}/, '').length.eql?(0)
@@ -85,12 +96,13 @@ module PragmaticSegmenter
     def process_text(txt)
       txt << 'ȸ' unless punctuation_array.any? { |p| txt[-1].include?(p) }
       PragmaticSegmenter::ExclamationWords.apply_rules(txt)
-      between_punctutation(txt)
+      between_punctuation(txt)
       txt = txt.apply(
-        DoublePuctationRules::All,
+        DoublePunctuationRules::All,
         QuestionMarkInQuotationRule,
         ExclamationPointRules::All
       )
+      txt = PragmaticSegmenter::List.new(text: txt).replace_parens
       sentence_boundary_punctuation(txt)
     end
 
@@ -106,7 +118,7 @@ module PragmaticSegmenter
       @punct_arr ||= PragmaticSegmenter::Punctuation.new.punct
     end
 
-    def between_punctutation(txt)
+    def between_punctuation(txt)
       PragmaticSegmenter::BetweenPunctuation.new(text: txt).replace
     end
 

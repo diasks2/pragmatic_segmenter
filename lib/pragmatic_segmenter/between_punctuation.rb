@@ -17,6 +17,9 @@ module PragmaticSegmenter
     # Rubular: http://rubular.com/r/JbAIpKdlSq
     BETWEEN_QUOTE_SLANTED_REGEX = /“(?>[^”\\]+|\\{2}|\\.)*”/
 
+    # Rubular: http://rubular.com/r/WX4AvnZvlX
+    BETWEEN_SQUARE_BRACKETS_REGEX = /\[(?>[^\]\\]+|\\{2}|\\.)*\]/
+
     # Rubular: http://rubular.com/r/6tTityPflI
     BETWEEN_PARENS_REGEX = /\((?>[^\(\)\\]+|\\{2}|\\.)*\)/
 
@@ -34,6 +37,7 @@ module PragmaticSegmenter
     def sub_punctuation_between_quotes_and_parens(txt)
       sub_punctuation_between_single_quotes(txt)
       sub_punctuation_between_double_quotes(txt)
+      sub_punctuation_between_square_brackets(txt)
       sub_punctuation_between_parens(txt)
       sub_punctuation_between_quotes_arrow(txt)
       sub_punctuation_between_quotes_slanted(txt)
@@ -42,6 +46,13 @@ module PragmaticSegmenter
     def sub_punctuation_between_parens(txt)
       PragmaticSegmenter::PunctuationReplacer.new(
         matches_array: txt.scan(BETWEEN_PARENS_REGEX),
+        text: txt
+      ).replace
+    end
+
+    def sub_punctuation_between_square_brackets(txt)
+      PragmaticSegmenter::PunctuationReplacer.new(
+        matches_array: txt.scan(BETWEEN_SQUARE_BRACKETS_REGEX),
         text: txt
       ).replace
     end

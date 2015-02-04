@@ -4,6 +4,7 @@ module PragmaticSegmenter
   # This class searches for a list within a string and adds
   # newlines before each list item.
   class List
+    ROMAN_NUMERALS = %w(i ii iii iv v vi vii viii ix x xi xii xiii xiv x xi xii xiii xv xvi xvii xviii xix xx)
     # Rubular: http://rubular.com/r/XcpaJKH0sz
     ALPHABETICAL_LIST_WITH_PERIODS =
       /(?<=^)[a-z](?=\.)|(?<=\A)[a-z](?=\.)|(?<=\s)[a-z](?=\.)/
@@ -48,6 +49,16 @@ module PragmaticSegmenter
       formatted_text = format_roman_numeral_lists(formatted_text)
       formatted_text = format_numbered_list_with_periods(formatted_text)
       format_numbered_list_with_parens(formatted_text)
+    end
+
+    def replace_parens
+      ROMAN_NUMERALS.each do |rm|
+        next unless text =~ /\(#{Regexp.escape(rm)}\)\s[A-Z]/
+        text.gsub!(/\(#{Regexp.escape(rm)}\)(?=\s[A-Z])/) do |match|
+          match.gsub!(/\(/, '&✂&').gsub!(/\)/, '&⌬&')
+        end
+      end
+      text
     end
 
     private
@@ -171,7 +182,7 @@ module PragmaticSegmenter
     def iterate_alphabet_array(regex, parens, txt, roman_numeral)
       list_array = txt.scan(regex).map(&:downcase)
       if roman_numeral
-        alphabet = %w(i ii iii iv v vi vii viii ix x xi xii xiii xiv x xi xii xiii xv xvi xvii xviii xix xx)
+        alphabet = ROMAN_NUMERALS
       else
         alphabet = ('a'..'z').to_a
       end

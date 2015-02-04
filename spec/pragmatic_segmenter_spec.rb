@@ -1515,6 +1515,21 @@ RSpec.describe PragmaticSegmenter::Segmenter do
         ps = PragmaticSegmenter::Segmenter.new(text: "Hello. 'This is a test of single quotes.' A new sentence.")
         expect(ps.segment).to eq(["Hello.", "'This is a test of single quotes.'", "A new sentence."])
       end
+
+      it "correctly segments text #099" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "[A sentence in square brackets.]")
+        expect(ps.segment).to eq(["[A sentence in square brackets.]"])
+      end
+
+      it "correctly segments text #100" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "(iii) List item number 3.")
+        expect(ps.segment).to eq(["(iii) List item number 3."])
+      end
+
+      it "correctly segments text #101" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Unbelievable??!?!")
+        expect(ps.segment).to eq(["Unbelievable??!?!"])
+      end
     end
   end
 

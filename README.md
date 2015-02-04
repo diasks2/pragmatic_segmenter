@@ -671,7 +671,7 @@ Other tools not yet tested:
 * [FreeLing](http://nlp.lsi.upc.edu/freeling/)
 * [Alpino](http://www.let.rug.nl/vannoord/alp/Alpino/)
 * [trtok](https://github.com/jirkamarsik/trainable-tokenizer)
-* [segtok](https://pypi.python.org/pypi/segtok/1.1.0)
+* [segtok](https://github.com/fnl/segtok)
 * [LingPipe](http://alias-i.com/lingpipe/demos/tutorial/sentences/read-me.html)
 * [Elephant](http://gmb.let.rug.nl/elephant/experiments.php)
 * [Ucto: Unicode Tokenizer](http://ilk.uvt.nl/ucto/)
@@ -798,6 +798,11 @@ To test the relative performance of different segmentation tools and libraries I
 * Update README with additional tools  
 * Update segmentation test scores in README with results of new Golden Rule tests  
 * Add Polish abbreviations  
+
+**Version 0.2.1**  
+* Add support for square brackets  
+* Add support for continuous exclamation points or questions marks or combinations of both  
+* Fix Roman numeral support  
 
 ## Contributing
 
