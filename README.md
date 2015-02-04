@@ -799,10 +799,11 @@ To test the relative performance of different segmentation tools and libraries I
 * Update segmentation test scores in README with results of new Golden Rule tests  
 * Add Polish abbreviations  
 
-**Version 0.2.1**  
+**Version 0.3.0**  
 * Add support for square brackets  
 * Add support for continuous exclamation points or questions marks or combinations of both  
 * Fix Roman numeral support  
+* Add English abbreviations    
 
 ## Contributing
 

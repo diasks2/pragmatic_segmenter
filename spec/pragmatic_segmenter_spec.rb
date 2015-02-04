@@ -1530,6 +1530,21 @@ RSpec.describe PragmaticSegmenter::Segmenter do
         ps = PragmaticSegmenter::Segmenter.new(text: "Unbelievable??!?!")
         expect(ps.segment).to eq(["Unbelievable??!?!"])
       end
+
+      it "correctly segments text #102" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "This abbreviation f.e. means for example.")
+        expect(ps.segment).to eq(["This abbreviation f.e. means for example."])
+      end
+
+      it "correctly segments text #103" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "The med. staff here is very kind.")
+        expect(ps.segment).to eq(["The med. staff here is very kind."])
+      end
+
+      it "correctly segments text #104" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "What did you order btw., she wondered.")
+        expect(ps.segment).to eq(["What did you order btw., she wondered."])
+      end
     end
   end
 
