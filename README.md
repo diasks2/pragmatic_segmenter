@@ -726,6 +726,7 @@ To test the relative performance of different segmentation tools and libraries I
 * Add additional language support
 * Add abbreviation lists for any languages that do not currently have one (only relevant for languages that have the concept of abbreviations with periods)
 * Get Golden Rule #18 passing - Handling of a.m. or p.m. followed by a capitalized non sentence starter (ex. "At 5 p.m. Mr. Smith went to the bank. He left the bank at 6 p.m. Next he went to the store." --> ["At 5 p.m. Mr. Smith went to the bank.", "He left the bank at 6 p.m.", "Next he went to the store."])
+* Support for Thai. This is a very challenging problem due to the absence of explicit sentence markers (i.e. like a period in English) and the ambiguity in Thai regarding what constitutes a sentence even among native speakers. For more information see the following research papers ([#1](http://www.cs.cmu.edu/~paisarn/papers/iccpol2001.pdf) | [#2](http://pioneer.chula.ac.th/~awirote/ling/snlp2007-wirote.pdf)). 
 
 ## Change Log
 
