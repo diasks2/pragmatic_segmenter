@@ -805,7 +805,10 @@ To test the relative performance of different segmentation tools and libraries I
 * Add support for square brackets  
 * Add support for continuous exclamation points or questions marks or combinations of both  
 * Fix Roman numeral support  
-* Add English abbreviations    
+* Add English abbreviations   
+
+**Version 0.3.1**  
+* Fix undefined method 'gsub!' for nil:NilClass issue  
 
 ## Contributing
 

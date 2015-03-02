@@ -69,14 +69,14 @@ module PragmaticSegmenter
     def check_for_parens_between_quotes(txt)
       return txt unless txt =~ PARENS_BETWEEN_DOUBLE_QUOTES_REGEX
       txt.gsub!(PARENS_BETWEEN_DOUBLE_QUOTES_REGEX) do |match|
-        match.gsub!(/\s(?=\()/, "\r").gsub!(/(?<=\))\s/, "\r")
+        match.gsub(/\s(?=\()/, "\r").gsub(/(?<=\))\s/, "\r")
       end
     end
 
     def replace_continuous_punctuation(txt)
       return txt unless txt =~ CONTINUOUS_PUNCTUATION_REGEX
       txt.gsub!(CONTINUOUS_PUNCTUATION_REGEX) do |match|
-        match.gsub!(/!/, '&ᓴ&').gsub!(/\?/, '&ᓷ&')
+        match.gsub(/!/, '&ᓴ&').gsub(/\?/, '&ᓷ&')
       end
     end
 
