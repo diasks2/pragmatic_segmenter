@@ -21,7 +21,7 @@ gem 'pragmatic_segmenter'
 ##Usage  
 
 * If no language is specified, the library will default to English.   
-* To specify a language use its two-digit [ISO 639-1 code](https://www.tm-town.com/languages).  
+* To specify a language use its two character [ISO 639-1 code](https://www.tm-town.com/languages).  
 
 ```ruby
 text = "Hello world. My name is Mr. Smith. I work for the U.S. Government and I live in the U.S. I live in New York."

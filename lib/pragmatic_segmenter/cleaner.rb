@@ -94,7 +94,7 @@ module PragmaticSegmenter
     # Arguments:
     #    text:       (String)  *required
     #    language:   (String)  *optional
-    #                (two-digit ISO 639-1 code e.g. 'en')
+    #                (two character ISO 639-1 code e.g. 'en')
     #    doc_type:   (String)  *optional
     #                (e.g. 'pdf')
 
