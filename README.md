@@ -677,6 +677,9 @@ Other tools not yet tested:
 * [Ucto: Unicode Tokenizer](http://ilk.uvt.nl/ucto/)
 * [tokenizer](http://moin.delph-in.net/WeSearch/DocumentParsing)
 * [spaCy](http://honnibal.github.io/spaCy/)
+* [GATE](https://gate.ac.uk/)
+* [University of Illinois Sentence Segmentation tool](http://cogcomp.cs.illinois.edu/page/tools_view/2)
+* [DetectorMorse](https://github.com/cslu-nlp/detectormorse)
 
 ## Speed Performance Benchmarks
 
