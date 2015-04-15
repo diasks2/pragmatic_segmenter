@@ -87,11 +87,10 @@ RSpec.describe PragmaticSegmenter::Segmenter do
       expect(ps.segment).to eq(["I have lived in the U.S. for 20 years."])
     end
 
-    xdescribe "not yet implemented" do
-      it "A.M. / P.M. as non sentence boundary and sentence boundary #018" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "At 5 a.m. Mr. Smith went to the bank. He left the bank at 6 P.M. Mr. Smith then went to the store.", language: "en")
-        expect(ps.segment).to eq(["At 5 a.m. Mr. Smith went to the bank.", "He left the bank at 6 P.M.", "Mr. Smith then went to the store."])
-      end
+    it "A.M. / P.M. as non sentence boundary and sentence boundary #018" do
+      skip "NOT IMPLEMENTED"
+      ps = PragmaticSegmenter::Segmenter.new(text: "At 5 a.m. Mr. Smith went to the bank. He left the bank at 6 P.M. Mr. Smith then went to the store.", language: "en")
+      expect(ps.segment).to eq(["At 5 a.m. Mr. Smith went to the bank.", "He left the bank at 6 P.M.", "Mr. Smith then went to the store."])
     end
 
     it "Number as non sentence boundary #019" do
