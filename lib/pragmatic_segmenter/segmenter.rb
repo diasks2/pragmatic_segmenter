@@ -2,7 +2,7 @@
 require 'pragmatic_segmenter/types'
 require 'pragmatic_segmenter/process'
 require 'pragmatic_segmenter/cleaner'
-require 'pragmatic_segmenter/languages'
+require 'pragmatic_segmenter/language_support'
 require 'pragmatic_segmenter/rules'
 
 module PragmaticSegmenter

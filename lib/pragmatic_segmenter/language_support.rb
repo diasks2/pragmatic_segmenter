@@ -1,3 +1,5 @@
+require 'pragmatic_segmenter/languages'
+
 module PragmaticSegmenter
   module LanguageSupport
     LANGUAGE_CODES = {
