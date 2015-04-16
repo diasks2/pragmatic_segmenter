@@ -67,9 +67,10 @@ module PragmaticSegmenter
     QuotationsSecondRule = Rule.new(/``/, '"')
 
     attr_reader :text, :doc_type
-    def initialize(text:, **args)
+    def initialize(text:, doc_type: nil, abbr: nil, **args)
       @text = Text.new(text.dup)
-      @doc_type = args[:doc_type]
+      @doc_type = doc_type
+      @abbr = abbr
     end
 
     # Clean text of unwanted formatting
@@ -127,10 +128,6 @@ module PragmaticSegmenter
           end
         end
       end
-    end
-
-    def abbreviations
-      @abbr ||= PragmaticSegmenter::Abbreviation.new.all
     end
 
     def remove_all_newlines(txt)
