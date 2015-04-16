@@ -13,16 +13,16 @@ module PragmaticSegmenter
         end
       end
 
-      class Abbreviation
-        def all
+      module Abbreviation
+        def self.all
           ABBREVIATIONS
         end
 
-        def prepositive
+        def self.prepositive
           PREPOSITIVE_ABBREVIATIONS
         end
 
-        def number
+        def self.number
           NUMBER_ABBREVIATIONS
         end
       end
@@ -31,7 +31,7 @@ module PragmaticSegmenter
         private
 
         def abbreviations
-          Italian::Abbreviation.new
+          Italian::Abbreviation
         end
       end
     end

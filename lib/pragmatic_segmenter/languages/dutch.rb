@@ -12,16 +12,16 @@ module PragmaticSegmenter
         end
       end
 
-      class Abbreviation
-        def all
+      module Abbreviation
+        def self.all
           ABBREVIATIONS
         end
 
-        def prepositive
+        def self.prepositive
           []
         end
 
-        def number
+        def self.number
           []
         end
       end
@@ -30,7 +30,7 @@ module PragmaticSegmenter
         private
 
         def abbreviations
-          Dutch::Abbreviation.new
+          Dutch::Abbreviation
         end
       end
     end

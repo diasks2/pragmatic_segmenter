@@ -48,7 +48,7 @@ module PragmaticSegmenter
         private
 
         def abbreviations
-          Deutsch::Abbreviation.new.all
+          Deutsch::ABBREVIATIONS
         end
       end
 
@@ -68,16 +68,16 @@ module PragmaticSegmenter
         end
       end
 
-      class Abbreviation
-        def all
+      module Abbreviation
+        def self.all
           ABBREVIATIONS
         end
 
-        def prepositive
+        def self.prepositive
           []
         end
 
-        def number
+        def self.number
           NUMBER_ABBREVIATIONS
         end
       end
@@ -108,7 +108,7 @@ module PragmaticSegmenter
         end
 
         def abbreviations
-          Deutsch::Abbreviation.new
+          Deutsch::Abbreviation
         end
       end
 

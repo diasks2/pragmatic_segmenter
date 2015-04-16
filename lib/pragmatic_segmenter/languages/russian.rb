@@ -11,16 +11,16 @@ module PragmaticSegmenter
         end
       end
 
-      class Abbreviation
-        def all
+      module Abbreviation
+        def self.all
           ABBREVIATIONS
         end
 
-        def prepositive
+        def self.prepositive
           []
         end
 
-        def number
+        def self.number
           []
         end
       end
@@ -46,7 +46,7 @@ module PragmaticSegmenter
         end
 
         def abbreviations
-          Russian::Abbreviation.new
+          Russian::Abbreviation
         end
 
         def replace_period_of_abbr(txt, abbr)

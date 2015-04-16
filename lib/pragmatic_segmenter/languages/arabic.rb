@@ -28,16 +28,16 @@ module PragmaticSegmenter
         end
       end
 
-      class Abbreviation
-        def all
+      module Abbreviation
+        def self.all
           ABBREVIATIONS
         end
 
-        def prepositive
+        def self.prepositive
           []
         end
 
-        def number
+        def self.number
           []
         end
       end
@@ -50,7 +50,7 @@ module PragmaticSegmenter
         end
 
         def abbreviations
-          Arabic::Abbreviation.new
+          Arabic::Abbreviation
         end
       end
     end
