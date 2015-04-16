@@ -20,7 +20,7 @@ module PragmaticSegmenter
         end
 
         def replace_abbreviations(txt)
-          AbbreviationReplacer.new(text: txt, abbr: Abbreviation).replace
+          AbbreviationReplacer.new(text: txt, language: Arabic).replace
         end
 
         def punctuation_array

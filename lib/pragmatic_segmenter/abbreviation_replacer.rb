@@ -9,9 +9,10 @@ module PragmaticSegmenter
     SENTENCE_STARTERS = %w(A Being Did For He How However I In It Millions More She That The There They We What When Where Who Why)
 
     attr_reader :text
-    def initialize(text:, abbr: Languages::Common::Abbreviation)
+    def initialize(text:, language: Languages::Common)
       @text = Text.new(text)
-      @abbr = abbr
+      @language = language
+      @abbr = language::Abbreviation
     end
 
     def abbreviations
