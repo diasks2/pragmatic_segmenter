@@ -105,10 +105,8 @@ module PragmaticSegmenter
       PragmaticSegmenter::BetweenPunctuation.new(text: txt).replace
     end
 
-    SENTENCE_BOUNDARY_REGEX = /\u{ff08}(?:[^\u{ff09}])*\u{ff09}(?=\s?[A-Z])|\u{300c}(?:[^\u{300d}])*\u{300d}(?=\s[A-Z])|\((?:[^\)]){2,}\)(?=\s[A-Z])|'(?:[^'])*[^,]'(?=\s[A-Z])|"(?:[^"])*[^,]"(?=\s[A-Z])|“(?:[^”])*[^,]”(?=\s[A-Z])|\S.*?[。．.！!?？ȸȹ☉☈☇☄]/
-
     def sentence_boundary_punctuation(txt)
-      txt.scan(SENTENCE_BOUNDARY_REGEX)
+      txt.scan(Languages::Common::SENTENCE_BOUNDARY_REGEX)
     end
   end
 end
