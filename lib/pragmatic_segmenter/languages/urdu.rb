@@ -12,7 +12,7 @@ module PragmaticSegmenter
         end
 
         def punctuation_array
-          Urdu::Punctuations
+          Punctuations
         end
       end
     end

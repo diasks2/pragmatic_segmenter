@@ -17,7 +17,7 @@ module PragmaticSegmenter
         end
 
         def replace_abbreviations(txt)
-          Persian::AbbreviationReplacer.new(text: txt).replace
+          AbbreviationReplacer.new(text: txt).replace
         end
       end
 

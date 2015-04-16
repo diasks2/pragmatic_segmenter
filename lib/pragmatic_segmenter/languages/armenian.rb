@@ -12,7 +12,7 @@ module PragmaticSegmenter
         end
 
         def punctuation_array
-          Armenian::Punctuations
+          Punctuations
         end
       end
     end

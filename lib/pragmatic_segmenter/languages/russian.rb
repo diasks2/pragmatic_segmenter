@@ -7,7 +7,7 @@ module PragmaticSegmenter
         private
 
         def replace_abbreviations(txt)
-          Russian::AbbreviationReplacer.new(text: txt, abbr: Russian::Abbreviation).replace
+          AbbreviationReplacer.new(text: txt, abbr: Abbreviation).replace
         end
       end
 

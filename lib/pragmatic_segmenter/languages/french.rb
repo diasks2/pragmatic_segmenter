@@ -21,7 +21,7 @@ module PragmaticSegmenter
         private
 
         def abbreviations
-          French::Abbreviation
+          Abbreviation
         end
       end
     end

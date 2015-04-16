@@ -5,7 +5,7 @@ module PragmaticSegmenter
         private
 
         def between_punctuation(txt)
-          Japanese::BetweenPunctuation.new(text: txt).replace
+          BetweenPunctuation.new(text: txt).replace
         end
       end
 

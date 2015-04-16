@@ -20,11 +20,11 @@ module PragmaticSegmenter
         end
 
         def replace_abbreviations(txt)
-          Arabic::AbbreviationReplacer.new(text: txt, abbr: Arabic::Abbreviation).replace
+          AbbreviationReplacer.new(text: txt, abbr: Abbreviation).replace
         end
 
         def punctuation_array
-          Arabic::Punctuations
+          Punctuations
         end
       end
 

@@ -32,15 +32,15 @@ module PragmaticSegmenter
         private
 
         def between_punctuation(txt)
-          Deutsch::BetweenPunctuation.new(text: txt).replace
+          BetweenPunctuation.new(text: txt).replace
         end
 
         def replace_numbers(txt)
-          Deutsch::Number.new(text: txt).replace
+          Number.new(text: txt).replace
         end
 
         def replace_abbreviations(txt)
-          Deutsch::AbbreviationReplacer.new(text: txt, abbr: Deutsch::Abbreviation).replace
+          AbbreviationReplacer.new(text: txt, abbr: Abbreviation).replace
         end
       end
 
@@ -48,7 +48,7 @@ module PragmaticSegmenter
         private
 
         def abbreviations
-          Deutsch::ABBREVIATIONS
+          ABBREVIATIONS
         end
       end
 
@@ -60,7 +60,7 @@ module PragmaticSegmenter
         end
 
         def replace_period_in_deutsch_dates(txt)
-          Deutsch::MONTHS.each do |month|
+          MONTHS.each do |month|
             # Rubular: http://rubular.com/r/zlqgj7G5dA
             txt.gsub!(/(?<=\d)\.(?=\s*#{Regexp.escape(month)})/, '∯')
           end
