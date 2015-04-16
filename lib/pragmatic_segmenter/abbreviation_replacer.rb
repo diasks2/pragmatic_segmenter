@@ -1,5 +1,4 @@
 # -*- encoding : utf-8 -*-
-require 'pragmatic_segmenter/single_letter_abbreviation'
 
 module PragmaticSegmenter
   # This class searches for periods within an abbreviation and
@@ -40,7 +39,7 @@ module PragmaticSegmenter
     def replace
       @reformatted_text = text.apply(PossessiveAbbreviationRule)
       @reformatted_text = text.apply(KommanditgesellschaftRule)
-      @reformatted_text = PragmaticSegmenter::SingleLetterAbbreviation.new(text: @reformatted_text).replace
+      @reformatted_text = Languages::Common::SingleLetterAbbreviation.new(text: @reformatted_text).replace
       @reformatted_text = search_for_abbreviations_in_string(@reformatted_text, abbreviations)
       @reformatted_text = replace_multi_period_abbreviations(@reformatted_text)
       @reformatted_text = @reformatted_text.apply(AmPmRules::All)

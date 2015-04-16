@@ -49,7 +49,7 @@ module PragmaticSegmenter
         end
       end
 
-      class SingleLetterAbbreviation < PragmaticSegmenter::SingleLetterAbbreviation
+      class SingleLetterAbbreviation < Common::SingleLetterAbbreviation
         # Rubular: http://rubular.com/r/B4X33QKIL8
         SingleLowerCaseLetterRule = Rule.new(/(?<=\s[a-z])\.(?=\s)/, '∯')
 
