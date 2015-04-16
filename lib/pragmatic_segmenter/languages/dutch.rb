@@ -5,7 +5,7 @@ module PragmaticSegmenter
         private
 
         def replace_abbreviations(txt)
-          PragmaticSegmenter::Languages::Dutch::AbbreviationReplacer.new(text: txt).replace
+          Dutch::AbbreviationReplacer.new(text: txt).replace
         end
       end
 
@@ -13,7 +13,7 @@ module PragmaticSegmenter
         private
 
         def abbreviations
-          PragmaticSegmenter::Languages::Dutch::Abbreviation.new.all
+          Dutch::Abbreviation.new.all
         end
       end
 
@@ -37,7 +37,7 @@ module PragmaticSegmenter
         private
 
         def abbreviations
-          PragmaticSegmenter::Languages::Dutch::Abbreviation.new
+          Dutch::Abbreviation.new
         end
       end
     end

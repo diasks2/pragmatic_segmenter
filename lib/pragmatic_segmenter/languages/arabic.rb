@@ -5,15 +5,15 @@ module PragmaticSegmenter
         private
 
         def sentence_boundary_punctuation(txt)
-          PragmaticSegmenter::Languages::Arabic::SentenceBoundaryPunctuation.new(text: txt).split
+          Arabic::SentenceBoundaryPunctuation.new(text: txt).split
         end
 
         def replace_abbreviations(txt)
-          PragmaticSegmenter::Languages::Arabic::AbbreviationReplacer.new(text: txt).replace
+          Arabic::AbbreviationReplacer.new(text: txt).replace
         end
 
         def punctuation_array
-          PragmaticSegmenter::Languages::Arabic::Punctuation.new.punct
+          Arabic::Punctuation.new.punct
         end
       end
 
@@ -78,7 +78,7 @@ module PragmaticSegmenter
         end
 
         def abbreviations
-          PragmaticSegmenter::Languages::Arabic::Abbreviation.new
+          Arabic::Abbreviation.new
         end
       end
     end

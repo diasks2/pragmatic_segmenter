@@ -8,7 +8,7 @@ module PragmaticSegmenter
         private
 
         def abbreviations
-          PragmaticSegmenter::Languages::French::Abbreviation.new.all
+          French::Abbreviation.new.all
         end
       end
 
@@ -32,7 +32,7 @@ module PragmaticSegmenter
         private
 
         def abbreviations
-          PragmaticSegmenter::Languages::French::Abbreviation.new
+          French::Abbreviation.new
         end
       end
     end

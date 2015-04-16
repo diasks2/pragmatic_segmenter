@@ -5,7 +5,7 @@ module PragmaticSegmenter
         private
 
         def sentence_boundary_punctuation(txt)
-          PragmaticSegmenter::Languages::Greek::SentenceBoundaryPunctuation.new(text: txt).split
+          Greek::SentenceBoundaryPunctuation.new(text: txt).split
         end
       end
 

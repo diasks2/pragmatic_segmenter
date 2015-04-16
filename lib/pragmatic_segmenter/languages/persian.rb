@@ -5,11 +5,11 @@ module PragmaticSegmenter
         private
 
         def sentence_boundary_punctuation(txt)
-          PragmaticSegmenter::Languages::Persian::SentenceBoundaryPunctuation.new(text: txt).split
+          Persian::SentenceBoundaryPunctuation.new(text: txt).split
         end
 
         def replace_abbreviations(txt)
-          PragmaticSegmenter::Languages::Persian::AbbreviationReplacer.new(text: txt).replace
+          Persian::AbbreviationReplacer.new(text: txt).replace
         end
       end
 

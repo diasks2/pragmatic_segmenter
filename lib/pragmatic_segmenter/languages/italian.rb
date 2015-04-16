@@ -5,7 +5,7 @@ module PragmaticSegmenter
         private
 
         def replace_abbreviations(txt)
-          PragmaticSegmenter::Languages::Italian::AbbreviationReplacer.new(text: txt).replace
+          Italian::AbbreviationReplacer.new(text: txt).replace
         end
       end
 
@@ -13,7 +13,7 @@ module PragmaticSegmenter
         private
 
         def abbreviations
-          PragmaticSegmenter::Languages::Italian::Abbreviation.new.all
+          Italian::Abbreviation.new.all
         end
       end
 
@@ -39,7 +39,7 @@ module PragmaticSegmenter
         private
 
         def abbreviations
-          PragmaticSegmenter::Languages::Italian::Abbreviation.new
+          Italian::Abbreviation.new
         end
       end
     end

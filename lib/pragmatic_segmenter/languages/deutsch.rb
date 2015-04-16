@@ -5,15 +5,15 @@ module PragmaticSegmenter
         private
 
         def between_punctuation(txt)
-          PragmaticSegmenter::Languages::Deutsch::BetweenPunctuation.new(text: txt).replace
+          Deutsch::BetweenPunctuation.new(text: txt).replace
         end
 
         def replace_numbers(txt)
-          PragmaticSegmenter::Languages::Deutsch::Number.new(text: txt).replace
+          Deutsch::Number.new(text: txt).replace
         end
 
         def replace_abbreviations(txt)
-          PragmaticSegmenter::Languages::Deutsch::AbbreviationReplacer.new(text: txt).replace
+          Deutsch::AbbreviationReplacer.new(text: txt).replace
         end
       end
 
@@ -21,7 +21,7 @@ module PragmaticSegmenter
         private
 
         def abbreviations
-          PragmaticSegmenter::Languages::Deutsch::Abbreviation.new.all
+          Deutsch::Abbreviation.new.all
         end
       end
 
@@ -93,7 +93,7 @@ module PragmaticSegmenter
       class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
         def replace
           @reformatted_text = text.apply(PossessiveAbbreviationRule)
-          @reformatted_text = PragmaticSegmenter::Languages::Deutsch::SingleLetterAbbreviation.new(text: @reformatted_text).replace
+          @reformatted_text = Deutsch::SingleLetterAbbreviation.new(text: @reformatted_text).replace
           @reformatted_text = search_for_abbreviations_in_string(@reformatted_text, abbreviations)
           @reformatted_text = replace_multi_period_abbreviations(@reformatted_text)
           @reformatted_text = @reformatted_text.apply(AmPmRules::All)
@@ -111,7 +111,7 @@ module PragmaticSegmenter
         end
 
         def abbreviations
-          PragmaticSegmenter::Languages::Deutsch::Abbreviation.new
+          Deutsch::Abbreviation.new
         end
       end
 

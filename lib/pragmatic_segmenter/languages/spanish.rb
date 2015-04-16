@@ -5,7 +5,7 @@ module PragmaticSegmenter
         private
 
         def replace_abbreviations(txt)
-          PragmaticSegmenter::Languages::Spanish::AbbreviationReplacer.new(text: txt).replace
+          Spanish::AbbreviationReplacer.new(text: txt).replace
         end
       end
 
@@ -13,7 +13,7 @@ module PragmaticSegmenter
         private
 
         def abbreviations
-          PragmaticSegmenter::Languages::Spanish::Abbreviation.new.all
+          Spanish::Abbreviation.new.all
         end
       end
 
@@ -39,7 +39,7 @@ module PragmaticSegmenter
         private
 
         def abbreviations
-          PragmaticSegmenter::Languages::Spanish::Abbreviation.new
+          Spanish::Abbreviation.new
         end
       end
     end

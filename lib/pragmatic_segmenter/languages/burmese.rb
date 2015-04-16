@@ -5,11 +5,11 @@ module PragmaticSegmenter
         private
 
         def sentence_boundary_punctuation(txt)
-          PragmaticSegmenter::Languages::Burmese::SentenceBoundaryPunctuation.new(text: txt).split
+          Burmese::SentenceBoundaryPunctuation.new(text: txt).split
         end
 
         def punctuation_array
-          PragmaticSegmenter::Languages::Burmese::Punctuation.new.punct
+          Burmese::Punctuation.new.punct
         end
       end
 

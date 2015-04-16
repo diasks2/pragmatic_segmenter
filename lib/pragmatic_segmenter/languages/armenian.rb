@@ -5,11 +5,11 @@ module PragmaticSegmenter
         private
 
         def sentence_boundary_punctuation(txt)
-          PragmaticSegmenter::Languages::Armenian::SentenceBoundaryPunctuation.new(text: txt).split
+          Armenian::SentenceBoundaryPunctuation.new(text: txt).split
         end
 
         def punctuation_array
-          PragmaticSegmenter::Languages::Armenian::Punctuation.new.punct
+          Armenian::Punctuation.new.punct
         end
       end
 
