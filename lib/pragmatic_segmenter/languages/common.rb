@@ -8,6 +8,32 @@ module PragmaticSegmenter
       PREPOSITIVE_ABBREVIATIONS = ['adm', 'attys', 'brig', 'capt', 'cmdr', 'col', 'cpl', 'det', 'dr', 'gen', 'gov', 'ing', 'lt', 'maj', 'mr', 'mrs', 'ms', 'mt', 'messrs', 'mssrs', 'prof', 'ph', 'rep', 'reps', 'rev', 'sen', 'sens', 'sgt', 'st', 'supt', 'v', 'vs']
       NUMBER_ABBREVIATIONS = ['art', 'ext', 'no', 'nos', 'p', 'pp']
 
+
+    # Rubular: http://rubular.com/r/yqa4Rit8EY
+    PossessiveAbbreviationRule = Rule.new(/\.(?='s\s)|\.(?='s$)|\.(?='s\z)/, '∯')
+
+    # Rubular: http://rubular.com/r/NEv265G2X2
+    KommanditgesellschaftRule = Rule.new(/(?<=Co)\.(?=\sKG)/, '∯')
+
+    # Rubular: http://rubular.com/r/xDkpFZ0EgH
+    MULTI_PERIOD_ABBREVIATION_REGEX = /\b[a-z](?:\.[a-z])+[.]/i
+
+    module AmPmRules
+      # Rubular: http://rubular.com/r/Vnx3m4Spc8
+      UpperCasePmRule = Rule.new(/(?<=P∯M)∯(?=\s[A-Z])/, '.')
+
+      # Rubular: http://rubular.com/r/AJMCotJVbW
+      UpperCaseAmRule = Rule.new(/(?<=A∯M)∯(?=\s[A-Z])/, '.')
+
+      # Rubular: http://rubular.com/r/13q7SnOhgA
+      LowerCasePmRule = Rule.new(/(?<=p∯m)∯(?=\s[A-Z])/, '.')
+
+      # Rubular: http://rubular.com/r/DgUDq4mLz5
+      LowerCaseAmRule = Rule.new(/(?<=a∯m)∯(?=\s[A-Z])/, '.')
+
+      All = [UpperCasePmRule, UpperCaseAmRule, LowerCasePmRule, LowerCaseAmRule]
+    end
+
       # Defines the abbreviations for each language (if available)
       class Abbreviation
         def all

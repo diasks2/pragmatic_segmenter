@@ -92,11 +92,11 @@ module PragmaticSegmenter
 
       class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
         def replace
-          @reformatted_text = text.apply(PossessiveAbbreviationRule)
+          @reformatted_text = text.apply(Languages::Common::PossessiveAbbreviationRule)
           @reformatted_text = Deutsch::SingleLetterAbbreviation.new(text: @reformatted_text).replace
           @reformatted_text = search_for_abbreviations_in_string(@reformatted_text, abbreviations)
           @reformatted_text = replace_multi_period_abbreviations(@reformatted_text)
-          @reformatted_text = @reformatted_text.apply(AmPmRules::All)
+          @reformatted_text = @reformatted_text.apply(Languages::Common::AmPmRules::All)
           replace_abbreviation_as_sentence_boundary(@reformatted_text)
         end
 
