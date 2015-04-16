@@ -9,7 +9,7 @@ module PragmaticSegmenter
         end
 
         def punctuation_array
-          Burmese::Punctuation.new.punct
+          Burmese::Punctuations
         end
       end
 
@@ -24,13 +24,7 @@ module PragmaticSegmenter
         end
       end
 
-      class Punctuation < PragmaticSegmenter::Punctuation
-        PUNCT = ['။', '၏', '?', '!']
-
-        def punct
-          PUNCT
-        end
-      end
+      Punctuations = ['။', '၏', '?', '!']
     end
   end
 end

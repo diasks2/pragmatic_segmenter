@@ -13,7 +13,7 @@ module PragmaticSegmenter
         end
 
         def punctuation_array
-          Arabic::Punctuation.new.punct
+          Arabic::Punctuations
         end
       end
 
@@ -58,13 +58,7 @@ module PragmaticSegmenter
         end
       end
 
-      class Punctuation < PragmaticSegmenter::Punctuation
-        PUNCT = ['?', '!', ':', '.', '؟', '،']
-
-        def punct
-          PUNCT
-        end
-      end
+      Punctuations = ['?', '!', ':', '.', '؟', '،']
 
       class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
         private
