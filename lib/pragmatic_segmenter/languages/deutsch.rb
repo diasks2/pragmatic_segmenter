@@ -98,7 +98,7 @@ module PragmaticSegmenter
 
         private
 
-        def scan_for_replacements(txt, am, index, character_array, abbr)
+        def scan_for_replacements(txt, am, index, character_array)
           txt.gsub(/(?<=#{am})\.(?=\s)/, '∯')
         end
       end

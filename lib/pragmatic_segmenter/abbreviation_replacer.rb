@@ -43,16 +43,16 @@ module PragmaticSegmenter
         next_word_start = /(?<=#{Regexp.escape(a.strip)} ).{1}/
         character_array = @text.scan(next_word_start)
         abbrev_match.each_with_index do |am, index|
-          txt = scan_for_replacements(txt, am, index, character_array, abbr)
+          txt = scan_for_replacements(txt, am, index, character_array)
         end
       end
       txt
     end
 
-    def scan_for_replacements(txt, am, index, character_array, abbr)
+    def scan_for_replacements(txt, am, index, character_array)
       character = character_array[index]
-      prepositive = abbr.prepositive
-      number_abbr = abbr.number
+      prepositive = @language::PREPOSITIVE_ABBREVIATIONS
+      number_abbr = @language::NUMBER_ABBREVIATIONS
       upper = /[[:upper:]]/.match(character.to_s)
       if upper.nil? || prepositive.include?(am.downcase.strip)
         if prepositive.include?(am.downcase.strip)

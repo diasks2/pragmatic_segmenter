@@ -28,10 +28,10 @@ module PragmaticSegmenter
       class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
         private
 
-        def scan_for_replacements(txt, am, index, character_array, abbr)
+        def scan_for_replacements(txt, am, index, character_array)
           character = character_array[index]
-          prepositive = abbr.prepositive
-          number_abbr = abbr.number
+          prepositive = @language::PREPOSITIVE_ABBREVIATIONS
+          number_abbr = @language::NUMBER_ABBREVIATIONS
           upper = /[[:upper:]]/.match(character.to_s)
           if upper.nil? || prepositive.include?(am.downcase.strip)
             if prepositive.include?(am.downcase.strip)
