@@ -22,16 +22,8 @@ module PragmaticSegmenter
     private
 
     def replace_single_letter_abbreviations(txt)
-      new_text = replace_single_uppercase_letter_abbreviation_at_start_of_line(txt)
-      replace_single_uppercase_letter_abbreviation(new_text)
-    end
-
-    def replace_single_uppercase_letter_abbreviation_at_start_of_line(txt)
-      txt.apply(SingleUpperCaseLetterAtStartOfLineRule)
-    end
-
-    def replace_single_uppercase_letter_abbreviation(txt)
-      txt.apply(SingleUpperCaseLetterRule)
+      txt.apply [SingleUpperCaseLetterAtStartOfLineRule,
+        SingleUpperCaseLetterRule]
     end
   end
 end
