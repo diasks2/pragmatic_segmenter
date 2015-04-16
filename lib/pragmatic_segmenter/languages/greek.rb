@@ -2,6 +2,7 @@ module PragmaticSegmenter
   module Languages
     class Greek < Common
       SENTENCE_BOUNDARY = /.*?[\.;!\?]|.*?$/
+      Punctuations = ['.', '!', ';', '?']
 
       class Process < PragmaticSegmenter::Process
         private
@@ -10,8 +11,6 @@ module PragmaticSegmenter
           txt.scan(SENTENCE_BOUNDARY)
         end
       end
-
-      Punctuations = ['.', '!', ';', '?']
     end
   end
 end

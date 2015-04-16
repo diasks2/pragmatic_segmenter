@@ -2,6 +2,7 @@ module PragmaticSegmenter
   module Languages
     class Armenian < Common
       SENTENCE_BOUNDARY = /.*?[։՜:]|.*?$/
+      Punctuations = ['։', '՜', ':']
 
       class Process < PragmaticSegmenter::Process
         private
@@ -14,8 +15,6 @@ module PragmaticSegmenter
           Armenian::Punctuations
         end
       end
-
-      Punctuations = ['։', '՜', ':']
     end
   end
 end

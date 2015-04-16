@@ -1,6 +1,12 @@
 module PragmaticSegmenter
   module Languages
     class Persian < Common
+      SENTENCE_BOUNDARY = /.*?[:\.!\?؟]|.*?\z|.*?$/
+      Punctuations = ['?', '!', ':', '.', '؟']
+
+      ReplaceColonBetweenNumbersRule = Rule.new(/(?<=\d):(?=\d)/, '♭')
+      ReplaceNonSentenceBoundaryCommaRule = Rule.new(/،(?=\s\S+،)/, '♬')
+
       class Process < PragmaticSegmenter::Process
         private
 
@@ -14,11 +20,6 @@ module PragmaticSegmenter
       end
 
       class SentenceBoundaryPunctuation < PragmaticSegmenter::SentenceBoundaryPunctuation
-        SENTENCE_BOUNDARY = /.*?[:\.!\?؟]|.*?\z|.*?$/
-
-        ReplaceColonBetweenNumbersRule = Rule.new(/(?<=\d):(?=\d)/, '♭')
-        ReplaceNonSentenceBoundaryCommaRule = Rule.new(/،(?=\s\S+،)/, '♬')
-
         def split
           txt = replace_non_sentence_boundary_punctuation(text)
           txt.scan(SENTENCE_BOUNDARY)
@@ -31,8 +32,6 @@ module PragmaticSegmenter
               apply(ReplaceNonSentenceBoundaryCommaRule)
         end
       end
-
-      Punctuations = ['?', '!', ':', '.', '؟']
 
       class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
         private

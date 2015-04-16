@@ -1,6 +1,16 @@
 module PragmaticSegmenter
   module Languages
     class Arabic < Common
+      Punctuations = ['?', '!', ':', '.', '؟', '،']
+      SENTENCE_BOUNDARY = /.*?[:\.!\?؟،]|.*?\z|.*?$/
+      ABBREVIATIONS = ['ا', 'ا. د', 'ا.د', 'ا.ش.ا', 'ا.ش.ا', 'إلخ', 'ت.ب', 'ت.ب', 'ج.ب', 'جم', 'ج.ب', 'ج.م.ع', 'ج.م.ع', 'س.ت', 'س.ت', 'سم', 'ص.ب.', 'ص.ب', 'كج.', 'كلم.', 'م', 'م.ب', 'م.ب', 'ه', 'د‪']
+
+      # Rubular: http://rubular.com/r/RX5HpdDIyv
+      ReplaceColonBetweenNumbersRule = Rule.new(/(?<=\d):(?=\d)/, '♭')
+
+      # Rubular: http://rubular.com/r/kPRgApNHUg
+      ReplaceNonSentenceBoundaryCommaRule = Rule.new(/،(?=\s\S+،)/, '♬')
+
       class Process < PragmaticSegmenter::Process
         private
 
@@ -18,13 +28,6 @@ module PragmaticSegmenter
       end
 
       class SentenceBoundaryPunctuation < PragmaticSegmenter::SentenceBoundaryPunctuation
-        SENTENCE_BOUNDARY = /.*?[:\.!\?؟،]|.*?\z|.*?$/
-
-        # Rubular: http://rubular.com/r/RX5HpdDIyv
-        ReplaceColonBetweenNumbersRule = Rule.new(/(?<=\d):(?=\d)/, '♭')
-
-        # Rubular: http://rubular.com/r/kPRgApNHUg
-        ReplaceNonSentenceBoundaryCommaRule = Rule.new(/،(?=\s\S+،)/, '♬')
 
         def split
           txt = replace_non_sentence_boundary_punctuation(text)
@@ -40,8 +43,6 @@ module PragmaticSegmenter
       end
 
       class Abbreviation
-        ABBREVIATIONS = ['ا', 'ا. د', 'ا.د', 'ا.ش.ا', 'ا.ش.ا', 'إلخ', 'ت.ب', 'ت.ب', 'ج.ب', 'جم', 'ج.ب', 'ج.م.ع', 'ج.م.ع', 'س.ت', 'س.ت', 'سم', 'ص.ب.', 'ص.ب', 'كج.', 'كلم.', 'م', 'م.ب', 'م.ب', 'ه', 'د‪']
-
         def all
           ABBREVIATIONS
         end
@@ -54,8 +55,6 @@ module PragmaticSegmenter
           []
         end
       end
-
-      Punctuations = ['?', '!', ':', '.', '؟', '،']
 
       class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
         private
