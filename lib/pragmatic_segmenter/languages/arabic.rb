@@ -15,7 +15,8 @@ module PragmaticSegmenter
         private
 
         def sentence_boundary_punctuation(txt)
-          Arabic::SentenceBoundaryPunctuation.new(text: txt).split
+          txt = txt.apply(ReplaceColonBetweenNumbersRule, ReplaceNonSentenceBoundaryCommaRule)
+          txt.scan(SENTENCE_BOUNDARY)
         end
 
         def replace_abbreviations(txt)
@@ -24,20 +25,6 @@ module PragmaticSegmenter
 
         def punctuation_array
           Arabic::Punctuations
-        end
-      end
-
-      class SentenceBoundaryPunctuation < PragmaticSegmenter::SentenceBoundaryPunctuation
-
-        def split
-          txt = replace_non_sentence_boundary_punctuation(text)
-          txt.scan(SENTENCE_BOUNDARY)
-        end
-
-        private
-
-        def replace_non_sentence_boundary_punctuation(txt)
-          txt.apply(ReplaceColonBetweenNumbersRule, ReplaceNonSentenceBoundaryCommaRule)
         end
       end
 
