@@ -1,6 +1,6 @@
 module PragmaticSegmenter
   module Languages
-    class Hindi
+    class Hindi < Common
       class Process < PragmaticSegmenter::Process
         private
 
@@ -12,8 +12,6 @@ module PragmaticSegmenter
           Hindi::Punctuations
         end
       end
-
-      Cleaner = PragmaticSegmenter::Cleaner
 
       class SentenceBoundaryPunctuation < PragmaticSegmenter::SentenceBoundaryPunctuation
         SENTENCE_BOUNDARY = /.*?[।\|!\?]|.*?$/

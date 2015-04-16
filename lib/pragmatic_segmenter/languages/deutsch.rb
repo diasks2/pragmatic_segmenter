@@ -1,6 +1,6 @@
 module PragmaticSegmenter
   module Languages
-    class Deutsch
+    class Deutsch < Common
       class Process < PragmaticSegmenter::Process
         private
 

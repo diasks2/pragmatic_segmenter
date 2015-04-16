@@ -1,6 +1,6 @@
 module PragmaticSegmenter
   module Languages
-    class Arabic
+    class Arabic < Common
       class Process < PragmaticSegmenter::Process
         private
 
@@ -16,8 +16,6 @@ module PragmaticSegmenter
           Arabic::Punctuations
         end
       end
-
-      Cleaner = PragmaticSegmenter::Cleaner
 
       class SentenceBoundaryPunctuation < PragmaticSegmenter::SentenceBoundaryPunctuation
         SENTENCE_BOUNDARY = /.*?[:\.!\?؟،]|.*?\z|.*?$/

@@ -1,6 +1,6 @@
 module PragmaticSegmenter
   module Languages
-    class Spanish
+    class Spanish < Common
       class Process < PragmaticSegmenter::Process
         private
 

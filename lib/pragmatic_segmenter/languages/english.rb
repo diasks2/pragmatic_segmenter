@@ -1,6 +1,6 @@
 module PragmaticSegmenter
   module Languages
-    class English
+    class English < Common
       class Process < PragmaticSegmenter::Process
       end
 

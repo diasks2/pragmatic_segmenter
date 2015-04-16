@@ -1,6 +1,6 @@
 module PragmaticSegmenter
   module Languages
-    class Japanese
+    class Japanese < Common
       class Process < PragmaticSegmenter::Process
         private
 

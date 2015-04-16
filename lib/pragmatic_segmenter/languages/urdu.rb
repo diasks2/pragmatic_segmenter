@@ -1,6 +1,6 @@
 module PragmaticSegmenter
   module Languages
-    class Urdu
+    class Urdu < Common
       class Process < PragmaticSegmenter::Process
         private
 
@@ -12,8 +12,6 @@ module PragmaticSegmenter
           Urdu::Punctuations
         end
       end
-
-      Cleaner = PragmaticSegmenter::Cleaner
 
       class SentenceBoundaryPunctuation < PragmaticSegmenter::SentenceBoundaryPunctuation
         SENTENCE_BOUNDARY = /.*?[۔؟!\?]|.*?$/

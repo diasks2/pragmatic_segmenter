@@ -1,6 +1,6 @@
 module PragmaticSegmenter
   module Languages
-    class Russian
+    class Russian < Common
       class Process < PragmaticSegmenter::Process
         private
 
@@ -8,8 +8,6 @@ module PragmaticSegmenter
           Russian::AbbreviationReplacer.new(text: txt).replace
         end
       end
-
-      Cleaner = PragmaticSegmenter::Cleaner
 
       class Abbreviation
         ABBREVIATIONS = ['а', 'авт', 'адм.-терр', 'акад', 'в', 'вв', 'вкз', 'вост.-европ', 'г', 'гг', 'гос', 'гр', 'д', 'деп', 'дисс', 'дол', 'долл', 'ежедн', 'ж', 'жен', 'з', 'зап', 'зап.-европ', 'заруб', 'и', 'И', 'и', 'ин', 'иностр', 'инст', 'к', 'кв', 'К', 'Кв', 'куб', 'канд', 'кг', 'л', 'м', 'мин', 'моск', 'муж', 'нед', 'о', 'о', 'О', 'о', 'п', 'пер', 'пп', 'пр', 'просп', 'р', 'руб', 'с', 'сек', 'см', 'СПб', 'стр', 'т', 'т', 'тел', 'тов', 'тт', 'тыс', 'ул', 'у.е', 'y.e', 'у', 'y', 'Ф', 'ф', 'ч', 'пгт', 'проф', 'л.h', 'Л.Н', 'Н']

@@ -1,6 +1,6 @@
 module PragmaticSegmenter
   module Languages
-    class Armenian
+    class Armenian < Common
       class Process < PragmaticSegmenter::Process
         private
 
@@ -12,8 +12,6 @@ module PragmaticSegmenter
           Armenian::Punctuations
         end
       end
-
-      Cleaner = PragmaticSegmenter::Cleaner
 
       class SentenceBoundaryPunctuation < PragmaticSegmenter::SentenceBoundaryPunctuation
         SENTENCE_BOUNDARY = /.*?[։՜:]|.*?$/

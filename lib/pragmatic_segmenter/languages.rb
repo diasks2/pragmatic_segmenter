@@ -1,3 +1,5 @@
+require 'pragmatic_segmenter/languages/common'
+
 require 'pragmatic_segmenter/languages/english'
 require 'pragmatic_segmenter/languages/deutsch'
 require 'pragmatic_segmenter/languages/hindi'
@@ -15,4 +17,3 @@ require 'pragmatic_segmenter/languages/russian'
 require 'pragmatic_segmenter/languages/japanese'
 require 'pragmatic_segmenter/languages/dutch'
 require 'pragmatic_segmenter/languages/polish'
-require 'pragmatic_segmenter/languages/common'

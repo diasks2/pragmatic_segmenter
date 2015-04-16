@@ -1,6 +1,6 @@
 module PragmaticSegmenter
   module Languages
-    class Burmese
+    class Burmese < Common
       class Process < PragmaticSegmenter::Process
         private
 
@@ -12,8 +12,6 @@ module PragmaticSegmenter
           Burmese::Punctuations
         end
       end
-
-      Cleaner = PragmaticSegmenter::Cleaner
 
       class SentenceBoundaryPunctuation < PragmaticSegmenter::SentenceBoundaryPunctuation
         SENTENCE_BOUNDARY = /.*?[။၏!\?]|.*?$/

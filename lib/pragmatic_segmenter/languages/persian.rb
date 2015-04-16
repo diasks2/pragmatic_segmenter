@@ -1,6 +1,6 @@
 module PragmaticSegmenter
   module Languages
-    class Persian
+    class Persian < Common
       class Process < PragmaticSegmenter::Process
         private
 
@@ -12,8 +12,6 @@ module PragmaticSegmenter
           Persian::AbbreviationReplacer.new(text: txt).replace
         end
       end
-
-      Cleaner = PragmaticSegmenter::Cleaner
 
       class SentenceBoundaryPunctuation < PragmaticSegmenter::SentenceBoundaryPunctuation
         SENTENCE_BOUNDARY = /.*?[:\.!\?؟]|.*?\z|.*?$/

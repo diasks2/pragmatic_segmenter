@@ -1,6 +1,6 @@
 module PragmaticSegmenter
   module Languages
-    class Greek
+    class Greek < Common
       class Process < PragmaticSegmenter::Process
         private
 
@@ -8,8 +8,6 @@ module PragmaticSegmenter
           Greek::SentenceBoundaryPunctuation.new(text: txt).split
         end
       end
-
-      Cleaner = PragmaticSegmenter::Cleaner
 
       class SentenceBoundaryPunctuation < PragmaticSegmenter::SentenceBoundaryPunctuation
         SENTENCE_BOUNDARY = /.*?[\.;!\?]|.*?$/
