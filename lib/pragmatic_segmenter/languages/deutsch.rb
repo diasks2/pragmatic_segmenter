@@ -55,7 +55,7 @@ module PragmaticSegmenter
       class Number < PragmaticSegmenter::Number
         def replace
           super
-          @text.apply(NumberPeriodSpaceRule).apply(NegativeNumberPeriodSpaceRule)
+          @text.apply(NumberPeriodSpaceRule, NegativeNumberPeriodSpaceRule)
           replace_period_in_deutsch_dates(@text)
         end
 
