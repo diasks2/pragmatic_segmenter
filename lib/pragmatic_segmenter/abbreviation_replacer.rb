@@ -14,9 +14,10 @@ module PragmaticSegmenter
     end
 
     def replace
-      @reformatted_text = text.apply(Languages::Common::PossessiveAbbreviationRule)
-      @reformatted_text = text.apply(Languages::Common::KommanditgesellschaftRule)
-      @reformatted_text = Languages::Common::SingleLetterAbbreviation.new(text: @reformatted_text).replace
+      @reformatted_text = text.apply(Languages::Common::PossessiveAbbreviationRule,
+        Languages::Common::KommanditgesellschaftRule,
+        Languages::Common::SingleLetterAbbreviationRules::All)
+
       @reformatted_text = search_for_abbreviations_in_string(@reformatted_text, abbreviations)
       @reformatted_text = replace_multi_period_abbreviations(@reformatted_text)
       @reformatted_text = @reformatted_text.apply(Languages::Common::AmPmRules::All)

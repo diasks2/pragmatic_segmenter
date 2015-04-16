@@ -79,17 +79,6 @@ module PragmaticSegmenter
         ]
       end
 
-      class SingleLetterAbbreviation
-        attr_reader :text
-        def initialize(text:)
-          @text = text
-        end
-
-        def replace
-          @formatted_text = text.apply SingleLetterAbbreviationRules::All
-        end
-      end
-
 
       class Process < PragmaticSegmenter::Process
       end
