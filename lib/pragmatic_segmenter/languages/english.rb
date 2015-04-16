@@ -17,14 +17,6 @@ module PragmaticSegmenter
           []
         end
       end
-
-      class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
-        private
-
-        def abbreviations
-          PragmaticSegmenter::Abbreviation.new
-        end
-      end
     end
   end
 end
