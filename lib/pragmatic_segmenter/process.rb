@@ -115,7 +115,7 @@ module PragmaticSegmenter
     end
 
     def punctuation_array
-      @punct_arr ||= PragmaticSegmenter::Punctuation.new.punct
+      @punct_arr ||= PragmaticSegmenter::Punctuations
     end
 
     def between_punctuation(txt)

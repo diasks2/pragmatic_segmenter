@@ -2,11 +2,5 @@
 
 module PragmaticSegmenter
   # This class holds the punctuation marks.
-  class Punctuation
-    PUNCT = ['。', '．', '.', '！', '!', '?', '？']
-
-    def punct
-      PUNCT
-    end
-  end
+  Punctuations = ['。', '．', '.', '！', '!', '?', '？']
 end
