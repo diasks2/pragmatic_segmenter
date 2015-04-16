@@ -13,8 +13,7 @@ module PragmaticSegmenter
         end
       end
 
-      class Cleaner < PragmaticSegmenter::Cleaner
-      end
+      Cleaner = PragmaticSegmenter::Cleaner
 
       class SentenceBoundaryPunctuation < PragmaticSegmenter::SentenceBoundaryPunctuation
         SENTENCE_BOUNDARY = /.*?[۔؟!\?]|.*?$/
