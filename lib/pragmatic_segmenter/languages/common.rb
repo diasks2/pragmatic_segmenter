@@ -25,27 +25,27 @@ module PragmaticSegmenter
 
       # This class searches for periods within an abbreviation and
       # replaces the periods.
-      class SingleLetterAbbreviation
+      module SingleLetterAbbreviationRules
         # Rubular: http://rubular.com/r/e3H6kwnr6H
         SingleUpperCaseLetterAtStartOfLineRule = Rule.new(/(?<=^[A-Z])\.(?=\s)/, '∯')
 
         # Rubular: http://rubular.com/r/gitvf0YWH4
         SingleUpperCaseLetterRule = Rule.new(/(?<=\s[A-Z])\.(?=\s)/, '∯')
 
+        All = [
+          SingleUpperCaseLetterAtStartOfLineRule,
+          SingleUpperCaseLetterRule
+        ]
+      end
+
+      class SingleLetterAbbreviation
         attr_reader :text
         def initialize(text:)
           @text = text
         end
 
         def replace
-          @formatted_text = replace_single_letter_abbreviations(text)
-        end
-
-        private
-
-        def replace_single_letter_abbreviations(txt)
-          txt.apply [SingleUpperCaseLetterAtStartOfLineRule,
-            SingleUpperCaseLetterRule]
+          @formatted_text = text.apply SingleLetterAbbreviationRules::All
         end
       end
 
