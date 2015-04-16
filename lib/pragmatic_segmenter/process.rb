@@ -7,7 +7,6 @@ require 'pragmatic_segmenter/exclamation_words'
 require 'pragmatic_segmenter/punctuation_replacer'
 require 'pragmatic_segmenter/between_punctuation'
 require 'pragmatic_segmenter/sentence_boundary_punctuation'
-require 'pragmatic_segmenter/punctuation'
 
 module PragmaticSegmenter
   # This class processing segmenting the text.
@@ -115,7 +114,7 @@ module PragmaticSegmenter
     end
 
     def punctuation_array
-      @punct_arr ||= PragmaticSegmenter::Punctuations
+      @punct_arr ||= Languages::Common::Punctuations
     end
 
     def between_punctuation(txt)
