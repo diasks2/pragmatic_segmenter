@@ -1,5 +1,4 @@
 # -*- encoding : utf-8 -*-
-require 'pragmatic_segmenter/abbreviation'
 require 'pragmatic_segmenter/single_letter_abbreviation'
 
 module PragmaticSegmenter
@@ -84,7 +83,7 @@ module PragmaticSegmenter
     end
 
     def abbreviations
-      @abbr ||= PragmaticSegmenter::Abbreviation.new
+      @abbr ||= Languages::Common::Abbreviation.new
     end
 
     def replace_abbreviation_as_sentence_boundary(txt)
