@@ -1,5 +1,15 @@
 module PragmaticSegmenter
   module Rules
+    module HtmlRules
+      # Rubular: http://rubular.com/r/ENrVFMdJ8v
+      HTMLTagRule = Rule.new(/<\/?[^>]*>/, '')
+
+      # Rubular: http://rubular.com/r/XZVqMPJhea
+      EscapedHTMLTagRule = Rule.new(/&lt;\/?[^gt;]*gt;/, '')
+
+      All = [HTMLTagRule, EscapedHTMLTagRule]
+    end
+
     # Rubular: http://rubular.com/r/EUbZCNfgei
     AbbreviationsWithMultiplePeriodsAndEmailRule = Rule.new(/(\w)(\.)(\w)/, '\1∮\3')
 
