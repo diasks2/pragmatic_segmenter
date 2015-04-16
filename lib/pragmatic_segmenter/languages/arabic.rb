@@ -60,11 +60,7 @@ module PragmaticSegmenter
         private
 
         def scan_for_replacements(txt, am, index, character_array, abbr)
-          replace_abbr(txt, am)
-        end
-
-        def replace_abbr(txt, abbr)
-          txt.gsub(/(?<=#{abbr})\./, '∯')
+          txt.gsub(/(?<=#{am})\./, '∯')
         end
 
         def abbreviations
