@@ -5,11 +5,6 @@ module PragmaticSegmenter
       end
 
       class Cleaner < PragmaticSegmenter::Cleaner
-        private
-
-        def abbreviations
-          French::Abbreviation.new.all
-        end
       end
 
       class Abbreviation
