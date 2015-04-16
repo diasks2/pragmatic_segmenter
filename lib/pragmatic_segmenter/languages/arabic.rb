@@ -37,8 +37,7 @@ module PragmaticSegmenter
         private
 
         def replace_non_sentence_boundary_punctuation(txt)
-          txt.apply(ReplaceColonBetweenNumbersRule).
-              apply(ReplaceNonSentenceBoundaryCommaRule)
+          txt.apply(ReplaceColonBetweenNumbersRule, ReplaceNonSentenceBoundaryCommaRule)
         end
       end
 
