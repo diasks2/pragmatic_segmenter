@@ -92,7 +92,7 @@ module PragmaticSegmenter
       replace_double_newlines(@clean_text)
       replace_newlines(@clean_text)
       replace_escaped_newlines(@clean_text)
-      @clean_text.apply(HtmlRules::All)
+      @clean_text.apply(HTMLRules::All)
       replace_punctuation_in_brackets(@clean_text)
       @clean_text.apply(InlineFormattingRule)
       clean_quotations(@clean_text)

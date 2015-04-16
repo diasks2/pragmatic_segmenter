@@ -1,6 +1,6 @@
 module PragmaticSegmenter
   module Rules
-    module HtmlRules
+    module HTMLRules
       # Rubular: http://rubular.com/r/ENrVFMdJ8v
       HTMLTagRule = Rule.new(/<\/?[^>]*>/, '')
 
