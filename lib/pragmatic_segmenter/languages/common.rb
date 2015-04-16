@@ -50,16 +50,16 @@ module PragmaticSegmenter
       end
 
       # Defines the abbreviations for each language (if available)
-      class Abbreviation
-        def all
+      module Abbreviation
+        def self.all
           ABBREVIATIONS
         end
 
-        def prepositive
+        def self.prepositive
           PREPOSITIVE_ABBREVIATIONS
         end
 
-        def number
+        def self.number
           NUMBER_ABBREVIATIONS
         end
       end

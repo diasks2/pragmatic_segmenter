@@ -60,7 +60,7 @@ module PragmaticSegmenter
     end
 
     def abbreviations
-      @abbr ||= Languages::Common::Abbreviation.new
+      @abbr ||= Languages::Common::Abbreviation
     end
 
     def replace_abbreviation_as_sentence_boundary(txt)
