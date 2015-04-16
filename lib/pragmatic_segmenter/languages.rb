@@ -17,3 +17,35 @@ require 'pragmatic_segmenter/languages/russian'
 require 'pragmatic_segmenter/languages/japanese'
 require 'pragmatic_segmenter/languages/dutch'
 require 'pragmatic_segmenter/languages/polish'
+
+module PragmaticSegmenter
+  module Languages
+    LANGUAGE_CODES = {
+      'en' => 'English',
+      'de' => 'Deutsch',
+      'es' => 'Spanish',
+      'fr' => 'French',
+      'it' => 'Italian',
+      'ja' => 'Japanese',
+      'el' => 'Greek',
+      'ru' => 'Russian',
+      'ar' => 'Arabic',
+      'am' => 'Amharic',
+      'hi' => 'Hindi',
+      'hy' => 'Armenian',
+      'fa' => 'Persian',
+      'my' => 'Burmese',
+      'ur' => 'Urdu',
+      'nl' => 'Dutch',
+      'pl' => 'Polish',
+    }
+
+    def process_class
+      Object.const_get("PragmaticSegmenter::Languages::#{LANGUAGE_CODES[language] || 'Common'}::Process")
+    end
+
+    def cleaner_class
+      Object.const_get("PragmaticSegmenter::Languages::#{LANGUAGE_CODES[language] || 'Common'}::Cleaner")
+    end
+  end
+end

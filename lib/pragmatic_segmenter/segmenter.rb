@@ -2,13 +2,13 @@
 require 'pragmatic_segmenter/types'
 require 'pragmatic_segmenter/process'
 require 'pragmatic_segmenter/cleaner'
-require 'pragmatic_segmenter/language_support'
+require 'pragmatic_segmenter/languages'
 require 'pragmatic_segmenter/rules'
 
 module PragmaticSegmenter
   # This class segments a text into an array of sentences.
   class Segmenter
-    include LanguageSupport
+    include Languages
     attr_reader :text, :language, :doc_type
 
     def initialize(text:, **args)
