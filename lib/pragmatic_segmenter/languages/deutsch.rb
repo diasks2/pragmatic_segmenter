@@ -69,21 +69,10 @@ module PragmaticSegmenter
       end
 
       class SingleLetterAbbreviation < Common::SingleLetterAbbreviation
-
         def replace
           super
-          @formatted_text = replace_single_lowercase_letter(@formatted_text)
-          replace_single_lowercase_letter_sol(@formatted_text)
-        end
-
-        private
-
-        def replace_single_lowercase_letter_sol(txt)
-          txt.apply(SingleLowerCaseLetterRule)
-        end
-
-        def replace_single_lowercase_letter(txt)
-          txt.apply(SingleLowerCaseLetterAtStartOfLineRule)
+          @formatted_text.apply SingleLowerCaseLetterRule,
+            SingleLowerCaseLetterAtStartOfLineRule
         end
       end
 
