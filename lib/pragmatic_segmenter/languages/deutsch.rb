@@ -40,7 +40,7 @@ module PragmaticSegmenter
         end
 
         def replace_abbreviations(txt)
-          Deutsch::AbbreviationReplacer.new(text: txt).replace
+          Deutsch::AbbreviationReplacer.new(text: txt, abbr: Deutsch::Abbreviation).replace
         end
       end
 
@@ -104,10 +104,6 @@ module PragmaticSegmenter
 
         def replace_abbr(txt, abbr)
           txt.gsub(/(?<=#{abbr})\.(?=\s)/, '∯')
-        end
-
-        def abbreviations
-          Deutsch::Abbreviation
         end
       end
 

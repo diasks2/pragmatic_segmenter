@@ -9,7 +9,7 @@ module PragmaticSegmenter
         private
 
         def replace_abbreviations(txt)
-          Italian::AbbreviationReplacer.new(text: txt).replace
+          AbbreviationReplacer.new(text: txt, abbr: Italian::Abbreviation).replace
         end
       end
 
@@ -24,14 +24,6 @@ module PragmaticSegmenter
 
         def self.number
           NUMBER_ABBREVIATIONS
-        end
-      end
-
-      class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
-        private
-
-        def abbreviations
-          Italian::Abbreviation
         end
       end
     end

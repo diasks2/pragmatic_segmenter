@@ -20,7 +20,7 @@ module PragmaticSegmenter
         end
 
         def replace_abbreviations(txt)
-          Arabic::AbbreviationReplacer.new(text: txt).replace
+          Arabic::AbbreviationReplacer.new(text: txt, abbr: Arabic::Abbreviation).replace
         end
 
         def punctuation_array
@@ -47,10 +47,6 @@ module PragmaticSegmenter
 
         def scan_for_replacements(txt, am, index, character_array, abbr)
           txt.gsub(/(?<=#{am})\./, '∯')
-        end
-
-        def abbreviations
-          Arabic::Abbreviation
         end
       end
     end

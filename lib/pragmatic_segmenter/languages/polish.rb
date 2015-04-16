@@ -7,7 +7,7 @@ module PragmaticSegmenter
         private
 
         def replace_abbreviations(txt)
-          Polish::AbbreviationReplacer.new(text: txt).replace
+          AbbreviationReplacer.new(text: txt, abbr: Polish::Abbreviation).replace
         end
       end
 
@@ -22,14 +22,6 @@ module PragmaticSegmenter
 
         def self.number
           []
-        end
-      end
-
-      class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
-        private
-
-        def abbreviations
-          Polish::Abbreviation
         end
       end
     end
