@@ -1,50 +1,33 @@
 # -*- encoding : utf-8 -*-
-require 'pragmatic_segmenter/abbreviation'
-require 'pragmatic_segmenter/single_letter_abbreviation'
 
 module PragmaticSegmenter
   # This class searches for periods within an abbreviation and
   # replaces the periods.
   class AbbreviationReplacer
-    # Rubular: http://rubular.com/r/yqa4Rit8EY
-    PossessiveAbbreviationRule = Rule.new(/\.(?='s\s)|\.(?='s$)|\.(?='s\z)/, '∯')
 
-    # Rubular: http://rubular.com/r/NEv265G2X2
-    KommanditgesellschaftRule = Rule.new(/(?<=Co)\.(?=\sKG)/, '∯')
-
-    # Rubular: http://rubular.com/r/xDkpFZ0EgH
-    MULTI_PERIOD_ABBREVIATION_REGEX = /\b[a-z](?:\.[a-z])+[.]/i
-
-    module AmPmRules
-      # Rubular: http://rubular.com/r/Vnx3m4Spc8
-      UpperCasePmRule = Rule.new(/(?<=P∯M)∯(?=\s[A-Z])/, '.')
-
-      # Rubular: http://rubular.com/r/AJMCotJVbW
-      UpperCaseAmRule = Rule.new(/(?<=A∯M)∯(?=\s[A-Z])/, '.')
-
-      # Rubular: http://rubular.com/r/13q7SnOhgA
-      LowerCasePmRule = Rule.new(/(?<=p∯m)∯(?=\s[A-Z])/, '.')
-
-      # Rubular: http://rubular.com/r/DgUDq4mLz5
-      LowerCaseAmRule = Rule.new(/(?<=a∯m)∯(?=\s[A-Z])/, '.')
-
-      All = [UpperCasePmRule, UpperCaseAmRule, LowerCasePmRule, LowerCaseAmRule]
-    end
 
     SENTENCE_STARTERS = %w(A Being Did For He How However I In It Millions More She That The There They We What When Where Who Why)
 
     attr_reader :text
-    def initialize(text:)
+    def initialize(text:, language: Languages::Common)
       @text = Text.new(text)
+      @language = language
+      @abbr = language::Abbreviation
     end
 
+    def abbreviations
+      @abbr
+    end
+
+
     def replace
-      @reformatted_text = text.apply(PossessiveAbbreviationRule)
-      @reformatted_text = text.apply(KommanditgesellschaftRule)
-      @reformatted_text = PragmaticSegmenter::SingleLetterAbbreviation.new(text: @reformatted_text).replace
-      @reformatted_text = search_for_abbreviations_in_string(@reformatted_text, abbreviations)
+      @reformatted_text = text.apply(@language::PossessiveAbbreviationRule,
+        @language::KommanditgesellschaftRule,
+        @language::SingleLetterAbbreviationRules::All)
+
+      @reformatted_text = search_for_abbreviations_in_string(@reformatted_text, @language::Abbreviation)
       @reformatted_text = replace_multi_period_abbreviations(@reformatted_text)
-      @reformatted_text = @reformatted_text.apply(AmPmRules::All)
+      @reformatted_text = @reformatted_text.apply(@language::AmPmRules::All)
       replace_abbreviation_as_sentence_boundary(@reformatted_text)
     end
 
@@ -60,16 +43,16 @@ module PragmaticSegmenter
         next_word_start = /(?<=#{Regexp.escape(a.strip)} ).{1}/
         character_array = @text.scan(next_word_start)
         abbrev_match.each_with_index do |am, index|
-          txt = scan_for_replacements(txt, am, index, character_array, abbr)
+          txt = scan_for_replacements(txt, am, index, character_array)
         end
       end
       txt
     end
 
-    def scan_for_replacements(txt, am, index, character_array, abbr)
+    def scan_for_replacements(txt, am, index, character_array)
       character = character_array[index]
-      prepositive = abbr.prepositive
-      number_abbr = abbr.number
+      prepositive = @language::PREPOSITIVE_ABBREVIATIONS
+      number_abbr = @language::NUMBER_ABBREVIATIONS
       upper = /[[:upper:]]/.match(character.to_s)
       if upper.nil? || prepositive.include?(am.downcase.strip)
         if prepositive.include?(am.downcase.strip)
@@ -81,10 +64,6 @@ module PragmaticSegmenter
         end
       end
       txt
-    end
-
-    def abbreviations
-      @abbr ||= PragmaticSegmenter::Abbreviation.new
     end
 
     def replace_abbreviation_as_sentence_boundary(txt)
@@ -120,19 +99,12 @@ module PragmaticSegmenter
     end
 
     def replace_multi_period_abbreviations(txt)
-      mpa = txt.scan(MULTI_PERIOD_ABBREVIATION_REGEX)
+      mpa = txt.scan(@language::MULTI_PERIOD_ABBREVIATION_REGEX)
       return txt if mpa.empty?
       mpa.each do |r|
         txt = txt.gsub(/#{Regexp.escape(r)}/, "#{r.gsub!('.', '∯')}")
       end
       txt
-    end
-
-    def replace_period_in_am_pm(txt)
-      txt.gsub(UPPERCASE_PM_REGEX, '.')
-         .gsub(UPPERCASE_AM_REGEX, '.')
-         .gsub(LOWERCASE_PM_REGEX, '.')
-         .gsub(LOWERCASE_AM_REGEX, '.')
     end
 
     def replace_pre_number_abbr(txt, abbr)
@@ -152,7 +124,7 @@ module PragmaticSegmenter
     end
 
     def replace_possessive_abbreviations(txt)
-      txt.gsub(POSSESSIVE_ABBREVIATION_REGEX, '∯')
+      txt.gsub(@language::POSSESSIVE_ABBREVIATION_REGEX, '∯')
     end
   end
 end

@@ -1,57 +1,31 @@
 module PragmaticSegmenter
   module Languages
-    class Persian
+    class Persian < Common
+      SENTENCE_BOUNDARY = /.*?[:\.!\?؟]|.*?\z|.*?$/
+      Punctuations = ['?', '!', ':', '.', '؟']
+
+      ReplaceColonBetweenNumbersRule = Rule.new(/(?<=\d):(?=\d)/, '♭')
+      ReplaceNonSentenceBoundaryCommaRule = Rule.new(/،(?=\s\S+،)/, '♬')
+
       class Process < PragmaticSegmenter::Process
         private
 
         def sentence_boundary_punctuation(txt)
-          PragmaticSegmenter::Languages::Persian::SentenceBoundaryPunctuation.new(text: txt).split
-        end
-
-        def replace_abbreviations(txt)
-          PragmaticSegmenter::Languages::Persian::AbbreviationReplacer.new(text: txt).replace
-        end
-      end
-
-      class Cleaner < PragmaticSegmenter::Cleaner
-      end
-
-      class SentenceBoundaryPunctuation < PragmaticSegmenter::SentenceBoundaryPunctuation
-        SENTENCE_BOUNDARY = /.*?[:\.!\?؟]|.*?\z|.*?$/
-
-        ReplaceColonBetweenNumbersRule = Rule.new(/(?<=\d):(?=\d)/, '♭')
-        ReplaceNonSentenceBoundaryCommaRule = Rule.new(/،(?=\s\S+،)/, '♬')
-
-        def split
-          txt = replace_non_sentence_boundary_punctuation(text)
+          txt = txt.apply ReplaceColonBetweenNumbersRule,
+            ReplaceNonSentenceBoundaryCommaRule
           txt.scan(SENTENCE_BOUNDARY)
         end
 
-        private
-
-        def replace_non_sentence_boundary_punctuation(txt)
-          txt.apply(ReplaceColonBetweenNumbersRule).
-              apply(ReplaceNonSentenceBoundaryCommaRule)
-        end
-      end
-
-      class Punctuation < PragmaticSegmenter::Punctuation
-        PUNCT = ['?', '!', ':', '.', '؟']
-
-        def punct
-          PUNCT
+        def replace_abbreviations(txt)
+          AbbreviationReplacer.new(text: txt).replace
         end
       end
 
       class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
         private
 
-        def scan_for_replacements(txt, am, index, character_array, abbr)
-          replace_abbr(txt, am)
-        end
-
-        def replace_abbr(txt, abbr)
-          txt.gsub(/(?<=#{abbr})\./, '∯')
+        def scan_for_replacements(txt, am, index, character_array)
+          txt.gsub(/(?<=#{am})\./, '∯')
         end
       end
     end

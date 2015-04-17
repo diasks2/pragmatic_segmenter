@@ -1,3 +1,5 @@
+require 'pragmatic_segmenter/rules/html'
+
 module PragmaticSegmenter
   module Rules
     # Rubular: http://rubular.com/r/EUbZCNfgei

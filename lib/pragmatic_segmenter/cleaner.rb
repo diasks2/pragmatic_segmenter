@@ -1,18 +1,6 @@
 # -*- encoding : utf-8 -*-
 
 module PragmaticSegmenter
-  module Rules
-    module HtmlRules
-      # Rubular: http://rubular.com/r/ENrVFMdJ8v
-      HTMLTagRule = Rule.new(/<\/?[^>]*>/, '')
-
-      # Rubular: http://rubular.com/r/XZVqMPJhea
-      EscapedHTMLTagRule = Rule.new(/&lt;\/?[^gt;]*gt;/, '')
-
-      All = [HTMLTagRule, EscapedHTMLTagRule]
-    end
-  end
-
   # This is an opinionated class that removes errant newlines,
   # xhtml, inline formatting, etc.
   class Cleaner
@@ -79,9 +67,10 @@ module PragmaticSegmenter
     QuotationsSecondRule = Rule.new(/``/, '"')
 
     attr_reader :text, :doc_type
-    def initialize(text:, **args)
+    def initialize(text:, doc_type: nil, abbr: nil, **args)
       @text = Text.new(text.dup)
-      @doc_type = args[:doc_type]
+      @doc_type = doc_type
+      @abbr = abbr
     end
 
     # Clean text of unwanted formatting
@@ -104,7 +93,7 @@ module PragmaticSegmenter
       replace_double_newlines(@clean_text)
       replace_newlines(@clean_text)
       replace_escaped_newlines(@clean_text)
-      @clean_text.apply(HtmlRules::All)
+      @clean_text.apply(HTMLRules::All)
       replace_punctuation_in_brackets(@clean_text)
       @clean_text.apply(InlineFormattingRule)
       clean_quotations(@clean_text)
@@ -141,10 +130,6 @@ module PragmaticSegmenter
       end
     end
 
-    def abbreviations
-      @abbr ||= PragmaticSegmenter::Abbreviation.new.all
-    end
-
     def remove_all_newlines(txt)
       clean_text = remove_newline_in_middle_of_sentence(txt)
       remove_newline_in_middle_of_word(clean_text)
@@ -161,50 +146,44 @@ module PragmaticSegmenter
     end
 
     def remove_newline_in_middle_of_word(txt)
-      txt.apply(NewLineInMiddleOfWordRule)
+      txt.apply NewLineInMiddleOfWordRule
     end
 
     def replace_escaped_newlines(txt)
-      txt.apply(EscapedNewLineRule).
-          apply(EscapedCarriageReturnRule).
-          apply(TypoEscapedNewLineRule).
-          apply(TypoEscapedCarriageReturnRule)
+      txt.apply EscapedNewLineRule, EscapedCarriageReturnRule,
+        TypoEscapedNewLineRule, TypoEscapedCarriageReturnRule
     end
 
     def replace_double_newlines(txt)
-      txt.apply(DoubleNewLineWithSpaceRule).
-          apply(DoubleNewLineRule)
+      txt.apply DoubleNewLineWithSpaceRule, DoubleNewLineRule
     end
 
     def replace_newlines(txt)
       if doc_type.eql?('pdf')
         remove_pdf_line_breaks(txt)
       else
-        txt.apply(NewLineFollowedByPeriodRule).
-            apply(ReplaceNewlineWithCarriageReturnRule)
+        txt.apply NewLineFollowedByPeriodRule,
+          ReplaceNewlineWithCarriageReturnRule
       end
     end
 
     def remove_pdf_line_breaks(txt)
-      txt.apply(NewLineFollowedByBulletRule).
-          apply(PDF_NewLineInMiddleOfSentenceRule).
-          apply(PDF_NewLineInMiddleOfSentenceNoSpacesRule)
+      txt.apply NewLineFollowedByBulletRule,
+        PDF_NewLineInMiddleOfSentenceRule,
+        PDF_NewLineInMiddleOfSentenceNoSpacesRule
     end
 
     def clean_quotations(txt)
-      txt.apply(QuotationsFirstRule).
-          apply(QuotationsSecondRule)
+      txt.apply QuotationsFirstRule, QuotationsSecondRule
     end
 
     def clean_table_of_contents(txt)
-      txt.apply(TableOfContentsRule).
-          apply(ConsecutivePeriodsRule).
-          apply(ConsecutiveForwardSlashRule)
+      txt.apply TableOfContentsRule, ConsecutivePeriodsRule,
+        ConsecutiveForwardSlashRule
     end
 
     def clean_consecutive_characters(txt)
-      txt.apply(ConsecutivePeriodsRule).
-          apply(ConsecutiveForwardSlashRule)
+      txt.apply ConsecutivePeriodsRule, ConsecutiveForwardSlashRule
     end
   end
 end

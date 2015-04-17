@@ -1,9 +1,6 @@
 module PragmaticSegmenter
   module Languages
-    class English
-      class Process < PragmaticSegmenter::Process
-      end
-
+    class English < Common
       class Cleaner < PragmaticSegmenter::Cleaner
         def clean
           super
@@ -18,14 +15,6 @@ module PragmaticSegmenter
 
         def abbreviations
           []
-        end
-      end
-
-      class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
-        private
-
-        def abbreviations
-          PragmaticSegmenter::Abbreviation.new
         end
       end
     end

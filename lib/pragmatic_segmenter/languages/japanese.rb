@@ -1,11 +1,11 @@
 module PragmaticSegmenter
   module Languages
-    class Japanese
+    class Japanese < Common
       class Process < PragmaticSegmenter::Process
         private
 
         def between_punctuation(txt)
-          PragmaticSegmenter::Languages::Japanese::BetweenPunctuation.new(text: txt).replace
+          BetweenPunctuation.new(text: txt).replace
         end
       end
 

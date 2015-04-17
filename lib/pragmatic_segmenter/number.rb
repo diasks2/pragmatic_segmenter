@@ -19,17 +19,23 @@ module PragmaticSegmenter
     # Rubular: http://rubular.com/r/NuvWnKleFl
     StartLineTwoDigitNumberPeriodRule = Rule.new(/(?<=^\d\d)\.(?=(\s\S)|\))/, '∯')
 
+    def rules
+      [
+        PeriodBeforeNumberRule,
+        NumberAfterPeriodBeforeLetterRule,
+        NewLineNumberPeriodSpaceLetterRule,
+        StartLineNumberPeriodRule,
+        StartLineTwoDigitNumberPeriodRule
+      ]
+    end
+
     attr_reader :text
     def initialize(text:)
       @text = Text.new(text)
     end
 
     def replace
-      @text.apply(PeriodBeforeNumberRule).
-            apply(NumberAfterPeriodBeforeLetterRule).
-            apply(NewLineNumberPeriodSpaceLetterRule).
-            apply(StartLineNumberPeriodRule).
-            apply(StartLineTwoDigitNumberPeriodRule)
+      @text.apply rules
     end
   end
 end
