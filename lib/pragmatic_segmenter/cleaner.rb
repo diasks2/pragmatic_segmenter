@@ -146,47 +146,44 @@ module PragmaticSegmenter
     end
 
     def remove_newline_in_middle_of_word(txt)
-      txt.apply(NewLineInMiddleOfWordRule)
+      txt.apply NewLineInMiddleOfWordRule
     end
 
     def replace_escaped_newlines(txt)
-      txt.apply [ EscapedNewLineRule,
-        EscapedCarriageReturnRule,
-        TypoEscapedNewLineRule,
-        TypoEscapedCarriageReturnRule]
+      txt.apply EscapedNewLineRule, EscapedCarriageReturnRule,
+        TypoEscapedNewLineRule, TypoEscapedCarriageReturnRule
     end
 
     def replace_double_newlines(txt)
-      txt.apply [DoubleNewLineWithSpaceRule, DoubleNewLineRule]
+      txt.apply DoubleNewLineWithSpaceRule, DoubleNewLineRule
     end
 
     def replace_newlines(txt)
       if doc_type.eql?('pdf')
         remove_pdf_line_breaks(txt)
       else
-        txt.apply [NewLineFollowedByPeriodRule,
-          ReplaceNewlineWithCarriageReturnRule]
+        txt.apply NewLineFollowedByPeriodRule,
+          ReplaceNewlineWithCarriageReturnRule
       end
     end
 
     def remove_pdf_line_breaks(txt)
-      txt.apply [NewLineFollowedByBulletRule,
+      txt.apply NewLineFollowedByBulletRule,
         PDF_NewLineInMiddleOfSentenceRule,
-        PDF_NewLineInMiddleOfSentenceNoSpacesRule]
+        PDF_NewLineInMiddleOfSentenceNoSpacesRule
     end
 
     def clean_quotations(txt)
-      txt.apply [QuotationsFirstRule, QuotationsSecondRule]
+      txt.apply QuotationsFirstRule, QuotationsSecondRule
     end
 
     def clean_table_of_contents(txt)
-      txt.apply [TableOfContentsRule,
-        ConsecutivePeriodsRule,
-        ConsecutiveForwardSlashRule]
+      txt.apply TableOfContentsRule, ConsecutivePeriodsRule,
+        ConsecutiveForwardSlashRule
     end
 
     def clean_consecutive_characters(txt)
-      txt.apply [ConsecutivePeriodsRule, ConsecutiveForwardSlashRule]
+      txt.apply ConsecutivePeriodsRule, ConsecutiveForwardSlashRule
     end
   end
 end
