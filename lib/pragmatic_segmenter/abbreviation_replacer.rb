@@ -21,13 +21,13 @@ module PragmaticSegmenter
 
 
     def replace
-      @reformatted_text = text.apply(Languages::Common::PossessiveAbbreviationRule,
-        Languages::Common::KommanditgesellschaftRule,
-        Languages::Common::SingleLetterAbbreviationRules::All)
+      @reformatted_text = text.apply(@language::PossessiveAbbreviationRule,
+        @language::KommanditgesellschaftRule,
+        @language::SingleLetterAbbreviationRules::All)
 
-      @reformatted_text = search_for_abbreviations_in_string(@reformatted_text, abbreviations)
+      @reformatted_text = search_for_abbreviations_in_string(@reformatted_text, @language::Abbreviation)
       @reformatted_text = replace_multi_period_abbreviations(@reformatted_text)
-      @reformatted_text = @reformatted_text.apply(Languages::Common::AmPmRules::All)
+      @reformatted_text = @reformatted_text.apply(@language::AmPmRules::All)
       replace_abbreviation_as_sentence_boundary(@reformatted_text)
     end
 
@@ -99,7 +99,7 @@ module PragmaticSegmenter
     end
 
     def replace_multi_period_abbreviations(txt)
-      mpa = txt.scan(Languages::Common::MULTI_PERIOD_ABBREVIATION_REGEX)
+      mpa = txt.scan(@language::MULTI_PERIOD_ABBREVIATION_REGEX)
       return txt if mpa.empty?
       mpa.each do |r|
         txt = txt.gsub(/#{Regexp.escape(r)}/, "#{r.gsub!('.', '∯')}")
@@ -124,7 +124,7 @@ module PragmaticSegmenter
     end
 
     def replace_possessive_abbreviations(txt)
-      txt.gsub(POSSESSIVE_ABBREVIATION_REGEX, '∯')
+      txt.gsub(@language::POSSESSIVE_ABBREVIATION_REGEX, '∯')
     end
   end
 end
