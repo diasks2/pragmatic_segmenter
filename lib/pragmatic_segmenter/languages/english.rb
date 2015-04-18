@@ -1,6 +1,8 @@
 module PragmaticSegmenter
   module Languages
-    class English < Common
+    module English
+      include Languages::Common
+
       class Cleaner < PragmaticSegmenter::Cleaner
         def clean
           super

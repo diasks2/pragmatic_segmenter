@@ -1,6 +1,8 @@
 module PragmaticSegmenter
   module Languages
-    class Burmese < Common
+    module Burmese
+      include Languages::Common
+
       SENTENCE_BOUNDARY = /.*?[။၏!\?]|.*?$/
       Punctuations = ['။', '၏', '?', '!']
 

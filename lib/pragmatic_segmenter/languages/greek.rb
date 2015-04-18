@@ -1,6 +1,8 @@
 module PragmaticSegmenter
   module Languages
-    class Greek < Common
+    module Greek
+      include Languages::Common
+
       SENTENCE_BOUNDARY = /.*?[\.;!\?]|.*?$/
       Punctuations = ['.', '!', ';', '?']
 

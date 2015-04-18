@@ -1,6 +1,8 @@
 module PragmaticSegmenter
   module Languages
-    class Urdu < Common
+    module Urdu
+      include Languages::Common
+
       SENTENCE_BOUNDARY = /.*?[۔؟!\?]|.*?$/
       Punctuations = ['?', '!', '۔', '؟']
 

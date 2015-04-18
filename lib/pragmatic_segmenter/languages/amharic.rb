@@ -1,6 +1,8 @@
 module PragmaticSegmenter
   module Languages
-    class Amharic < Common
+    module Amharic
+      include Languages::Common
+
       SENTENCE_BOUNDARY = /.*?[፧።!\?]|.*?$/
       Punctuations = ['።', '፧', '?', '!']
 

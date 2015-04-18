@@ -1,6 +1,6 @@
 module PragmaticSegmenter
   module Languages
-    class Common
+    module Common
       # This class holds the punctuation marks.
       Punctuations = ['。', '．', '.', '！', '!', '?', '？']
 

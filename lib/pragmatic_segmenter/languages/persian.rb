@@ -1,6 +1,8 @@
 module PragmaticSegmenter
   module Languages
-    class Persian < Common
+    module Persian
+      include Languages::Common
+
       SENTENCE_BOUNDARY = /.*?[:\.!\?؟]|.*?\z|.*?$/
       Punctuations = ['?', '!', ':', '.', '؟']
 

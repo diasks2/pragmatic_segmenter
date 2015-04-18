@@ -1,6 +1,7 @@
 module PragmaticSegmenter
   module Languages
-    class Chinese < Common
+    module Chinese
+      include Languages::Common
 
     end
   end

@@ -1,6 +1,8 @@
 module PragmaticSegmenter
   module Languages
-    class Hindi < Common
+    module Hindi
+      include Languages::Common
+
       SENTENCE_BOUNDARY = /.*?[।\|!\?]|.*?$/
       Punctuations = ['।', '|', '.', '!', '?']
 
