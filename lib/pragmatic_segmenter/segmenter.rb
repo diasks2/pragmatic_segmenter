@@ -7,19 +7,19 @@ module PragmaticSegmenter
     include Languages
     attr_reader :text, :language, :doc_type
 
-    def initialize(text:, **args)
+    def initialize(text:, language: nil, doc_type: nil, clean: true)
       return unless text
-      @language = args[:language] || 'en'
-      @doc_type = args[:doc_type]
-      @text = text.dup
-      unless args[:clean].eql?(false)
-        @text = cleaner_class.new(text: @text, doc_type: args[:doc_type]).clean
+      @language = language || 'en'
+      @doc_type = doc_type
+      @text = text
+      unless clean.eql?(false)
+        @text = cleaner_class.new(text: @text, doc_type: @doc_type).clean
       end
     end
 
     def segment
-      return [] unless text
-      process_class.new(text: text, doc_type: doc_type).process
+      return [] unless @text
+      process_class.new(text: @text, doc_type: @doc_type).process
     end
   end
 end
