@@ -12,13 +12,8 @@ module PragmaticSegmenter
     def initialize(text:, language: Languages::Common)
       @text = Text.new(text)
       @language = language
-      @abbr = language::Abbreviation
+      @abbreviations = language::Abbreviation
     end
-
-    def abbreviations
-      @abbr
-    end
-
 
     def replace
       @reformatted_text = text.apply(@language::PossessiveAbbreviationRule,
