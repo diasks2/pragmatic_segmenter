@@ -17,6 +17,7 @@ require 'pragmatic_segmenter/languages/russian'
 require 'pragmatic_segmenter/languages/japanese'
 require 'pragmatic_segmenter/languages/dutch'
 require 'pragmatic_segmenter/languages/polish'
+require 'pragmatic_segmenter/languages/chinese'
 
 module PragmaticSegmenter
   module Languages
@@ -38,6 +39,7 @@ module PragmaticSegmenter
       'ur' => 'Urdu',
       'nl' => 'Dutch',
       'pl' => 'Polish',
+      'zh' => 'Chinese',
     }
 
     def process_class
