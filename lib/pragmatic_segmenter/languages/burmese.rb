@@ -3,16 +3,8 @@ module PragmaticSegmenter
     module Burmese
       include Languages::Common
 
-      SENTENCE_BOUNDARY = /.*?[။၏!\?]|.*?$/
+      SENTENCE_BOUNDARY_REGEX = /.*?[။၏!\?]|.*?$/
       Punctuations = ['။', '၏', '?', '!']
-
-      class Process < Process
-        private
-
-        def sentence_boundary_punctuation(txt)
-          txt.scan(SENTENCE_BOUNDARY)
-        end
-      end
     end
   end
 end

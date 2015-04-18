@@ -4,7 +4,7 @@ module PragmaticSegmenter
       include Languages::Common
 
       Punctuations = ['?', '!', ':', '.', '؟', '،']
-      SENTENCE_BOUNDARY = /.*?[:\.!\?؟،]|.*?\z|.*?$/
+      SENTENCE_BOUNDARY_REGEX = /.*?[:\.!\?؟،]|.*?\z|.*?$/
 
       module Abbreviation
         ABBREVIATIONS = ['ا', 'ا. د', 'ا.د', 'ا.ش.ا', 'ا.ش.ا', 'إلخ', 'ت.ب', 'ت.ب', 'ج.ب', 'جم', 'ج.ب', 'ج.م.ع', 'ج.م.ع', 'س.ت', 'س.ت', 'سم', 'ص.ب.', 'ص.ب', 'كج.', 'كلم.', 'م', 'م.ب', 'م.ب', 'ه', 'د‪']
@@ -23,7 +23,7 @@ module PragmaticSegmenter
 
         def sentence_boundary_punctuation(txt)
           txt = txt.apply(ReplaceColonBetweenNumbersRule, ReplaceNonSentenceBoundaryCommaRule)
-          txt.scan(SENTENCE_BOUNDARY)
+          txt.scan(SENTENCE_BOUNDARY_REGEX)
         end
 
         def replace_abbreviations(txt)
