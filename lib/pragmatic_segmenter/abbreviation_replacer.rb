@@ -12,7 +12,11 @@ module PragmaticSegmenter
     def initialize(text:, language: Languages::Common)
       @text = Text.new(text)
       @language = language
-      @abbreviations = language::Abbreviation
+      @abbreviations = [
+          language::ABBREVIATIONS,
+          language::PREPOSITIVE_ABBREVIATIONS,
+          language::NUMBER_ABBREVIATIONS
+        ]
     end
 
     def replace
