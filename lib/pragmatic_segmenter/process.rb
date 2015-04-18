@@ -69,7 +69,7 @@ module PragmaticSegmenter
     end
 
     def check_for_punctuation(txt)
-      if punctuation_array.any? { |p| txt.include?(p) }
+      if @language::Punctuations.any? { |p| txt.include?(p) }
         process_text(txt)
       else
         txt
@@ -77,7 +77,7 @@ module PragmaticSegmenter
     end
 
     def process_text(txt)
-      txt << 'ȸ' unless punctuation_array.any? { |p| txt[-1].include?(p) }
+      txt << 'ȸ' unless @language::Punctuations.any? { |p| txt[-1].include?(p) }
       PragmaticSegmenter::ExclamationWords.apply_rules(txt)
       between_punctuation(txt)
       txt = txt.apply(
@@ -95,10 +95,6 @@ module PragmaticSegmenter
 
     def replace_abbreviations(txt)
       PragmaticSegmenter::AbbreviationReplacer.new(text: txt).replace
-    end
-
-    def punctuation_array
-      @language::Punctuations
     end
 
     def between_punctuation(txt)
