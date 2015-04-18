@@ -3,7 +3,7 @@ module PragmaticSegmenter
     module Japanese
       include Languages::Common
 
-      class Process < PragmaticSegmenter::Process
+      class Process < Process
         private
 
         def between_punctuation(txt)

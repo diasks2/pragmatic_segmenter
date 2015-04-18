@@ -5,7 +5,7 @@ module PragmaticSegmenter
 
       ABBREVIATIONS = ['а', 'авт', 'адм.-терр', 'акад', 'в', 'вв', 'вкз', 'вост.-европ', 'г', 'гг', 'гос', 'гр', 'д', 'деп', 'дисс', 'дол', 'долл', 'ежедн', 'ж', 'жен', 'з', 'зап', 'зап.-европ', 'заруб', 'и', 'И', 'и', 'ин', 'иностр', 'инст', 'к', 'кв', 'К', 'Кв', 'куб', 'канд', 'кг', 'л', 'м', 'мин', 'моск', 'муж', 'нед', 'о', 'о', 'О', 'о', 'п', 'пер', 'пп', 'пр', 'просп', 'р', 'руб', 'с', 'сек', 'см', 'СПб', 'стр', 'т', 'т', 'тел', 'тов', 'тт', 'тыс', 'ул', 'у.е', 'y.e', 'у', 'y', 'Ф', 'ф', 'ч', 'пгт', 'проф', 'л.h', 'Л.Н', 'Н']
 
-      class Process < PragmaticSegmenter::Process
+      class Process < Process
         private
 
         def replace_abbreviations(txt)
@@ -27,7 +27,7 @@ module PragmaticSegmenter
         end
       end
 
-      class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
+      class AbbreviationReplacer  < AbbreviationReplacer
         private
 
         def scan_for_replacements(txt, am, index, character_array)

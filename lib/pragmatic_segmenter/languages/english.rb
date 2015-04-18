@@ -3,7 +3,7 @@ module PragmaticSegmenter
     module English
       include Languages::Common
 
-      class Cleaner < PragmaticSegmenter::Cleaner
+      class Cleaner < Cleaner
         def clean
           super
           clean_quotations(@clean_text)

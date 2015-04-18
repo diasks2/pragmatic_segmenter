@@ -6,7 +6,7 @@ module PragmaticSegmenter
       SENTENCE_BOUNDARY = /.*?[\.;!\?]|.*?$/
       Punctuations = ['.', '!', ';', '?']
 
-      class Process < PragmaticSegmenter::Process
+      class Process < Process
         private
 
         def sentence_boundary_punctuation(txt)

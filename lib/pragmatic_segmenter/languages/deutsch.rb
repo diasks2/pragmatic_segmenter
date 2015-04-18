@@ -84,7 +84,7 @@ module PragmaticSegmenter
         end
       end
 
-      class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
+      class AbbreviationReplacer  < AbbreviationReplacer
         def replace
           @reformatted_text = text.apply(
             Languages::Common::PossessiveAbbreviationRule,
