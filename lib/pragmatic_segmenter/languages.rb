@@ -1,3 +1,8 @@
+require 'pragmatic_segmenter/types'
+require 'pragmatic_segmenter/process'
+require 'pragmatic_segmenter/cleaner'
+require 'pragmatic_segmenter/rules'
+
 require 'pragmatic_segmenter/languages/common'
 
 require 'pragmatic_segmenter/languages/english'
