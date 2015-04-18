@@ -38,6 +38,7 @@ module PragmaticSegmenter
       'ur' => 'Urdu',
       'nl' => 'Dutch',
       'pl' => 'Polish',
+      'zh' => 'Chinese',
     }
 
     def process_class
