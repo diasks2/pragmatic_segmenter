@@ -94,7 +94,7 @@ module PragmaticSegmenter
     end
 
     def replace_abbreviations(txt)
-      AbbreviationReplacer.new(text: txt).replace
+      AbbreviationReplacer.new(text: txt, language: @language).replace
     end
 
     def between_punctuation(txt)
