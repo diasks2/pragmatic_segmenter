@@ -22,8 +22,8 @@ module PragmaticSegmenter
       reformatted_text = replace_abbreviations(reformatted_text)
       reformatted_text = replace_numbers(reformatted_text)
       reformatted_text = replace_continuous_punctuation(reformatted_text)
-      reformatted_text.apply(Languages::Common::AbbreviationsWithMultiplePeriodsAndEmailRule)
-      reformatted_text.apply(Languages::Common::GeoLocationRule)
+      reformatted_text.apply(@language::AbbreviationsWithMultiplePeriodsAndEmailRule)
+      reformatted_text.apply(@language::GeoLocationRule)
       split_into_segments(reformatted_text)
     end
 
@@ -31,34 +31,34 @@ module PragmaticSegmenter
 
     def split_into_segments(txt)
       check_for_parens_between_quotes(txt).split("\r")
-         .map! { |segment| segment.apply(Languages::Common::SingleNewLineRule, Languages::Common::EllipsisRules::All) }
+         .map! { |segment| segment.apply(@language::SingleNewLineRule, @language::EllipsisRules::All) }
          .map { |segment| check_for_punctuation(segment) }.flatten
-         .map! { |segment| segment.apply(Languages::Common::SubSymbolsRules::All) }
+         .map! { |segment| segment.apply(@language::SubSymbolsRules::All) }
          .map { |segment| post_process_segments(segment) }
          .flatten.compact.delete_if(&:empty?)
-         .map! { |segment| segment.apply(Languages::Common::SubSingleQuoteRule) }
+         .map! { |segment| segment.apply(@language::SubSingleQuoteRule) }
     end
 
     def post_process_segments(txt)
       return if consecutive_underscore?(txt) || txt.length < 2
-      txt.apply(Languages::Common::ReinsertEllipsisRules::All).apply(Languages::Common::ExtraWhiteSpaceRule)
-      if txt =~ Languages::Common::QUOTATION_AT_END_OF_SENTENCE_REGEX
-        txt.split(Languages::Common::SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX)
+      txt.apply(@language::ReinsertEllipsisRules::All).apply(@language::ExtraWhiteSpaceRule)
+      if txt =~ @language::QUOTATION_AT_END_OF_SENTENCE_REGEX
+        txt.split(@language::SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX)
       else
         txt.tr("\n", '').strip
       end
     end
 
     def check_for_parens_between_quotes(txt)
-      return txt unless txt =~ Languages::Common::PARENS_BETWEEN_DOUBLE_QUOTES_REGEX
-      txt.gsub!(Languages::Common::PARENS_BETWEEN_DOUBLE_QUOTES_REGEX) do |match|
+      return txt unless txt =~ @language::PARENS_BETWEEN_DOUBLE_QUOTES_REGEX
+      txt.gsub!(@language::PARENS_BETWEEN_DOUBLE_QUOTES_REGEX) do |match|
         match.gsub(/\s(?=\()/, "\r").gsub(/(?<=\))\s/, "\r")
       end
     end
 
     def replace_continuous_punctuation(txt)
-      return txt unless txt =~ Languages::Common::CONTINUOUS_PUNCTUATION_REGEX
-      txt.gsub!(Languages::Common::CONTINUOUS_PUNCTUATION_REGEX) do |match|
+      return txt unless txt =~ @language::CONTINUOUS_PUNCTUATION_REGEX
+      txt.gsub!(@language::CONTINUOUS_PUNCTUATION_REGEX) do |match|
         match.gsub(/!/, '&ᓴ&').gsub(/\?/, '&ᓷ&')
       end
     end
@@ -81,9 +81,9 @@ module PragmaticSegmenter
       PragmaticSegmenter::ExclamationWords.apply_rules(txt)
       between_punctuation(txt)
       txt = txt.apply(
-        Languages::Common::DoublePunctuationRules::All,
-        Languages::Common::QuestionMarkInQuotationRule,
-        Languages::Common::ExclamationPointRules::All
+        @language::DoublePunctuationRules::All,
+        @language::QuestionMarkInQuotationRule,
+        @language::ExclamationPointRules::All
       )
       txt = PragmaticSegmenter::List.new(text: txt).replace_parens
       sentence_boundary_punctuation(txt)
@@ -106,7 +106,7 @@ module PragmaticSegmenter
     end
 
     def sentence_boundary_punctuation(txt)
-      txt.scan(Languages::Common::SENTENCE_BOUNDARY_REGEX)
+      txt.scan(@language::SENTENCE_BOUNDARY_REGEX)
     end
   end
 end
