@@ -18,11 +18,20 @@ module PragmaticSegmenter
       # Rubular: http://rubular.com/r/TkZomF9tTM
       BETWEEN_DOUBLE_QUOTES_DE_REGEX = /„(?>[^“\\]+|\\{2}|\\.)*“/
 
-      # Rubular: http://rubular.com/r/hZxoyQwKT1
-      NumberPeriodSpaceRule = Rule.new(/(?<=\s[0-9]|\s([1-9][0-9]))\.(?=\s)/, '∯')
 
-      # Rubular: http://rubular.com/r/ityNMwdghj
-      NegativeNumberPeriodSpaceRule = Rule.new(/(?<=-[0-9]|-([1-9][0-9]))\.(?=\s)/, '∯')
+      module Numbers
+        # Rubular: http://rubular.com/r/hZxoyQwKT1
+        NumberPeriodSpaceRule = Rule.new(/(?<=\s[0-9]|\s([1-9][0-9]))\.(?=\s)/, '∯')
+
+        # Rubular: http://rubular.com/r/ityNMwdghj
+        NegativeNumberPeriodSpaceRule = Rule.new(/(?<=-[0-9]|-([1-9][0-9]))\.(?=\s)/, '∯')
+
+        All = [
+          Common::Numbers::All,
+          NumberPeriodSpaceRule,
+          NegativeNumberPeriodSpaceRule
+        ]
+      end
 
       MONTHS = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember']
 
@@ -40,9 +49,7 @@ module PragmaticSegmenter
         end
 
         def replace_numbers(txt)
-          txt.apply Common::Numbers::All,
-            NumberPeriodSpaceRule,
-            NegativeNumberPeriodSpaceRule
+          txt.apply Numbers::All
 
           replace_period_in_deutsch_dates(txt)
         end
@@ -54,7 +61,6 @@ module PragmaticSegmenter
           end
           txt
         end
-
 
         def replace_abbreviations(txt)
           AbbreviationReplacer.new(text: txt, language: Deutsch).replace
