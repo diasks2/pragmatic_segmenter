@@ -7,9 +7,10 @@ module PragmaticSegmenter
     include Rules
 
     attr_reader :text, :doc_type
-    def initialize(text:, doc_type: nil, **args)
+    def initialize(text:, doc_type: nil, language: Languages::Common, **args)
       @text = Text.new(text.dup)
       @doc_type = doc_type
+      @language = language
     end
 
     # Clean text of unwanted formatting
