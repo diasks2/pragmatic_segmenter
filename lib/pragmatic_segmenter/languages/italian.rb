@@ -8,14 +8,6 @@ module PragmaticSegmenter
         PREPOSITIVE_ABBREVIATIONS = ['a.c', 'acc', 'adj', 'adm', 'adv', 'all', 'amn', 'arch', 'asst', 'avv', 'banc', 'bart', 'bcc', 'bldg', 'brig', 'bros', 'c.a', 'c.a.p', 'c.c.p', 'c.m', 'c.p', 'c.p', 'c.s', 'c.v', 'capt', 'cc', 'cmdr', 'co', 'col', 'comdr', 'con', 'corp', 'corr', 'cpl', 'dir', 'dott', 'dott', 'dr', 'dr', 'drs', 'e.p.c', 'ecc', 'egr', 'ens', 'es', 'fatt', 'gen', 'geom', 'gg', 'gov', 'hon', 'hosp', 'hr', 'id', 'ing', 'insp', 'int', "l'avv", "l'ing", 'lett', 'lt', 'maj', 'messrs', 'mlle', 'mm', 'mme', 'mo', 'mons', 'mr', 'mr', 'mrs', 'mrs', 'ms', 'ms', 'msgr', 'n.b', 'ogg', 'on', 'op', 'ord', 'p.c', 'p.c.c', 'p.es', 'p.f', 'p.r', 'p.s', 'p.t', 'p.v', 'pfc', 'ph', 'post', 'pp', 'prof', 'psicol', 'pvt', 'racc', 'rag', 'rep', 'reps', 'res', 'rev', 'ric', 'rif', 'rp', 'rsvp', 'rt', 's.a', 's.b.f', 's.n.c', 's.p.a', 's.p.m', 's.r.l', 'seg', 'sen', 'sens', 'sfc', 'sgg', 'sgt', 'sig', 'sigg', 'soc', 'spett', 'sr', 'ss', 'st', 'supt', 'surg', 'tel', 'u.s', 'v.p', 'v.r', 'v.s']
         NUMBER_ABBREVIATIONS = ['art', 'no', 'nos', 'nr', 'pp']
       end
-
-      class Process < Process
-        private
-
-        def replace_abbreviations(txt)
-          AbbreviationReplacer.new(text: txt, language: Italian).replace
-        end
-      end
     end
   end
 end

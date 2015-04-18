@@ -9,14 +9,6 @@ module PragmaticSegmenter
         NUMBER_ABBREVIATIONS = ['cra', 'ext', 'no', 'nos', 'p', 'pp', 'tel']
       end
 
-      class Process < Process
-        private
-
-        def replace_abbreviations(txt)
-          AbbreviationReplacer.new(text: txt, language: Spanish).replace
-        end
-      end
-
       class Cleaner < Cleaner
         private
 

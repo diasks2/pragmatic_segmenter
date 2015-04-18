@@ -9,13 +9,6 @@ module PragmaticSegmenter
         NUMBER_ABBREVIATIONS = []
       end
 
-      class Process < Process
-        private
-
-        def replace_abbreviations(txt)
-          AbbreviationReplacer.new(text: txt, language: Dutch).replace
-        end
-      end
     end
   end
 end
