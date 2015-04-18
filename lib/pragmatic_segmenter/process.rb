@@ -98,7 +98,7 @@ module PragmaticSegmenter
     end
 
     def punctuation_array
-      Languages::Common::Punctuations
+      @language::Punctuations
     end
 
     def between_punctuation(txt)
