@@ -3,9 +3,11 @@ module PragmaticSegmenter
     module Russian
       include Languages::Common
 
-      ABBREVIATIONS = ['а', 'авт', 'адм.-терр', 'акад', 'в', 'вв', 'вкз', 'вост.-европ', 'г', 'гг', 'гос', 'гр', 'д', 'деп', 'дисс', 'дол', 'долл', 'ежедн', 'ж', 'жен', 'з', 'зап', 'зап.-европ', 'заруб', 'и', 'И', 'и', 'ин', 'иностр', 'инст', 'к', 'кв', 'К', 'Кв', 'куб', 'канд', 'кг', 'л', 'м', 'мин', 'моск', 'муж', 'нед', 'о', 'о', 'О', 'о', 'п', 'пер', 'пп', 'пр', 'просп', 'р', 'руб', 'с', 'сек', 'см', 'СПб', 'стр', 'т', 'т', 'тел', 'тов', 'тт', 'тыс', 'ул', 'у.е', 'y.e', 'у', 'y', 'Ф', 'ф', 'ч', 'пгт', 'проф', 'л.h', 'Л.Н', 'Н']
-      PREPOSITIVE_ABBREVIATIONS = []
-      NUMBER_ABBREVIATIONS = []
+      module Abbreviation
+        ABBREVIATIONS = ['а', 'авт', 'адм.-терр', 'акад', 'в', 'вв', 'вкз', 'вост.-европ', 'г', 'гг', 'гос', 'гр', 'д', 'деп', 'дисс', 'дол', 'долл', 'ежедн', 'ж', 'жен', 'з', 'зап', 'зап.-европ', 'заруб', 'и', 'И', 'и', 'ин', 'иностр', 'инст', 'к', 'кв', 'К', 'Кв', 'куб', 'канд', 'кг', 'л', 'м', 'мин', 'моск', 'муж', 'нед', 'о', 'о', 'О', 'о', 'п', 'пер', 'пп', 'пр', 'просп', 'р', 'руб', 'с', 'сек', 'см', 'СПб', 'стр', 'т', 'т', 'тел', 'тов', 'тт', 'тыс', 'ул', 'у.е', 'y.e', 'у', 'y', 'Ф', 'ф', 'ч', 'пгт', 'проф', 'л.h', 'Л.Н', 'Н']
+        PREPOSITIVE_ABBREVIATIONS = []
+        NUMBER_ABBREVIATIONS = []
+      end
 
       class Process < Process
         private
@@ -15,27 +17,13 @@ module PragmaticSegmenter
         end
       end
 
-      module Abbreviation
-        def self.all
-          ABBREVIATIONS
-        end
-
-        def self.prepositive
-          PREPOSITIVE_ABBREVIATIONS
-        end
-
-        def self.number
-          NUMBER_ABBREVIATIONS
-        end
-      end
-
       class AbbreviationReplacer  < AbbreviationReplacer
         private
 
         def scan_for_replacements(txt, am, index, character_array)
           character = character_array[index]
-          prepositive = @language::PREPOSITIVE_ABBREVIATIONS
-          number_abbr = @language::NUMBER_ABBREVIATIONS
+          prepositive = @language::Abbreviation::PREPOSITIVE_ABBREVIATIONS
+          number_abbr = @language::Abbreviation::NUMBER_ABBREVIATIONS
           upper = /[[:upper:]]/.match(character.to_s)
           if upper.nil? || prepositive.include?(am.downcase.strip)
             if prepositive.include?(am.downcase.strip)

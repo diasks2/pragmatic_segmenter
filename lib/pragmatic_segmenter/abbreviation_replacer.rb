@@ -13,9 +13,9 @@ module PragmaticSegmenter
       @text = Text.new(text)
       @language = language
       @abbreviations = [
-          language::ABBREVIATIONS,
-          language::PREPOSITIVE_ABBREVIATIONS,
-          language::NUMBER_ABBREVIATIONS
+          language::Abbreviation::ABBREVIATIONS,
+          language::Abbreviation::PREPOSITIVE_ABBREVIATIONS,
+          language::Abbreviation::NUMBER_ABBREVIATIONS
         ]
     end
 
@@ -35,7 +35,7 @@ module PragmaticSegmenter
     def search_for_abbreviations_in_string(txt)
       original = txt.dup
       downcased = txt.downcase
-      @language::ABBREVIATIONS.each do |a|
+      @language::Abbreviation::ABBREVIATIONS.each do |a|
         next unless downcased.include?(a.strip)
         abbrev_match = original.scan(/(?:^|\s|\r|\n)#{Regexp.escape(a.strip)}/i)
         next if abbrev_match.empty?
@@ -50,8 +50,8 @@ module PragmaticSegmenter
 
     def scan_for_replacements(txt, am, index, character_array)
       character = character_array[index]
-      prepositive = @language::PREPOSITIVE_ABBREVIATIONS
-      number_abbr = @language::NUMBER_ABBREVIATIONS
+      prepositive = @language::Abbreviation::PREPOSITIVE_ABBREVIATIONS
+      number_abbr = @language::Abbreviation::NUMBER_ABBREVIATIONS
       upper = /[[:upper:]]/.match(character.to_s)
       if upper.nil? || prepositive.include?(am.downcase.strip)
         if prepositive.include?(am.downcase.strip)
