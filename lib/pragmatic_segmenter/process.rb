@@ -18,7 +18,7 @@ module PragmaticSegmenter
     end
 
     def process
-      reformatted_text = PragmaticSegmenter::List.new(text: text).add_line_break
+      reformatted_text = List.new(text: text).add_line_break
       reformatted_text = replace_abbreviations(reformatted_text)
       reformatted_text = replace_numbers(reformatted_text)
       reformatted_text = replace_continuous_punctuation(reformatted_text)
@@ -78,27 +78,27 @@ module PragmaticSegmenter
 
     def process_text(txt)
       txt << 'ȸ' unless @language::Punctuations.any? { |p| txt[-1].include?(p) }
-      PragmaticSegmenter::ExclamationWords.apply_rules(txt)
+      ExclamationWords.apply_rules(txt)
       between_punctuation(txt)
       txt = txt.apply(
         @language::DoublePunctuationRules::All,
         @language::QuestionMarkInQuotationRule,
         @language::ExclamationPointRules::All
       )
-      txt = PragmaticSegmenter::List.new(text: txt).replace_parens
+      txt = List.new(text: txt).replace_parens
       sentence_boundary_punctuation(txt)
     end
 
     def replace_numbers(txt)
-      PragmaticSegmenter::Number.new(text: txt).replace
+      Number.new(text: txt).replace
     end
 
     def replace_abbreviations(txt)
-      PragmaticSegmenter::AbbreviationReplacer.new(text: txt).replace
+      AbbreviationReplacer.new(text: txt).replace
     end
 
     def between_punctuation(txt)
-      PragmaticSegmenter::BetweenPunctuation.new(text: txt).replace
+      BetweenPunctuation.new(text: txt).replace
     end
 
     def sentence_boundary_punctuation(txt)
