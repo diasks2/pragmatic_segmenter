@@ -7,9 +7,9 @@ module PragmaticSegmenter
     include Languages
     attr_reader :text, :language, :doc_type
 
-    def initialize(text:, language: nil, doc_type: nil, clean: true)
+    def initialize(text:, language: 'en', doc_type: nil, clean: true)
       return unless text
-      @language = language || 'en'
+      @language = language
       @doc_type = doc_type
 
       if clean
