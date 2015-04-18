@@ -11,9 +11,11 @@ module PragmaticSegmenter
       return unless text
       @language = language || 'en'
       @doc_type = doc_type
-      @text = text
-      unless clean.eql?(false)
-        @text = cleaner_class.new(text: @text, doc_type: @doc_type).clean
+
+      if clean
+        @text = cleaner_class.new(text: text, doc_type: @doc_type).clean
+      else
+        @text = text
       end
     end
 
