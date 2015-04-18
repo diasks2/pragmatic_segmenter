@@ -6,6 +6,8 @@ module PragmaticSegmenter
       Punctuations = ['?', '!', ':', '.', '؟', '،']
       SENTENCE_BOUNDARY = /.*?[:\.!\?؟،]|.*?\z|.*?$/
       ABBREVIATIONS = ['ا', 'ا. د', 'ا.د', 'ا.ش.ا', 'ا.ش.ا', 'إلخ', 'ت.ب', 'ت.ب', 'ج.ب', 'جم', 'ج.ب', 'ج.م.ع', 'ج.م.ع', 'س.ت', 'س.ت', 'سم', 'ص.ب.', 'ص.ب', 'كج.', 'كلم.', 'م', 'م.ب', 'م.ب', 'ه', 'د‪']
+      PREPOSITIVE_ABBREVIATIONS = []
+      NUMBER_ABBREVIATIONS = []
 
       # Rubular: http://rubular.com/r/RX5HpdDIyv
       ReplaceColonBetweenNumbersRule = Rule.new(/(?<=\d):(?=\d)/, '♭')
@@ -36,11 +38,11 @@ module PragmaticSegmenter
         end
 
         def self.prepositive
-          []
+          PREPOSITIVE_ABBREVIATIONS
         end
 
         def self.number
-          []
+          NUMBER_ABBREVIATIONS
         end
       end
 
