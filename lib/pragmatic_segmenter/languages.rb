@@ -48,11 +48,15 @@ module PragmaticSegmenter
     }
 
     def process_class
-      Object.const_get("PragmaticSegmenter::Languages::#{LANGUAGE_CODES[language] || 'Common'}::Process")
+      language_module::Process
     end
 
     def cleaner_class
-      Object.const_get("PragmaticSegmenter::Languages::#{LANGUAGE_CODES[language] || 'Common'}::Cleaner")
+      language_module::Cleaner
+    end
+
+    def language_module
+      Object.const_get("PragmaticSegmenter::Languages::#{LANGUAGE_CODES[language] || 'Common'}")
     end
   end
 end
