@@ -1,7 +1,6 @@
 # -*- encoding : utf-8 -*-
 require 'pragmatic_segmenter/list'
 require 'pragmatic_segmenter/abbreviation_replacer'
-require 'pragmatic_segmenter/number'
 require 'pragmatic_segmenter/rules/ellipsis'
 require 'pragmatic_segmenter/exclamation_words'
 require 'pragmatic_segmenter/punctuation_replacer'
@@ -90,7 +89,7 @@ module PragmaticSegmenter
     end
 
     def replace_numbers(txt)
-      Number.new(text: txt).replace
+      txt.apply @language::Numbers::All
     end
 
     def replace_abbreviations(txt)

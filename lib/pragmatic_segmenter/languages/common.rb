@@ -11,6 +11,32 @@ module PragmaticSegmenter
         NUMBER_ABBREVIATIONS = ['art', 'ext', 'no', 'nos', 'p', 'pp']
       end
 
+      module Numbers
+        # Rubular: http://rubular.com/r/oNyxBOqbyy
+        PeriodBeforeNumberRule = Rule.new(/\.(?=\d)/, '∯')
+
+        # Rubular: http://rubular.com/r/EMk5MpiUzt
+        NumberAfterPeriodBeforeLetterRule = Rule.new(/(?<=\d)\.(?=\S)/, '∯')
+
+        # Rubular: http://rubular.com/r/rf4l1HjtjG
+        NewLineNumberPeriodSpaceLetterRule = Rule.new(/(?<=\r\d)\.(?=(\s\S)|\))/, '∯')
+
+        # Rubular: http://rubular.com/r/HPa4sdc6b9
+        StartLineNumberPeriodRule = Rule.new(/(?<=^\d)\.(?=(\s\S)|\))/, '∯')
+
+        # Rubular: http://rubular.com/r/NuvWnKleFl
+        StartLineTwoDigitNumberPeriodRule = Rule.new(/(?<=^\d\d)\.(?=(\s\S)|\))/, '∯')
+
+        All = [
+          PeriodBeforeNumberRule,
+          NumberAfterPeriodBeforeLetterRule,
+          NewLineNumberPeriodSpaceLetterRule,
+          StartLineNumberPeriodRule,
+          StartLineTwoDigitNumberPeriodRule
+        ]
+      end
+
+
       SENTENCE_BOUNDARY_REGEX = /\u{ff08}(?:[^\u{ff09}])*\u{ff09}(?=\s?[A-Z])|\u{300c}(?:[^\u{300d}])*\u{300d}(?=\s[A-Z])|\((?:[^\)]){2,}\)(?=\s[A-Z])|'(?:[^'])*[^,]'(?=\s[A-Z])|"(?:[^"])*[^,]"(?=\s[A-Z])|“(?:[^”])*[^,]”(?=\s[A-Z])|\S.*?[。．.！!?？ȸȹ☉☈☇☄]/
 
       include Rules

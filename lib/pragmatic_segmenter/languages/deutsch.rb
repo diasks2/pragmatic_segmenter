@@ -32,7 +32,6 @@ module PragmaticSegmenter
       # Rubular: http://rubular.com/r/iUNSkCuso0
       SingleLowerCaseLetterAtStartOfLineRule = Rule.new(/(?<=^[a-z])\.(?=\s)/, '∯')
 
-
       class Process < PragmaticSegmenter::Process
         private
 
@@ -41,8 +40,21 @@ module PragmaticSegmenter
         end
 
         def replace_numbers(txt)
-          Number.new(text: txt).replace
+          txt.apply Common::Numbers::All,
+            NumberPeriodSpaceRule,
+            NegativeNumberPeriodSpaceRule
+
+          replace_period_in_deutsch_dates(txt)
         end
+
+        def replace_period_in_deutsch_dates(txt)
+          MONTHS.each do |month|
+            # Rubular: http://rubular.com/r/zlqgj7G5dA
+            txt.gsub!(/(?<=\d)\.(?=\s*#{Regexp.escape(month)})/, '∯')
+          end
+          txt
+        end
+
 
         def replace_abbreviations(txt)
           AbbreviationReplacer.new(text: txt, language: Deutsch).replace
@@ -54,22 +66,6 @@ module PragmaticSegmenter
 
         def abbreviations
           Abbreviation::ABBREVIATIONS
-        end
-      end
-
-      class Number < PragmaticSegmenter::Number
-        def replace
-          super
-          @text.apply(NumberPeriodSpaceRule, NegativeNumberPeriodSpaceRule)
-          replace_period_in_deutsch_dates(@text)
-        end
-
-        def replace_period_in_deutsch_dates(txt)
-          MONTHS.each do |month|
-            # Rubular: http://rubular.com/r/zlqgj7G5dA
-            txt.gsub!(/(?<=\d)\.(?=\s*#{Regexp.escape(month)})/, '∯')
-          end
-          txt
         end
       end
 
