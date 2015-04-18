@@ -21,7 +21,7 @@ module PragmaticSegmenter
 
     def segment
       return [] unless @text
-      process_class.new(text: @text, doc_type: @doc_type).process
+      process_class.new(text: @text).process
     end
   end
 end

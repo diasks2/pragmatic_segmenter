@@ -11,10 +11,9 @@ module PragmaticSegmenter
   # This class processing segmenting the text.
   class Process
 
-    attr_reader :text, :doc_type
-    def initialize(text:, doc_type:)
+    attr_reader :text
+    def initialize(text:)
       @text = text
-      @doc_type = doc_type
     end
 
     def process
