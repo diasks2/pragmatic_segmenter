@@ -24,7 +24,7 @@ module PragmaticSegmenter
         @language::KommanditgesellschaftRule,
         @language::SingleLetterAbbreviationRules::All)
 
-      @reformatted_text = search_for_abbreviations_in_string(@reformatted_text, @language::Abbreviation)
+      @reformatted_text = search_for_abbreviations_in_string(@reformatted_text)
       @reformatted_text = replace_multi_period_abbreviations(@reformatted_text)
       @reformatted_text = @reformatted_text.apply(@language::AmPmRules::All)
       replace_abbreviation_as_sentence_boundary(@reformatted_text)
@@ -32,10 +32,10 @@ module PragmaticSegmenter
 
     private
 
-    def search_for_abbreviations_in_string(txt, abbr)
+    def search_for_abbreviations_in_string(txt)
       original = txt.dup
       downcased = txt.downcase
-      abbr.all.each do |a|
+      @language::ABBREVIATIONS.each do |a|
         next unless downcased.include?(a.strip)
         abbrev_match = original.scan(/(?:^|\s|\r|\n)#{Regexp.escape(a.strip)}/i)
         next if abbrev_match.empty?
