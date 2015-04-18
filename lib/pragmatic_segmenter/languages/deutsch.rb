@@ -1,8 +1,13 @@
 module PragmaticSegmenter
   module Languages
-    class Deutsch < Common
-      ABBREVIATIONS = ['Ä', 'ä', 'adj', 'adm', 'adv', 'art', 'asst', 'b.a', 'b.s', 'bart', 'bldg', 'brig', 'bros', 'bse', 'buchst', 'bzgl', 'bzw', 'c.-à-d', 'ca', 'capt', 'chr', 'cmdr', 'co', 'col', 'comdr', 'con', 'corp', 'cpl', 'd.h', 'd.j', 'dergl', 'dgl', 'dkr', 'dr ', 'ens', 'etc', 'ev ', 'evtl', 'ff', 'g.g.a', 'g.u', 'gen', 'ggf', 'gov', 'hon', 'hosp', 'i.f', 'i.h.v', 'ii', 'iii', 'insp', 'iv', 'ix', 'jun', 'k.o', 'kath ', 'lfd', 'lt', 'ltd', 'm.e', 'maj', 'med', 'messrs', 'mio', 'mlle', 'mm', 'mme', 'mr', 'mrd', 'mrs', 'ms', 'msgr', 'mwst', 'no', 'nos', 'nr', 'o.ä', 'op', 'ord', 'pfc', 'ph', 'pp', 'prof', 'pvt', 'rep', 'reps', 'res', 'rev', 'rt', 's.p.a', 'sa', 'sen', 'sens', 'sfc', 'sgt', 'sog', 'sogen', 'spp', 'sr', 'st', 'std', 'str  ', 'supt', 'surg', 'u.a  ', 'u.e', 'u.s.w', 'u.u', 'u.ä', 'usf', 'usw', 'v', 'vgl', 'vi', 'vii', 'viii', 'vs', 'x', 'xi', 'xii', 'xiii', 'xiv', 'xix', 'xv', 'xvi', 'xvii', 'xviii', 'xx', 'z.b', 'z.t', 'z.z', 'z.zt', 'zt', 'zzt']
-      NUMBER_ABBREVIATIONS = ['art', 'ca', 'no', 'nos', 'nr', 'pp']
+    module Deutsch
+      include Languages::Common
+
+      module Abbreviation
+        ABBREVIATIONS = ['Ä', 'ä', 'adj', 'adm', 'adv', 'art', 'asst', 'b.a', 'b.s', 'bart', 'bldg', 'brig', 'bros', 'bse', 'buchst', 'bzgl', 'bzw', 'c.-à-d', 'ca', 'capt', 'chr', 'cmdr', 'co', 'col', 'comdr', 'con', 'corp', 'cpl', 'd.h', 'd.j', 'dergl', 'dgl', 'dkr', 'dr ', 'ens', 'etc', 'ev ', 'evtl', 'ff', 'g.g.a', 'g.u', 'gen', 'ggf', 'gov', 'hon', 'hosp', 'i.f', 'i.h.v', 'ii', 'iii', 'insp', 'iv', 'ix', 'jun', 'k.o', 'kath ', 'lfd', 'lt', 'ltd', 'm.e', 'maj', 'med', 'messrs', 'mio', 'mlle', 'mm', 'mme', 'mr', 'mrd', 'mrs', 'ms', 'msgr', 'mwst', 'no', 'nos', 'nr', 'o.ä', 'op', 'ord', 'pfc', 'ph', 'pp', 'prof', 'pvt', 'rep', 'reps', 'res', 'rev', 'rt', 's.p.a', 'sa', 'sen', 'sens', 'sfc', 'sgt', 'sog', 'sogen', 'spp', 'sr', 'st', 'std', 'str  ', 'supt', 'surg', 'u.a  ', 'u.e', 'u.s.w', 'u.u', 'u.ä', 'usf', 'usw', 'v', 'vgl', 'vi', 'vii', 'viii', 'vs', 'x', 'xi', 'xii', 'xiii', 'xiv', 'xix', 'xv', 'xvi', 'xvii', 'xviii', 'xx', 'z.b', 'z.t', 'z.z', 'z.zt', 'zt', 'zzt']
+        NUMBER_ABBREVIATIONS = ['art', 'ca', 'no', 'nos', 'nr', 'pp']
+        PREPOSITIVE_ABBREVIATIONS = []
+      end
 
       # Rubular: http://rubular.com/r/OdcXBsub0w
       BETWEEN_UNCONVENTIONAL_DOUBLE_QUOTE_DE_REGEX = /,,(?>[^“\\]+|\\{2}|\\.)*“/
@@ -48,7 +53,7 @@ module PragmaticSegmenter
         private
 
         def abbreviations
-          ABBREVIATIONS
+          Abbreviation::ABBREVIATIONS
         end
       end
 
@@ -68,29 +73,15 @@ module PragmaticSegmenter
         end
       end
 
-      module Abbreviation
-        def self.all
-          ABBREVIATIONS
-        end
-
-        def self.prepositive
-          []
-        end
-
-        def self.number
-          NUMBER_ABBREVIATIONS
-        end
-      end
-
-      class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
+      class AbbreviationReplacer  < AbbreviationReplacer
         def replace
           @reformatted_text = text.apply(
-            Languages::Common::PossessiveAbbreviationRule,
-            Languages::Common::SingleLetterAbbreviationRules::All,
+            @language::PossessiveAbbreviationRule,
+            @language::SingleLetterAbbreviationRules::All,
             SingleLowerCaseLetterRule,
             SingleLowerCaseLetterAtStartOfLineRule)
 
-          @reformatted_text = search_for_abbreviations_in_string(@reformatted_text, abbreviations)
+          @reformatted_text = search_for_abbreviations_in_string(@reformatted_text)
           @reformatted_text = replace_multi_period_abbreviations(@reformatted_text)
           @reformatted_text = @reformatted_text.apply(Languages::Common::AmPmRules::All)
           replace_abbreviation_as_sentence_boundary(@reformatted_text)

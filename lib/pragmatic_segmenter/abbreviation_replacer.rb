@@ -12,20 +12,14 @@ module PragmaticSegmenter
     def initialize(text:, language: Languages::Common)
       @text = Text.new(text)
       @language = language
-      @abbr = language::Abbreviation
     end
-
-    def abbreviations
-      @abbr
-    end
-
 
     def replace
       @reformatted_text = text.apply(@language::PossessiveAbbreviationRule,
         @language::KommanditgesellschaftRule,
         @language::SingleLetterAbbreviationRules::All)
 
-      @reformatted_text = search_for_abbreviations_in_string(@reformatted_text, @language::Abbreviation)
+      @reformatted_text = search_for_abbreviations_in_string(@reformatted_text)
       @reformatted_text = replace_multi_period_abbreviations(@reformatted_text)
       @reformatted_text = @reformatted_text.apply(@language::AmPmRules::All)
       replace_abbreviation_as_sentence_boundary(@reformatted_text)
@@ -33,10 +27,10 @@ module PragmaticSegmenter
 
     private
 
-    def search_for_abbreviations_in_string(txt, abbr)
+    def search_for_abbreviations_in_string(txt)
       original = txt.dup
       downcased = txt.downcase
-      abbr.all.each do |a|
+      @language::Abbreviation::ABBREVIATIONS.each do |a|
         next unless downcased.include?(a.strip)
         abbrev_match = original.scan(/(?:^|\s|\r|\n)#{Regexp.escape(a.strip)}/i)
         next if abbrev_match.empty?
@@ -51,8 +45,8 @@ module PragmaticSegmenter
 
     def scan_for_replacements(txt, am, index, character_array)
       character = character_array[index]
-      prepositive = @language::PREPOSITIVE_ABBREVIATIONS
-      number_abbr = @language::NUMBER_ABBREVIATIONS
+      prepositive = @language::Abbreviation::PREPOSITIVE_ABBREVIATIONS
+      number_abbr = @language::Abbreviation::NUMBER_ABBREVIATIONS
       upper = /[[:upper:]]/.match(character.to_s)
       if upper.nil? || prepositive.include?(am.downcase.strip)
         if prepositive.include?(am.downcase.strip)

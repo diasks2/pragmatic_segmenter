@@ -1,9 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'pragmatic_segmenter/types'
-require 'pragmatic_segmenter/process'
-require 'pragmatic_segmenter/cleaner'
 require 'pragmatic_segmenter/languages'
-require 'pragmatic_segmenter/rules'
 
 module PragmaticSegmenter
   # This class segments a text into an array of sentences.
@@ -11,19 +7,21 @@ module PragmaticSegmenter
     include Languages
     attr_reader :text, :language, :doc_type
 
-    def initialize(text:, **args)
+    def initialize(text:, language: nil, doc_type: nil, clean: true)
       return unless text
-      @language = args[:language] || 'en'
-      @doc_type = args[:doc_type]
-      @text = text.dup
-      unless args[:clean].eql?(false)
-        @text = cleaner_class.new(text: @text, doc_type: args[:doc_type]).clean
+      @language = language || 'en'
+      @doc_type = doc_type
+
+      if clean
+        @text = cleaner_class.new(text: text, doc_type: @doc_type).clean
+      else
+        @text = text
       end
     end
 
     def segment
-      return [] unless text
-      process_class.new(text: text, doc_type: doc_type).process
+      return [] unless @text
+      process_class.new(text: @text, language: language_module).process
     end
   end
 end

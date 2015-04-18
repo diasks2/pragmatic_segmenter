@@ -1,7 +1,9 @@
 module PragmaticSegmenter
   module Languages
-    class English < Common
-      class Cleaner < PragmaticSegmenter::Cleaner
+    module English
+      include Languages::Common
+
+      class Cleaner < Cleaner
         def clean
           super
           clean_quotations(@clean_text)

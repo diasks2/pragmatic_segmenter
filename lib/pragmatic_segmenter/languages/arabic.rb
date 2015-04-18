@@ -1,9 +1,16 @@
 module PragmaticSegmenter
   module Languages
-    class Arabic < Common
+    module Arabic
+      include Languages::Common
+
       Punctuations = ['?', '!', ':', '.', '؟', '،']
-      SENTENCE_BOUNDARY = /.*?[:\.!\?؟،]|.*?\z|.*?$/
-      ABBREVIATIONS = ['ا', 'ا. د', 'ا.د', 'ا.ش.ا', 'ا.ش.ا', 'إلخ', 'ت.ب', 'ت.ب', 'ج.ب', 'جم', 'ج.ب', 'ج.م.ع', 'ج.م.ع', 'س.ت', 'س.ت', 'سم', 'ص.ب.', 'ص.ب', 'كج.', 'كلم.', 'م', 'م.ب', 'م.ب', 'ه', 'د‪']
+      SENTENCE_BOUNDARY_REGEX = /.*?[:\.!\?؟،]|.*?\z|.*?$/
+
+      module Abbreviation
+        ABBREVIATIONS = ['ا', 'ا. د', 'ا.د', 'ا.ش.ا', 'ا.ش.ا', 'إلخ', 'ت.ب', 'ت.ب', 'ج.ب', 'جم', 'ج.ب', 'ج.م.ع', 'ج.م.ع', 'س.ت', 'س.ت', 'سم', 'ص.ب.', 'ص.ب', 'كج.', 'كلم.', 'م', 'م.ب', 'م.ب', 'ه', 'د‪']
+        PREPOSITIVE_ABBREVIATIONS = []
+        NUMBER_ABBREVIATIONS = []
+      end
 
       # Rubular: http://rubular.com/r/RX5HpdDIyv
       ReplaceColonBetweenNumbersRule = Rule.new(/(?<=\d):(?=\d)/, '♭')
@@ -11,38 +18,20 @@ module PragmaticSegmenter
       # Rubular: http://rubular.com/r/kPRgApNHUg
       ReplaceNonSentenceBoundaryCommaRule = Rule.new(/،(?=\s\S+،)/, '♬')
 
-      class Process < PragmaticSegmenter::Process
+      class Process < Process
         private
 
         def sentence_boundary_punctuation(txt)
           txt = txt.apply(ReplaceColonBetweenNumbersRule, ReplaceNonSentenceBoundaryCommaRule)
-          txt.scan(SENTENCE_BOUNDARY)
+          txt.scan(SENTENCE_BOUNDARY_REGEX)
         end
 
         def replace_abbreviations(txt)
           AbbreviationReplacer.new(text: txt, language: Arabic).replace
         end
-
-        def punctuation_array
-          Punctuations
-        end
       end
 
-      module Abbreviation
-        def self.all
-          ABBREVIATIONS
-        end
-
-        def self.prepositive
-          []
-        end
-
-        def self.number
-          []
-        end
-      end
-
-      class AbbreviationReplacer  < PragmaticSegmenter::AbbreviationReplacer
+      class AbbreviationReplacer  < AbbreviationReplacer
         private
 
         def scan_for_replacements(txt, am, index, character_array)

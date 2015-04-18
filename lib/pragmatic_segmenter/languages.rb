@@ -1,3 +1,8 @@
+require 'pragmatic_segmenter/types'
+require 'pragmatic_segmenter/process'
+require 'pragmatic_segmenter/cleaner'
+require 'pragmatic_segmenter/rules'
+
 require 'pragmatic_segmenter/languages/common'
 
 require 'pragmatic_segmenter/languages/english'
@@ -17,6 +22,7 @@ require 'pragmatic_segmenter/languages/russian'
 require 'pragmatic_segmenter/languages/japanese'
 require 'pragmatic_segmenter/languages/dutch'
 require 'pragmatic_segmenter/languages/polish'
+require 'pragmatic_segmenter/languages/chinese'
 
 module PragmaticSegmenter
   module Languages
@@ -38,14 +44,19 @@ module PragmaticSegmenter
       'ur' => 'Urdu',
       'nl' => 'Dutch',
       'pl' => 'Polish',
+      'zh' => 'Chinese',
     }
 
     def process_class
-      Object.const_get("PragmaticSegmenter::Languages::#{LANGUAGE_CODES[language] || 'Common'}::Process")
+      language_module::Process
     end
 
     def cleaner_class
-      Object.const_get("PragmaticSegmenter::Languages::#{LANGUAGE_CODES[language] || 'Common'}::Cleaner")
+      language_module::Cleaner
+    end
+
+    def language_module
+      Object.const_get("PragmaticSegmenter::Languages::#{LANGUAGE_CODES[language] || 'Common'}")
     end
   end
 end
