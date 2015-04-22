@@ -14,14 +14,14 @@ module PragmaticSegmenter
     end
 
     def replace
-      @reformatted_text = text.apply(@language::PossessiveAbbreviationRule,
+      @text.apply(@language::PossessiveAbbreviationRule,
         @language::KommanditgesellschaftRule,
         @language::SingleLetterAbbreviationRules::All)
 
-      @reformatted_text = search_for_abbreviations_in_string(@reformatted_text)
-      @reformatted_text = replace_multi_period_abbreviations(@reformatted_text)
-      @reformatted_text = @reformatted_text.apply(@language::AmPmRules::All)
-      replace_abbreviation_as_sentence_boundary(@reformatted_text)
+      @text = search_for_abbreviations_in_string(@text)
+      @text = replace_multi_period_abbreviations(@text)
+      @text.apply(@language::AmPmRules::All)
+      replace_abbreviation_as_sentence_boundary(@text)
     end
 
     private
