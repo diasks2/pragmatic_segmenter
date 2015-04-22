@@ -8,7 +8,7 @@ module PragmaticSegmenter
 
     attr_reader :text, :doc_type
     def initialize(text:, doc_type: nil, language: , **args)
-      @text = Text.new(text.dup)
+      @text = Text.new(text)
       @doc_type = doc_type
       @language = language
     end
@@ -29,17 +29,17 @@ module PragmaticSegmenter
 
     def clean
       return unless text
-      @clean_text = remove_all_newlines(text)
-      replace_double_newlines(@clean_text)
-      replace_newlines(@clean_text)
-      replace_escaped_newlines(@clean_text)
-      @clean_text.apply(HTMLRules::All)
-      replace_punctuation_in_brackets(@clean_text)
-      @clean_text.apply(InlineFormattingRule)
-      clean_quotations(@clean_text)
-      clean_table_of_contents(@clean_text)
-      check_for_no_space_in_between_sentences(@clean_text)
-      clean_consecutive_characters(@clean_text)
+      @text = remove_all_newlines(@text)
+      replace_double_newlines(@text)
+      replace_newlines(@text)
+      replace_escaped_newlines(@text)
+      @text.apply(HTMLRules::All)
+      replace_punctuation_in_brackets(@text)
+      @text.apply(InlineFormattingRule)
+      clean_quotations(@text)
+      clean_table_of_contents(@text)
+      check_for_no_space_in_between_sentences(@text)
+      clean_consecutive_characters(@text)
     end
 
     private

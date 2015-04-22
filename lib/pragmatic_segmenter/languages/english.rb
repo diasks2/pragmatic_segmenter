@@ -6,7 +6,7 @@ module PragmaticSegmenter
       class Cleaner < Cleaner
         def clean
           super
-          clean_quotations(@clean_text)
+          clean_quotations(@text)
         end
 
         private

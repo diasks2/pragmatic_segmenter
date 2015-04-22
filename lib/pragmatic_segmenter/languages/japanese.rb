@@ -17,7 +17,7 @@ module PragmaticSegmenter
 
         def clean
           super
-          @clean_text = remove_newline_in_middle_of_word(@clean_text)
+          @text = remove_newline_in_middle_of_word(@text)
         end
 
         private
