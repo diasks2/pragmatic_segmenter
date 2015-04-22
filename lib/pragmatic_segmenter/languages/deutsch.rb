@@ -67,14 +67,6 @@ module PragmaticSegmenter
         end
       end
 
-      class Cleaner < PragmaticSegmenter::Cleaner
-        private
-
-        def abbreviations
-          Abbreviation::ABBREVIATIONS
-        end
-      end
-
       class AbbreviationReplacer  < AbbreviationReplacer
         def replace
           @reformatted_text = text.apply(

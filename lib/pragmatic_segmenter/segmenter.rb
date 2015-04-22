@@ -13,7 +13,7 @@ module PragmaticSegmenter
       @doc_type = doc_type
 
       if clean
-        @text = cleaner_class.new(text: text, doc_type: @doc_type).clean
+        @text = cleaner_class.new(text: text, doc_type: @doc_type, language: language_module).clean
       else
         @text = text
       end
