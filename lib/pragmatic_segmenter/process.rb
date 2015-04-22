@@ -11,7 +11,7 @@ module PragmaticSegmenter
   class Process
 
     attr_reader :text
-    def initialize(text:, language: Languages::Common)
+    def initialize(text:, language: )
       @text = text
       @language = language
     end
