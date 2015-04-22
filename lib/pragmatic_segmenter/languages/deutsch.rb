@@ -69,16 +69,16 @@ module PragmaticSegmenter
 
       class AbbreviationReplacer  < AbbreviationReplacer
         def replace
-          @reformatted_text = text.apply(
+          @text = text.apply(
             @language::PossessiveAbbreviationRule,
             @language::SingleLetterAbbreviationRules::All,
             SingleLowerCaseLetterRule,
             SingleLowerCaseLetterAtStartOfLineRule)
 
-          @reformatted_text = search_for_abbreviations_in_string(@reformatted_text)
-          @reformatted_text = replace_multi_period_abbreviations(@reformatted_text)
-          @reformatted_text = @reformatted_text.apply(Languages::Common::AmPmRules::All)
-          replace_abbreviation_as_sentence_boundary(@reformatted_text)
+          @text = search_for_abbreviations_in_string(@text)
+          @text = replace_multi_period_abbreviations(@text)
+          @text.apply(Languages::Common::AmPmRules::All)
+          replace_abbreviation_as_sentence_boundary(@text)
         end
 
         private
