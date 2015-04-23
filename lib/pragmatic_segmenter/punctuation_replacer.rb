@@ -37,33 +37,33 @@ module PragmaticSegmenter
     end
 
     def replace
-      replace_punctuation(matches_array, text)
+      replace_punctuation(matches_array)
     end
 
     private
 
-    def replace_punctuation(array, txt)
+    def replace_punctuation(array)
       return if !array || array.empty?
-      txt.apply(Rules::EscapeRegexReservedCharacters::All)
+      @text.apply(Rules::EscapeRegexReservedCharacters::All)
       array.each do |a|
         a.apply(Rules::EscapeRegexReservedCharacters::All)
-        sub = sub_characters(txt, a, '.', '∯')
-        sub_1 = sub_characters(txt, sub, '。', '&ᓰ&')
-        sub_2 = sub_characters(txt, sub_1, '．', '&ᓱ&')
-        sub_3 = sub_characters(txt, sub_2, '！', '&ᓳ&')
-        sub_4 = sub_characters(txt, sub_3, '!', '&ᓴ&')
-        sub_5 = sub_characters(txt, sub_4, '?', '&ᓷ&')
-        sub_6 = sub_characters(txt, sub_5, '？', '&ᓸ&')
+        sub = sub_characters(a, '.', '∯')
+        sub_1 = sub_characters(sub, '。', '&ᓰ&')
+        sub_2 = sub_characters(sub_1, '．', '&ᓱ&')
+        sub_3 = sub_characters(sub_2, '！', '&ᓳ&')
+        sub_4 = sub_characters(sub_3, '!', '&ᓴ&')
+        sub_5 = sub_characters(sub_4, '?', '&ᓷ&')
+        sub_6 = sub_characters(sub_5, '？', '&ᓸ&')
         unless match_type.eql?('single')
-          sub_7 = sub_characters(txt, sub_6, "'", '&⎋&')
+          sub_7 = sub_characters(sub_6, "'", '&⎋&')
         end
       end
-      txt.apply(Rules::SubEscapedRegexReservedCharacters::All)
+      @text.apply(Rules::SubEscapedRegexReservedCharacters::All)
     end
 
-    def sub_characters(txt, string, char_a, char_b)
+    def sub_characters(string, char_a, char_b)
       sub = string.gsub(char_a, char_b)
-      txt.gsub!(/#{Regexp.escape(string)}/, "#{sub}")
+      @text.gsub!(/#{Regexp.escape(string)}/, "#{sub}")
       sub
     end
   end
