@@ -86,7 +86,7 @@ module PragmaticSegmenter
     end
 
     def replace_periods_in_numbered_list
-      scan_lists(NUMBERED_LIST_REGEX_1, NUMBERED_LIST_REGEX_2, '♨', true)
+      scan_lists(NUMBERED_LIST_REGEX_1, NUMBERED_LIST_REGEX_2, '♨', strip: true)
     end
 
     def add_line_breaks_for_numbered_list_with_periods
@@ -97,7 +97,7 @@ module PragmaticSegmenter
 
     def replace_parens_in_numbered_list
       scan_lists(
-        NUMBERED_LIST_PARENS_REGEX, NUMBERED_LIST_PARENS_REGEX, '☝', false)
+        NUMBERED_LIST_PARENS_REGEX, NUMBERED_LIST_PARENS_REGEX, '☝')
     end
 
     def add_line_breaks_for_numbered_list_with_parens
@@ -106,7 +106,7 @@ module PragmaticSegmenter
       end
     end
 
-    def scan_lists(regex1, regex2, replacement, strip)
+    def scan_lists(regex1, regex2, replacement, strip: false)
       list_array = @text.scan(regex1).map(&:to_i)
       list_array.each_with_index do |a, i|
         next unless (a + 1).eql?(list_array[i + 1]) ||
