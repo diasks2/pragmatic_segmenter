@@ -47,16 +47,8 @@ module PragmaticSegmenter
       'zh' => 'Chinese',
     }
 
-    def process_class
-      language_module::Process
-    end
-
-    def cleaner_class
-      language_module::Cleaner
-    end
-
-    def language_module
-      Object.const_get("PragmaticSegmenter::Languages::#{LANGUAGE_CODES[language] || 'Common'}")
+    def self.get_language_by_code(code)
+      Object.const_get("PragmaticSegmenter::Languages::#{LANGUAGE_CODES[code] || 'Common'}")
     end
   end
 end
