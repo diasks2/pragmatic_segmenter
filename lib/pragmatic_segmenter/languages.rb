@@ -27,28 +27,28 @@ require 'pragmatic_segmenter/languages/chinese'
 module PragmaticSegmenter
   module Languages
     LANGUAGE_CODES = {
-      'en' => 'English',
-      'de' => 'Deutsch',
-      'es' => 'Spanish',
-      'fr' => 'French',
-      'it' => 'Italian',
-      'ja' => 'Japanese',
-      'el' => 'Greek',
-      'ru' => 'Russian',
-      'ar' => 'Arabic',
-      'am' => 'Amharic',
-      'hi' => 'Hindi',
-      'hy' => 'Armenian',
-      'fa' => 'Persian',
-      'my' => 'Burmese',
-      'ur' => 'Urdu',
-      'nl' => 'Dutch',
-      'pl' => 'Polish',
-      'zh' => 'Chinese',
+      'en' => English,
+      'de' => Deutsch,
+      'es' => Spanish,
+      'fr' => French,
+      'it' => Italian,
+      'ja' => Japanese,
+      'el' => Greek,
+      'ru' => Russian,
+      'ar' => Arabic,
+      'am' => Amharic,
+      'hi' => Hindi,
+      'hy' => Armenian,
+      'fa' => Persian,
+      'my' => Burmese,
+      'ur' => Urdu,
+      'nl' => Dutch,
+      'pl' => Polish,
+      'zh' => Chinese,
     }
 
     def self.get_language_by_code(code)
-      Object.const_get("PragmaticSegmenter::Languages::#{LANGUAGE_CODES[code] || 'Common'}")
+      LANGUAGE_CODES[code] || Common
     end
   end
 end
