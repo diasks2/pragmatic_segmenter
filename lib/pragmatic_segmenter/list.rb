@@ -5,6 +5,8 @@ module PragmaticSegmenter
   # newlines before each list item.
   class List
     ROMAN_NUMERALS = %w(i ii iii iv v vi vii viii ix x xi xii xiii xiv x xi xii xiii xv xvi xvii xviii xix xx)
+    LATIN_NUMERALS = ('a'..'z').to_a
+
     # Rubular: http://rubular.com/r/XcpaJKH0sz
     ALPHABETICAL_LIST_WITH_PERIODS =
       /(?<=^)[a-z](?=\.)|(?<=\A)[a-z](?=\.)|(?<=\s)[a-z](?=\.)/
@@ -182,7 +184,7 @@ module PragmaticSegmenter
       if roman_numeral
         alphabet = ROMAN_NUMERALS
       else
-        alphabet = ('a'..'z').to_a
+        alphabet = LATIN_NUMERALS
       end
       list_array.delete_if { |item| !alphabet.any? { |a| a.include?(item) } }
       list_array.each_with_index do |a, i|
