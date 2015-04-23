@@ -1,10 +1,11 @@
 # -*- encoding : utf-8 -*-
+require_relative 'cleaner/rules'
 
 module PragmaticSegmenter
   # This is an opinionated class that removes errant newlines,
   # xhtml, inline formatting, etc.
   class Cleaner
-    include Rules
+    include Rules::TextCleaners
 
     attr_reader :text, :doc_type
     def initialize(text:, doc_type: nil, language:)
@@ -33,7 +34,7 @@ module PragmaticSegmenter
       replace_double_newlines(@text)
       replace_newlines(@text)
       replace_escaped_newlines(@text)
-      @text.apply(HTMLRules::All)
+      @text.apply(HTML::All)
       replace_punctuation_in_brackets(@text)
       @text.apply(InlineFormattingRule)
       clean_quotations(@text)
@@ -113,8 +114,9 @@ module PragmaticSegmenter
 
     def remove_pdf_line_breaks(txt)
       txt.apply NewLineFollowedByBulletRule,
-        PDF_NewLineInMiddleOfSentenceRule,
-        PDF_NewLineInMiddleOfSentenceNoSpacesRule
+
+        PDF::NewLineInMiddleOfSentenceRule,
+        PDF::NewLineInMiddleOfSentenceNoSpacesRule
     end
 
     def clean_quotations(txt)

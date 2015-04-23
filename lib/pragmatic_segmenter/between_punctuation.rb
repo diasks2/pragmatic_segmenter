@@ -1,5 +1,4 @@
 # -*- encoding : utf-8 -*-
-require 'pragmatic_segmenter/punctuation_replacer'
 
 module PragmaticSegmenter
   # This class searches for punctuation between quotes or parenthesis

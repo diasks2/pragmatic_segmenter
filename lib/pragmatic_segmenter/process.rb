@@ -1,10 +1,11 @@
 # -*- encoding : utf-8 -*-
-require 'pragmatic_segmenter/list'
-require 'pragmatic_segmenter/abbreviation_replacer'
-require 'pragmatic_segmenter/rules/ellipsis'
-require 'pragmatic_segmenter/exclamation_words'
 require 'pragmatic_segmenter/punctuation_replacer'
 require 'pragmatic_segmenter/between_punctuation'
+
+
+require 'pragmatic_segmenter/list'
+require 'pragmatic_segmenter/abbreviation_replacer'
+require 'pragmatic_segmenter/exclamation_words'
 
 module PragmaticSegmenter
   # This class processing segmenting the text.
@@ -21,7 +22,7 @@ module PragmaticSegmenter
       @text = replace_abbreviations(@text)
       @text = replace_numbers(@text)
       @text = replace_continuous_punctuation(@text)
-      @text.apply(@language::AbbreviationsWithMultiplePeriodsAndEmailRule)
+      @text.apply(@language::Abbreviations::WithMultiplePeriodsAndEmailRule)
       @text.apply(@language::GeoLocationRule)
       split_into_segments(@text)
     end

@@ -4,10 +4,31 @@ module PragmaticSegmenter
   # This class replaces punctuation that is typically a sentence boundary
   # but in this case is not a sentence boundary.
   class PunctuationReplacer
-    # Rubular: http://rubular.com/r/2YFrKWQUYi
-    BETWEEN_SINGLE_QUOTES_REGEX = /(?<=\s)'(?:[^']|'[a-zA-Z])*'/
+    module Rules
+      module EscapeRegexReservedCharacters
+        LeftParen = Rule.new('(', '\\(')
+        RightParen = Rule.new(')', '\\)')
+        LeftBracket = Rule.new('[', '\\[')
+        RightBracket = Rule.new(']', '\\]')
+        Dash = Rule.new('-', '\\-')
 
-    include Rules
+        All = [ LeftParen, RightParen,
+                LeftBracket, RightBracket, Dash ]
+      end
+
+      module SubEscapedRegexReservedCharacters
+        SubLeftParen = Rule.new('\\(', '(')
+        SubRightParen = Rule.new('\\)', ')')
+        SubLeftBracket = Rule.new('\\[', '[')
+        SubRightBracket = Rule.new('\\]', ']')
+        SubDash = Rule.new('\\-', '-')
+
+        All = [ SubLeftParen, SubRightParen,
+                SubLeftBracket, SubRightBracket, SubDash ]
+      end
+
+    end
+
     attr_reader :matches_array, :text, :match_type
     def initialize(text:, matches_array:, match_type: nil)
       @text = text
@@ -23,9 +44,9 @@ module PragmaticSegmenter
 
     def replace_punctuation(array, txt)
       return if !array || array.empty?
-      txt.apply(EscapeRegexReservedCharacters::All)
+      txt.apply(Rules::EscapeRegexReservedCharacters::All)
       array.each do |a|
-        a.apply(EscapeRegexReservedCharacters::All)
+        a.apply(Rules::EscapeRegexReservedCharacters::All)
         sub = sub_characters(txt, a, '.', '∯')
         sub_1 = sub_characters(txt, sub, '。', '&ᓰ&')
         sub_2 = sub_characters(txt, sub_1, '．', '&ᓱ&')
@@ -37,7 +58,7 @@ module PragmaticSegmenter
           sub_7 = sub_characters(txt, sub_6, "'", '&⎋&')
         end
       end
-      txt.apply(SubEscapedRegexReservedCharacters::All)
+      txt.apply(Rules::SubEscapedRegexReservedCharacters::All)
     end
 
     def sub_characters(txt, string, char_a, char_b)
