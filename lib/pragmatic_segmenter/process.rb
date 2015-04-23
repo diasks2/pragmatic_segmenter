@@ -40,7 +40,11 @@ module PragmaticSegmenter
 
     def post_process_segments(txt)
       return if consecutive_underscore?(txt) || txt.length < 2
-      txt.apply(@language::ReinsertEllipsisRules::All).apply(@language::ExtraWhiteSpaceRule)
+      txt.apply(
+        @language::ReinsertEllipsisRules::All,
+        @language::ExtraWhiteSpaceRule
+      )
+
       if txt =~ @language::QUOTATION_AT_END_OF_SENTENCE_REGEX
         txt.split(@language::SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX)
       else
