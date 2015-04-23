@@ -7,7 +7,7 @@ module PragmaticSegmenter
     include Rules
 
     attr_reader :text, :doc_type
-    def initialize(text:, doc_type: nil, language: , **args)
+    def initialize(text:, doc_type: nil, language:)
       @text = Text.new(text)
       @doc_type = doc_type
       @language = language
