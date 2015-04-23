@@ -45,10 +45,10 @@ module PragmaticSegmenter
     end
 
     def add_line_break
-      @text = format_alphabetical_lists(@text)
-      @text = format_roman_numeral_lists(@text)
-      @text = format_numbered_list_with_periods(@text)
-      format_numbered_list_with_parens(@text)
+      format_alphabetical_lists
+      format_roman_numeral_lists
+      format_numbered_list_with_periods
+      format_numbered_list_with_parens
     end
 
     def replace_parens
@@ -63,64 +63,62 @@ module PragmaticSegmenter
 
     private
 
-    def format_numbered_list_with_parens(txt)
-      txt = replace_parens_in_numbered_list(txt)
-      txt = add_line_breaks_for_numbered_list_with_parens(txt)
-      txt.apply(ListMarkerRule)
+    def format_numbered_list_with_parens
+      replace_parens_in_numbered_list
+      add_line_breaks_for_numbered_list_with_parens
+      @text.apply(ListMarkerRule)
     end
 
-    def format_numbered_list_with_periods(txt)
-      txt = replace_periods_in_numbered_list(txt)
-      txt = add_line_breaks_for_numbered_list_with_periods(txt)
-      txt.apply(SubstituteListPeriodRule)
+    def format_numbered_list_with_periods
+      replace_periods_in_numbered_list
+      add_line_breaks_for_numbered_list_with_periods
+      @text.apply(SubstituteListPeriodRule)
     end
 
-    def format_alphabetical_lists(txt)
-      txt = add_line_breaks_for_alphabetical_list_with_periods(txt, false)
-      add_line_breaks_for_alphabetical_list_with_parens(txt, false)
+    def format_alphabetical_lists
+      add_line_breaks_for_alphabetical_list_with_periods(false)
+      add_line_breaks_for_alphabetical_list_with_parens(false)
     end
 
-    def format_roman_numeral_lists(txt)
-      txt = add_line_breaks_for_alphabetical_list_with_periods(txt, true)
-      add_line_breaks_for_alphabetical_list_with_parens(txt, true)
+    def format_roman_numeral_lists
+      add_line_breaks_for_alphabetical_list_with_periods(true)
+      add_line_breaks_for_alphabetical_list_with_parens(true)
     end
 
-    def replace_periods_in_numbered_list(txt)
-      scan_lists(NUMBERED_LIST_REGEX_1, NUMBERED_LIST_REGEX_2, '♨', true, txt)
+    def replace_periods_in_numbered_list
+      scan_lists(NUMBERED_LIST_REGEX_1, NUMBERED_LIST_REGEX_2, '♨', true)
     end
 
-    def add_line_breaks_for_numbered_list_with_periods(txt)
-      return txt unless txt.include?('♨') &&
-                        txt !~ /♨.+\n.+♨|♨.+\r.+♨/ &&
-                        txt !~ /for\s\d{1,2}♨\s[a-z]/
-      txt.apply(SpaceBetweenListItemsFirstRule).
-          apply(SpaceBetweenListItemsSecondRule)
+    def add_line_breaks_for_numbered_list_with_periods
+      if @text.include?('♨') && @text !~ /♨.+\n.+♨|♨.+\r.+♨/ && @text !~ /for\s\d{1,2}♨\s[a-z]/
+        @text.apply(SpaceBetweenListItemsFirstRule, SpaceBetweenListItemsSecondRule)
+      end
     end
 
-    def replace_parens_in_numbered_list(txt)
+    def replace_parens_in_numbered_list
       scan_lists(
-        NUMBERED_LIST_PARENS_REGEX, NUMBERED_LIST_PARENS_REGEX, '☝', false, txt)
+        NUMBERED_LIST_PARENS_REGEX, NUMBERED_LIST_PARENS_REGEX, '☝', false)
     end
 
-    def add_line_breaks_for_numbered_list_with_parens(txt)
-      return txt unless txt.include?('☝') && txt !~ /☝.+\n.+☝|☝.+\r.+☝/
-      txt.apply(SpaceBetweenListItemsThirdRule)
+    def add_line_breaks_for_numbered_list_with_parens
+      if @text.include?('☝') && @text !~ /☝.+\n.+☝|☝.+\r.+☝/
+        @text.apply(SpaceBetweenListItemsThirdRule)
+      end
     end
 
-    def scan_lists(regex1, regex2, replacement, strip, txt)
-      list_array = txt.scan(regex1).map(&:to_i)
+    def scan_lists(regex1, regex2, replacement, strip)
+      list_array = @text.scan(regex1).map(&:to_i)
       list_array.each_with_index do |a, i|
         next unless (a + 1).eql?(list_array[i + 1]) ||
                     (a - 1).eql?(list_array[i - 1]) ||
                     (a.eql?(0) && list_array[i - 1].eql?(9)) ||
                     (a.eql?(9) && list_array[i + 1].eql?(0))
-        substitute_found_list_items(txt, regex2, a, strip, replacement)
+        substitute_found_list_items(regex2, a, strip, replacement)
       end
-      txt
     end
 
-    def substitute_found_list_items(txt, regex, a, strip, replacement)
-      txt.gsub!(regex).with_index do |m|
+    def substitute_found_list_items(regex, a, strip, replacement)
+      @text.gsub!(regex).with_index do |m|
         if a.to_s.eql?(strip ? m.strip.chop : m)
           "#{Regexp.escape(a.to_s)}" + replacement
         else
@@ -129,22 +127,22 @@ module PragmaticSegmenter
       end
     end
 
-    def add_line_breaks_for_alphabetical_list_with_periods(txt, roman_numeral)
-      iterate_alphabet_array(ALPHABETICAL_LIST_WITH_PERIODS, false, txt, roman_numeral)
+    def add_line_breaks_for_alphabetical_list_with_periods(roman_numeral)
+      iterate_alphabet_array(ALPHABETICAL_LIST_WITH_PERIODS, false, roman_numeral)
     end
 
-    def add_line_breaks_for_alphabetical_list_with_parens(txt, roman_numeral)
-      iterate_alphabet_array(ALPHABETICAL_LIST_WITH_PARENS, true, txt, roman_numeral)
+    def add_line_breaks_for_alphabetical_list_with_parens(roman_numeral)
+      iterate_alphabet_array(ALPHABETICAL_LIST_WITH_PARENS, true, roman_numeral)
     end
 
-    def replace_alphabet_list(a, txt)
-      txt.gsub!(ALPHABETICAL_LIST_LETTERS_AND_PERIODS_REGEX).with_index do |m|
+    def replace_alphabet_list(a)
+      @text.gsub!(ALPHABETICAL_LIST_LETTERS_AND_PERIODS_REGEX).with_index do |m|
         a.eql?(m.chomp('.')) ? "\r#{Regexp.escape(a.to_s)}∯" : "#{m}"
       end
     end
 
-    def replace_alphabet_list_parens(a, txt)
-      txt.gsub!(EXTRACT_ALPHABETICAL_LIST_LETTERS_REGEX).with_index do |m|
+    def replace_alphabet_list_parens(a)
+      @text.gsub!(EXTRACT_ALPHABETICAL_LIST_LETTERS_REGEX).with_index do |m|
         if m.include?('(')
           a.eql?(m.dup.downcase.gsub!(/\(/, '')) ? "\r&✂&#{Regexp.escape(m.gsub!(/\(/, ''))}" : "#{m}"
         else
@@ -153,34 +151,34 @@ module PragmaticSegmenter
       end
     end
 
-    def replace_correct_alphabet_list(a, txt, parens)
+    def replace_correct_alphabet_list(a, parens)
       if parens
-        replace_alphabet_list_parens(a, txt)
+        replace_alphabet_list_parens(a)
       else
-        replace_alphabet_list(a, txt)
+        replace_alphabet_list(a)
       end
     end
 
-    def last_array_item_replacement(a, i, alphabet, list_array, txt, parens)
+    def last_array_item_replacement(a, i, alphabet, list_array, parens)
       return if alphabet & list_array == [] ||
         !alphabet.include?(list_array[i - 1]) ||
         !alphabet.include?(a)
       return if (alphabet.index(list_array[i - 1]) - alphabet.index(a)).abs != 1
-      replace_correct_alphabet_list(a, txt, parens)
+      replace_correct_alphabet_list(a, parens)
     end
 
-    def other_items_replacement(a, i, alphabet, list_array, txt, parens)
+    def other_items_replacement(a, i, alphabet, list_array, parens)
       return if alphabet & list_array == [] ||
         !alphabet.include?(list_array[i - 1]) ||
         !alphabet.include?(a) ||
         !alphabet.include?(list_array[i + 1])
       return if alphabet.index(list_array[i + 1]) - alphabet.index(a) != 1 &&
                 (alphabet.index(list_array[i - 1]) - alphabet.index(a)).abs != 1
-      replace_correct_alphabet_list(a, txt, parens)
+      replace_correct_alphabet_list(a, parens)
     end
 
-    def iterate_alphabet_array(regex, parens, txt, roman_numeral)
-      list_array = txt.scan(regex).map(&:downcase)
+    def iterate_alphabet_array(regex, parens, roman_numeral)
+      list_array = @text.scan(regex).map(&:downcase)
       if roman_numeral
         alphabet = ROMAN_NUMERALS
       else
@@ -189,12 +187,11 @@ module PragmaticSegmenter
       list_array.delete_if { |item| !alphabet.any? { |a| a.include?(item) } }
       list_array.each_with_index do |a, i|
         if i.eql?(list_array.length - 1)
-          last_array_item_replacement(a, i, alphabet, list_array, txt, parens)
+          last_array_item_replacement(a, i, alphabet, list_array, parens)
         else
-          other_items_replacement(a, i, alphabet, list_array, txt, parens)
+          other_items_replacement(a, i, alphabet, list_array, parens)
         end
       end
-      txt
     end
   end
 end
