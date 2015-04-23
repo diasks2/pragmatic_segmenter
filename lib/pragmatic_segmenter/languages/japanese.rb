@@ -17,13 +17,13 @@ module PragmaticSegmenter
 
         def clean
           super
-          @text = remove_newline_in_middle_of_word(@text)
+          remove_newline_in_middle_of_word
         end
 
         private
 
-        def remove_newline_in_middle_of_word(txt)
-          txt.apply(NewLineInMiddleOfWordRule)
+        def remove_newline_in_middle_of_word
+          @text.apply NewLineInMiddleOfWordRule
         end
       end
 
