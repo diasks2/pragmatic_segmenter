@@ -78,13 +78,13 @@ module PragmaticSegmenter
     end
 
     def format_alphabetical_lists
-      add_line_breaks_for_alphabetical_list_with_periods(false)
-      add_line_breaks_for_alphabetical_list_with_parens(false)
+      add_line_breaks_for_alphabetical_list_with_periods(roman_numeral: false)
+      add_line_breaks_for_alphabetical_list_with_parens(roman_numeral: false)
     end
 
     def format_roman_numeral_lists
-      add_line_breaks_for_alphabetical_list_with_periods(true)
-      add_line_breaks_for_alphabetical_list_with_parens(true)
+      add_line_breaks_for_alphabetical_list_with_periods(roman_numeral: true)
+      add_line_breaks_for_alphabetical_list_with_parens(roman_numeral: true)
     end
 
     def replace_periods_in_numbered_list
@@ -100,6 +100,7 @@ module PragmaticSegmenter
     def replace_parens_in_numbered_list
       scan_lists(
         NUMBERED_LIST_PARENS_REGEX, NUMBERED_LIST_PARENS_REGEX, '☝')
+      scan_lists(NUMBERED_LIST_PARENS_REGEX, NUMBERED_LIST_PARENS_REGEX, '☝')
     end
 
     def add_line_breaks_for_numbered_list_with_parens
@@ -129,12 +130,14 @@ module PragmaticSegmenter
       end
     end
 
-    def add_line_breaks_for_alphabetical_list_with_periods(roman_numeral)
-      iterate_alphabet_array(ALPHABETICAL_LIST_WITH_PERIODS, false, roman_numeral)
+    def add_line_breaks_for_alphabetical_list_with_periods(roman_numeral: false)
+      iterate_alphabet_array(ALPHABETICAL_LIST_WITH_PERIODS, roman_numeral: roman_numeral)
     end
 
-    def add_line_breaks_for_alphabetical_list_with_parens(roman_numeral)
-      iterate_alphabet_array(ALPHABETICAL_LIST_WITH_PARENS, true, roman_numeral)
+    def add_line_breaks_for_alphabetical_list_with_parens(roman_numeral: false)
+      iterate_alphabet_array(ALPHABETICAL_LIST_WITH_PARENS,
+        parens: true,
+        roman_numeral: roman_numeral)
     end
 
     def replace_alphabet_list(a)
@@ -179,7 +182,7 @@ module PragmaticSegmenter
       replace_correct_alphabet_list(a, parens)
     end
 
-    def iterate_alphabet_array(regex, parens, roman_numeral)
+    def iterate_alphabet_array(regex, parens: false, roman_numeral: false)
       list_array = @text.scan(regex).map(&:downcase)
       if roman_numeral
         alphabet = ROMAN_NUMERALS
