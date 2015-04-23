@@ -9,10 +9,10 @@ module PragmaticSegmenter
 
     include Rules
     attr_reader :matches_array, :text, :match_type
-    def initialize(text:, matches_array:, **args)
+    def initialize(text:, matches_array:, match_type: nil)
       @text = text
       @matches_array = matches_array
-      @match_type = args[:match_type]
+      @match_type = match_type
     end
 
     def replace
