@@ -66,11 +66,14 @@ module PragmaticSegmenter
     end
 
     def sub_punctuation_between_double_quotes(txt)
-      btwn_dbl_quote = txt.scan(BETWEEN_DOUBLE_QUOTES_REGEX)
       PragmaticSegmenter::PunctuationReplacer.new(
-        matches_array: btwn_dbl_quote,
+        matches_array: btwn_dbl_quote(txt),
         text: txt
       ).replace
+    end
+
+    def btwn_dbl_quote(txt)
+      txt.scan(BETWEEN_DOUBLE_QUOTES_REGEX)
     end
 
     def sub_punctuation_between_quotes_arrow(txt)

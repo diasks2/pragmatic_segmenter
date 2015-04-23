@@ -91,15 +91,7 @@ module PragmaticSegmenter
       class BetweenPunctuation < PragmaticSegmenter::BetweenPunctuation
         private
 
-        def sub_punctuation_between_double_quotes(txt)
-          btwn_dbl_quote = sub_punctuation_between_double_quotes_de(txt)
-          PragmaticSegmenter::PunctuationReplacer.new(
-            matches_array: btwn_dbl_quote,
-            text: txt
-          ).replace
-        end
-
-        def sub_punctuation_between_double_quotes_de(txt)
+        def btwn_dbl_quote(txt)
           if txt.include?('„')
             btwn_dbl_quote = txt.scan(BETWEEN_DOUBLE_QUOTES_DE_REGEX)
             txt.scan(SPLIT_DOUBLE_QUOTES_DE_REGEX).each do |q|
