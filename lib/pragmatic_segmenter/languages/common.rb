@@ -94,12 +94,6 @@ module PragmaticSegmenter
           SingleUpperCaseLetterRule
         ]
       end
-
-
-      class Process < PragmaticSegmenter::Process
-      end
-      class Cleaner < PragmaticSegmenter::Cleaner
-      end
     end
   end
 end

@@ -28,10 +28,14 @@ module PragmaticSegmenter
 
     def process
       @language_module::Process
+    rescue
+      Process
     end
 
     def cleaner
       @language_module::Cleaner
+    rescue
+      Cleaner
     end
   end
 end
