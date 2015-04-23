@@ -45,10 +45,10 @@ module PragmaticSegmenter
     end
 
     def add_line_break
-      formatted_text = format_alphabetical_lists(text)
-      formatted_text = format_roman_numeral_lists(formatted_text)
-      formatted_text = format_numbered_list_with_periods(formatted_text)
-      format_numbered_list_with_parens(formatted_text)
+      @text = format_alphabetical_lists(@text)
+      @text = format_roman_numeral_lists(@text)
+      @text = format_numbered_list_with_periods(@text)
+      format_numbered_list_with_parens(@text)
     end
 
     def replace_parens
@@ -64,25 +64,25 @@ module PragmaticSegmenter
     private
 
     def format_numbered_list_with_parens(txt)
-      new_txt = replace_parens_in_numbered_list(txt)
-      new_txt = add_line_breaks_for_numbered_list_with_parens(new_txt)
-      new_txt.apply(ListMarkerRule)
+      txt = replace_parens_in_numbered_list(txt)
+      txt = add_line_breaks_for_numbered_list_with_parens(txt)
+      txt.apply(ListMarkerRule)
     end
 
     def format_numbered_list_with_periods(txt)
-      new_txt = replace_periods_in_numbered_list(txt)
-      new_txt = add_line_breaks_for_numbered_list_with_periods(new_txt)
-      new_txt.apply(SubstituteListPeriodRule)
+      txt = replace_periods_in_numbered_list(txt)
+      txt = add_line_breaks_for_numbered_list_with_periods(txt)
+      txt.apply(SubstituteListPeriodRule)
     end
 
     def format_alphabetical_lists(txt)
-      new_txt = add_line_breaks_for_alphabetical_list_with_periods(txt, false)
-      add_line_breaks_for_alphabetical_list_with_parens(new_txt, false)
+      txt = add_line_breaks_for_alphabetical_list_with_periods(txt, false)
+      add_line_breaks_for_alphabetical_list_with_parens(txt, false)
     end
 
     def format_roman_numeral_lists(txt)
-      new_txt = add_line_breaks_for_alphabetical_list_with_periods(txt, true)
-      add_line_breaks_for_alphabetical_list_with_parens(new_txt, true)
+      txt = add_line_breaks_for_alphabetical_list_with_periods(txt, true)
+      add_line_breaks_for_alphabetical_list_with_parens(txt, true)
     end
 
     def replace_periods_in_numbered_list(txt)
