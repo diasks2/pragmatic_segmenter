@@ -17,13 +17,13 @@ module PragmaticSegmenter
     end
 
     def process
-      reformatted_text = List.new(text: text).add_line_break
-      reformatted_text = replace_abbreviations(reformatted_text)
-      reformatted_text = replace_numbers(reformatted_text)
-      reformatted_text = replace_continuous_punctuation(reformatted_text)
-      reformatted_text.apply(@language::AbbreviationsWithMultiplePeriodsAndEmailRule)
-      reformatted_text.apply(@language::GeoLocationRule)
-      split_into_segments(reformatted_text)
+      @text = List.new(text: @text).add_line_break
+      @text = replace_abbreviations(@text)
+      @text = replace_numbers(@text)
+      @text = replace_continuous_punctuation(@text)
+      @text.apply(@language::AbbreviationsWithMultiplePeriodsAndEmailRule)
+      @text.apply(@language::GeoLocationRule)
+      split_into_segments(@text)
     end
 
     private
