@@ -51,15 +51,14 @@ module PragmaticSegmenter
         def replace_numbers(txt)
           txt.apply Numbers::All
 
-          replace_period_in_deutsch_dates(txt)
+          replace_period_in_deutsch_dates
         end
 
-        def replace_period_in_deutsch_dates(txt)
+        def replace_period_in_deutsch_dates
           MONTHS.each do |month|
             # Rubular: http://rubular.com/r/zlqgj7G5dA
-            txt.gsub!(/(?<=\d)\.(?=\s*#{Regexp.escape(month)})/, '∯')
+            @text.gsub!(/(?<=\d)\.(?=\s*#{Regexp.escape(month)})/, '∯')
           end
-          txt
         end
 
         def replace_abbreviations
