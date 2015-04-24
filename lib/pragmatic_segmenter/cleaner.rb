@@ -5,7 +5,7 @@ module PragmaticSegmenter
   # This is an opinionated class that removes errant newlines,
   # xhtml, inline formatting, etc.
   class Cleaner
-    include Rules::TextCleaners
+    include Rules
 
     attr_reader :text, :doc_type
     def initialize(text:, doc_type: nil, language:)
