@@ -26,8 +26,8 @@ module PragmaticSegmenter
           txt.scan(SENTENCE_BOUNDARY_REGEX)
         end
 
-        def replace_abbreviations(txt)
-          AbbreviationReplacer.new(text: txt, language: @language).replace
+        def replace_abbreviations
+          @text = AbbreviationReplacer.new(text: @text, language: @language).replace
         end
       end
 
