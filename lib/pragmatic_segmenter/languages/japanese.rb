@@ -42,14 +42,14 @@ module PragmaticSegmenter
         end
 
         def sub_punctuation_between_quotes_ja(txt)
-          PragmaticSegmenter::PunctuationReplacer.new(
+          PunctuationReplacer.new(
             matches_array: txt.scan(BETWEEN_QUOTE_JA_REGEX),
             text: txt
           ).replace
         end
 
         def sub_punctuation_between_parens_ja(txt)
-          PragmaticSegmenter::PunctuationReplacer.new(
+          PunctuationReplacer.new(
             matches_array: txt.scan(BETWEEN_PARENS_JA_REGEX),
             text: txt
           ).replace
