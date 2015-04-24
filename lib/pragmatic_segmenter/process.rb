@@ -21,7 +21,7 @@ module PragmaticSegmenter
       @text = List.new(text: @text).add_line_break
       replace_abbreviations
       replace_numbers
-      @text = replace_continuous_punctuation(@text)
+      replace_continuous_punctuation
       @text.apply(@language::Abbreviations::WithMultiplePeriodsAndEmailRule)
       @text.apply(@language::GeoLocationRule)
       split_into_segments(@text)
@@ -60,9 +60,9 @@ module PragmaticSegmenter
       end
     end
 
-    def replace_continuous_punctuation(txt)
-      return txt unless txt =~ @language::CONTINUOUS_PUNCTUATION_REGEX
-      txt.gsub!(@language::CONTINUOUS_PUNCTUATION_REGEX) do |match|
+    def replace_continuous_punctuation
+      return @text unless @text =~ @language::CONTINUOUS_PUNCTUATION_REGEX
+      @text.gsub!(@language::CONTINUOUS_PUNCTUATION_REGEX) do |match|
         match.gsub(/!/, '&ᓴ&').gsub(/\?/, '&ᓷ&')
       end
     end
