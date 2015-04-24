@@ -12,13 +12,12 @@ module PragmaticSegmenter
   class Process
 
     attr_reader :text
-    def initialize(text:, language: )
-      @text = text
+    def initialize(language: )
       @language = language
     end
 
-    def process
-      @text = List.new(text: @text).add_line_break
+    def process(text:)
+      @text = List.new(text: text).add_line_break
       replace_abbreviations
       replace_numbers
       replace_continuous_punctuation
