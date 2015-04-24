@@ -61,7 +61,6 @@ module PragmaticSegmenter
     end
 
     def replace_continuous_punctuation
-      return @text unless @text =~ @language::CONTINUOUS_PUNCTUATION_REGEX
       @text.gsub!(@language::CONTINUOUS_PUNCTUATION_REGEX) do |match|
         match.gsub(/!/, '&ᓴ&').gsub(/\?/, '&ᓷ&')
       end
