@@ -24,13 +24,13 @@ module PragmaticSegmenter
       replace_continuous_punctuation
       @text.apply(@language::Abbreviations::WithMultiplePeriodsAndEmailRule)
       @text.apply(@language::GeoLocationRule)
-      split_into_segments(@text)
+      split_into_segments
     end
 
     private
 
-    def split_into_segments(txt)
-      check_for_parens_between_quotes(txt).split("\r")
+    def split_into_segments
+      check_for_parens_between_quotes(@text).split("\r")
          .map! { |segment| segment.apply(@language::SingleNewLineRule, @language::EllipsisRules::All) }
          .map { |segment| check_for_punctuation(segment) }.flatten
          .map! { |segment| segment.apply(@language::SubSymbolsRules::All) }
