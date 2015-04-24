@@ -20,7 +20,7 @@ module PragmaticSegmenter
     def process
       @text = List.new(text: @text).add_line_break
       replace_abbreviations
-      @text = replace_numbers(@text)
+      replace_numbers
       @text = replace_continuous_punctuation(@text)
       @text.apply(@language::Abbreviations::WithMultiplePeriodsAndEmailRule)
       @text.apply(@language::GeoLocationRule)
@@ -93,8 +93,8 @@ module PragmaticSegmenter
       sentence_boundary_punctuation(txt)
     end
 
-    def replace_numbers(txt)
-      txt.apply @language::Numbers::All
+    def replace_numbers
+      @text.apply @language::Numbers::All
     end
 
     def replace_abbreviations

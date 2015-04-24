@@ -48,8 +48,8 @@ module PragmaticSegmenter
           BetweenPunctuation.new(text: txt).replace
         end
 
-        def replace_numbers(txt)
-          txt.apply Numbers::All
+        def replace_numbers
+          @text.apply Numbers::All
 
           replace_period_in_deutsch_dates
         end
