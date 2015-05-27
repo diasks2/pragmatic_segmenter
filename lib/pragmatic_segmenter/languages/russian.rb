@@ -9,11 +9,6 @@ module PragmaticSegmenter
         NUMBER_ABBREVIATIONS = []
       end
 
-      class Process < Process
-        private
-
-      end
-
       class AbbreviationReplacer  < AbbreviationReplacer
         private
 
