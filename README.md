@@ -813,6 +813,9 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.3.1**  
 * Fix undefined method 'gsub!' for nil:NilClass issue  
 
+**Version 0.3.2**  
+* Add English abbreviations  
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.
