@@ -120,6 +120,9 @@ module PragmaticSegmenter
     end
 
     def sentence_boundary_punctuation(txt)
+      txt = txt.apply @language::ReplaceColonBetweenNumbersRule if defined? @language::ReplaceColonBetweenNumbersRule
+      txt = txt.apply @language::ReplaceNonSentenceBoundaryCommaRule if defined? @language::ReplaceNonSentenceBoundaryCommaRule
+
       txt.scan(@language::SENTENCE_BOUNDARY_REGEX)
     end
   end
