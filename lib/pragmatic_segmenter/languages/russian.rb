@@ -12,9 +12,6 @@ module PragmaticSegmenter
       class Process < Process
         private
 
-        def replace_abbreviations
-          @text = AbbreviationReplacer.new(text: @text, language: @language).replace
-        end
       end
 
       class AbbreviationReplacer  < AbbreviationReplacer

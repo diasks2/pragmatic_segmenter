@@ -60,10 +60,6 @@ module PragmaticSegmenter
             @text.gsub!(/(?<=\d)\.(?=\s*#{Regexp.escape(month)})/, '∯')
           end
         end
-
-        def replace_abbreviations
-          @text = AbbreviationReplacer.new(text: @text, language: @language).replace
-        end
       end
 
       class AbbreviationReplacer  < AbbreviationReplacer

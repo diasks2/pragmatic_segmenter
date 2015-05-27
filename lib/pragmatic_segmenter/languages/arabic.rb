@@ -25,10 +25,6 @@ module PragmaticSegmenter
           txt = txt.apply(ReplaceColonBetweenNumbersRule, ReplaceNonSentenceBoundaryCommaRule)
           txt.scan(SENTENCE_BOUNDARY_REGEX)
         end
-
-        def replace_abbreviations
-          @text = AbbreviationReplacer.new(text: @text, language: @language).replace
-        end
       end
 
       class AbbreviationReplacer  < AbbreviationReplacer
