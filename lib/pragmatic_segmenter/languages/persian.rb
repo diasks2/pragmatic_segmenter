@@ -9,11 +9,6 @@ module PragmaticSegmenter
       ReplaceColonBetweenNumbersRule = Rule.new(/(?<=\d):(?=\d)/, '♭')
       ReplaceNonSentenceBoundaryCommaRule = Rule.new(/،(?=\s\S+،)/, '♬')
 
-      class Process < Process
-        private
-
-      end
-
       class AbbreviationReplacer  < AbbreviationReplacer
         private
 

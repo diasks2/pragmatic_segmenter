@@ -18,11 +18,6 @@ module PragmaticSegmenter
       # Rubular: http://rubular.com/r/kPRgApNHUg
       ReplaceNonSentenceBoundaryCommaRule = Rule.new(/،(?=\s\S+،)/, '♬')
 
-      class Process < Process
-        private
-
-      end
-
       class AbbreviationReplacer  < AbbreviationReplacer
         private
 
