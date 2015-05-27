@@ -107,8 +107,16 @@ module PragmaticSegmenter
       @text = abbreviations_replacer.new(text: @text, language: @language).replace
     end
 
+    def between_punctuation_processor
+      if defined? @language::BetweenPunctuation
+        @language::BetweenPunctuation
+      else
+        BetweenPunctuation
+      end
+    end
+
     def between_punctuation(txt)
-      BetweenPunctuation.new(text: txt).replace
+      between_punctuation_processor.new(text: txt).replace
     end
 
     def sentence_boundary_punctuation(txt)
