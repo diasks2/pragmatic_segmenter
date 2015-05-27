@@ -44,10 +44,6 @@ module PragmaticSegmenter
       class Process < PragmaticSegmenter::Process
         private
 
-        def between_punctuation(txt)
-          BetweenPunctuation.new(text: txt).replace
-        end
-
         def replace_numbers
           @text.apply Numbers::All
 

@@ -6,9 +6,6 @@ module PragmaticSegmenter
       class Process < Process
         private
 
-        def between_punctuation(txt)
-          BetweenPunctuation.new(text: txt).replace
-        end
       end
 
       class Cleaner < PragmaticSegmenter::Cleaner
