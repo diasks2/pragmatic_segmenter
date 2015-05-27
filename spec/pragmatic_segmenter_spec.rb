@@ -2608,7 +2608,7 @@ RSpec.describe PragmaticSegmenter::Segmenter do
       it 'cleans the text #002' do
         text = 'injections made by the Shareholder through the years. 7 (max.) 3. Specifications/4.Design and function The operating instructions are part of the product and must be kept in the immediate vicinity of the instrument and readily accessible to skilled "'
         ps = PragmaticSegmenter::Cleaner.new(text: text)
-        expect(ps.clean).to eq('')
+        expect(ps.clean).to eq("injections made by the Shareholder through the years. 7 (max.) 3. Specifications/4.Design and function The operating instructions are part of the product and must be kept in the immediate vicinity of the instrument and readily accessible to skilled \"")
       end
 
       it 'does not mutate the input string (cleaner)' do

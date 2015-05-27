@@ -44,6 +44,10 @@ module PragmaticSegmenter
 
     private
 
+    def abbreviations
+      @language::Abbreviation::ABBREVIATIONS
+    end
+
     def check_for_no_space_in_between_sentences(txt)
       words = txt.split(' ')
       words.each do |word|

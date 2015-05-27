@@ -816,6 +816,9 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.3.2**  
 * Add English abbreviations  
 
+**Version 0.3.3**  
+* Fix cleaner bug    
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.
