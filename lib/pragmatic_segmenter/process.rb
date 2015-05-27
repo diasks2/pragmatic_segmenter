@@ -95,8 +95,16 @@ module PragmaticSegmenter
       @text.apply @language::Numbers::All
     end
 
+    def abbreviations_replacer
+      if defined? @language::AbbreviationReplacer
+        @language::AbbreviationReplacer
+      else
+        AbbreviationReplacer
+      end
+    end
+
     def replace_abbreviations
-      @text = AbbreviationReplacer.new(text: @text, language: @language).replace
+      @text = abbreviations_replacer.new(text: @text, language: @language).replace
     end
 
     def between_punctuation(txt)
