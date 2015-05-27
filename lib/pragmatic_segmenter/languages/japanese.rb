@@ -3,11 +3,6 @@ module PragmaticSegmenter
     module Japanese
       include Languages::Common
 
-      class Process < Process
-        private
-
-      end
-
       class Cleaner < PragmaticSegmenter::Cleaner
         # Rubular: http://rubular.com/r/N4kPuJgle7
         NewLineInMiddleOfWordRule = Rule.new(/(?<=の)\n(?=\S)/, '')
