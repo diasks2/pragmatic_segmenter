@@ -12,11 +12,6 @@ module PragmaticSegmenter
       class Process < Process
         private
 
-        def sentence_boundary_punctuation(txt)
-          txt = txt.apply ReplaceColonBetweenNumbersRule,
-            ReplaceNonSentenceBoundaryCommaRule
-          txt.scan(SENTENCE_BOUNDARY_REGEX)
-        end
       end
 
       class AbbreviationReplacer  < AbbreviationReplacer
