@@ -21,15 +21,15 @@ module PragmaticSegmenter
 
     def segment
       return [] unless @text
-      process.new(language: @language_module).process(text: @text)
+      processor.new(language: @language_module).process(text: @text)
     end
 
     private
 
-    def process
-      @language_module::Process
+    def processor
+      @language_module::Processor
     rescue
-      Process
+      Processor
     end
 
     def cleaner
