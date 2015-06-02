@@ -8,20 +8,20 @@ module PragmaticSegmenter
     SENTENCE_STARTERS = %w(A Being Did For He How However I In It Millions More She That The There They We What When Where Who Why)
 
     attr_reader :text
-    def initialize(text:, language: Languages::Common)
+    def initialize(text:, language: )
       @text = Text.new(text)
       @language = language
     end
 
     def replace
-      @reformatted_text = text.apply(@language::PossessiveAbbreviationRule,
+      @text.apply(@language::PossessiveAbbreviationRule,
         @language::KommanditgesellschaftRule,
         @language::SingleLetterAbbreviationRules::All)
 
-      @reformatted_text = search_for_abbreviations_in_string(@reformatted_text)
-      @reformatted_text = replace_multi_period_abbreviations(@reformatted_text)
-      @reformatted_text = @reformatted_text.apply(@language::AmPmRules::All)
-      replace_abbreviation_as_sentence_boundary(@reformatted_text)
+      @text = search_for_abbreviations_in_string(@text)
+      @text = replace_multi_period_abbreviations(@text)
+      @text.apply(@language::AmPmRules::All)
+      replace_abbreviation_as_sentence_boundary(@text)
     end
 
     private

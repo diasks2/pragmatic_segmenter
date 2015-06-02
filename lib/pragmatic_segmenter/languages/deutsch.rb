@@ -18,11 +18,20 @@ module PragmaticSegmenter
       # Rubular: http://rubular.com/r/TkZomF9tTM
       BETWEEN_DOUBLE_QUOTES_DE_REGEX = /„(?>[^“\\]+|\\{2}|\\.)*“/
 
-      # Rubular: http://rubular.com/r/hZxoyQwKT1
-      NumberPeriodSpaceRule = Rule.new(/(?<=\s[0-9]|\s([1-9][0-9]))\.(?=\s)/, '∯')
 
-      # Rubular: http://rubular.com/r/ityNMwdghj
-      NegativeNumberPeriodSpaceRule = Rule.new(/(?<=-[0-9]|-([1-9][0-9]))\.(?=\s)/, '∯')
+      module Numbers
+        # Rubular: http://rubular.com/r/hZxoyQwKT1
+        NumberPeriodSpaceRule = Rule.new(/(?<=\s[0-9]|\s([1-9][0-9]))\.(?=\s)/, '∯')
+
+        # Rubular: http://rubular.com/r/ityNMwdghj
+        NegativeNumberPeriodSpaceRule = Rule.new(/(?<=-[0-9]|-([1-9][0-9]))\.(?=\s)/, '∯')
+
+        All = [
+          Common::Numbers::All,
+          NumberPeriodSpaceRule,
+          NegativeNumberPeriodSpaceRule
+        ]
+      end
 
       MONTHS = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember']
 
@@ -32,59 +41,35 @@ module PragmaticSegmenter
       # Rubular: http://rubular.com/r/iUNSkCuso0
       SingleLowerCaseLetterAtStartOfLineRule = Rule.new(/(?<=^[a-z])\.(?=\s)/, '∯')
 
-
       class Process < PragmaticSegmenter::Process
         private
 
-        def between_punctuation(txt)
-          BetweenPunctuation.new(text: txt).replace
+        def replace_numbers
+          @text.apply Numbers::All
+
+          replace_period_in_deutsch_dates
         end
 
-        def replace_numbers(txt)
-          Number.new(text: txt).replace
-        end
-
-        def replace_abbreviations(txt)
-          AbbreviationReplacer.new(text: txt, language: Deutsch).replace
-        end
-      end
-
-      class Cleaner < PragmaticSegmenter::Cleaner
-        private
-
-        def abbreviations
-          Abbreviation::ABBREVIATIONS
-        end
-      end
-
-      class Number < PragmaticSegmenter::Number
-        def replace
-          super
-          @text.apply(NumberPeriodSpaceRule, NegativeNumberPeriodSpaceRule)
-          replace_period_in_deutsch_dates(@text)
-        end
-
-        def replace_period_in_deutsch_dates(txt)
+        def replace_period_in_deutsch_dates
           MONTHS.each do |month|
             # Rubular: http://rubular.com/r/zlqgj7G5dA
-            txt.gsub!(/(?<=\d)\.(?=\s*#{Regexp.escape(month)})/, '∯')
+            @text.gsub!(/(?<=\d)\.(?=\s*#{Regexp.escape(month)})/, '∯')
           end
-          txt
         end
       end
 
       class AbbreviationReplacer  < AbbreviationReplacer
         def replace
-          @reformatted_text = text.apply(
+          @text = text.apply(
             @language::PossessiveAbbreviationRule,
             @language::SingleLetterAbbreviationRules::All,
             SingleLowerCaseLetterRule,
             SingleLowerCaseLetterAtStartOfLineRule)
 
-          @reformatted_text = search_for_abbreviations_in_string(@reformatted_text)
-          @reformatted_text = replace_multi_period_abbreviations(@reformatted_text)
-          @reformatted_text = @reformatted_text.apply(Languages::Common::AmPmRules::All)
-          replace_abbreviation_as_sentence_boundary(@reformatted_text)
+          @text = search_for_abbreviations_in_string(@text)
+          @text = replace_multi_period_abbreviations(@text)
+          @text.apply(Languages::Common::AmPmRules::All)
+          replace_abbreviation_as_sentence_boundary(@text)
         end
 
         private
@@ -97,15 +82,7 @@ module PragmaticSegmenter
       class BetweenPunctuation < PragmaticSegmenter::BetweenPunctuation
         private
 
-        def sub_punctuation_between_double_quotes(txt)
-          btwn_dbl_quote = sub_punctuation_between_double_quotes_de(txt)
-          PragmaticSegmenter::PunctuationReplacer.new(
-            matches_array: btwn_dbl_quote,
-            text: txt
-          ).replace
-        end
-
-        def sub_punctuation_between_double_quotes_de(txt)
+        def btwn_dbl_quote(txt)
           if txt.include?('„')
             btwn_dbl_quote = txt.scan(BETWEEN_DOUBLE_QUOTES_DE_REGEX)
             txt.scan(SPLIT_DOUBLE_QUOTES_DE_REGEX).each do |q|

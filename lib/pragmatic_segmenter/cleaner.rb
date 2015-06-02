@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+require_relative 'cleaner/rules'
 
 module PragmaticSegmenter
   # This is an opinionated class that removes errant newlines,
@@ -7,8 +8,8 @@ module PragmaticSegmenter
     include Rules
 
     attr_reader :text, :doc_type
-    def initialize(text:, doc_type: nil, language: Languages::Common, **args)
-      @text = Text.new(text.dup)
+    def initialize(text:, doc_type: nil, language: Languages::Common)
+      @text = Text.new(text)
       @doc_type = doc_type
       @language = language
     end
@@ -29,17 +30,19 @@ module PragmaticSegmenter
 
     def clean
       return unless text
-      @clean_text = remove_all_newlines(text)
-      replace_double_newlines(@clean_text)
-      replace_newlines(@clean_text)
-      replace_escaped_newlines(@clean_text)
-      @clean_text.apply(HTMLRules::All)
-      replace_punctuation_in_brackets(@clean_text)
-      @clean_text.apply(InlineFormattingRule)
-      clean_quotations(@clean_text)
-      clean_table_of_contents(@clean_text)
-      check_for_no_space_in_between_sentences(@clean_text)
-      clean_consecutive_characters(@clean_text)
+      remove_all_newlines
+      replace_double_newlines
+      replace_newlines
+      replace_escaped_newlines
+
+      @text.apply(HTML::All)
+
+      replace_punctuation_in_brackets
+      @text.apply(InlineFormattingRule)
+      clean_quotations
+      clean_table_of_contents
+      check_for_no_space_in_between_sentences
+      clean_consecutive_characters
     end
 
     private
@@ -48,18 +51,18 @@ module PragmaticSegmenter
       @language::Abbreviation::ABBREVIATIONS
     end
 
-    def check_for_no_space_in_between_sentences(txt)
-      words = txt.split(' ')
+    def check_for_no_space_in_between_sentences
+      words = @text.split(' ')
       words.each do |word|
-        search_for_connected_sentences(word, txt, NO_SPACE_BETWEEN_SENTENCES_REGEX, NoSpaceBetweenSentencesRule)
-        search_for_connected_sentences(word, txt, NO_SPACE_BETWEEN_SENTENCES_DIGIT_REGEX, NoSpaceBetweenSentencesDigitRule)
+        search_for_connected_sentences(word, @text, NO_SPACE_BETWEEN_SENTENCES_REGEX, NoSpaceBetweenSentencesRule)
+        search_for_connected_sentences(word, @text, NO_SPACE_BETWEEN_SENTENCES_DIGIT_REGEX, NoSpaceBetweenSentencesDigitRule)
       end
-      txt
+      @text
     end
 
-    def replace_punctuation_in_brackets(txt)
-      txt.dup.gsub!(/\[(?:[^\]])*\]/) do |match|
-        txt.gsub!(/#{Regexp.escape(match)}/, "#{match.dup.gsub!(/\?/, '&ᓷ&')}") if match.include?('?')
+    def replace_punctuation_in_brackets
+      @text.dup.gsub!(/\[(?:[^\]])*\]/) do |match|
+        @text.gsub!(/#{Regexp.escape(match)}/, "#{match.dup.gsub!(/\?/, '&ᓷ&')}") if match.include?('?')
       end
     end
 
@@ -74,60 +77,61 @@ module PragmaticSegmenter
       end
     end
 
-    def remove_all_newlines(txt)
-      clean_text = remove_newline_in_middle_of_sentence(txt)
-      remove_newline_in_middle_of_word(clean_text)
+    def remove_all_newlines
+      remove_newline_in_middle_of_sentence
+      remove_newline_in_middle_of_word
     end
 
-    def remove_newline_in_middle_of_sentence(txt)
-      txt.dup.gsub!(/(?:[^\.])*/) do |match|
+    def remove_newline_in_middle_of_sentence
+      @text.dup.gsub!(/(?:[^\.])*/) do |match|
         next unless match.include?("\n")
         orig = match.dup
         match.gsub!(NEWLINE_IN_MIDDLE_OF_SENTENCE_REGEX, '')
-        txt.gsub!(/#{Regexp.escape(orig)}/, "#{match}")
+        @text.gsub!(/#{Regexp.escape(orig)}/, "#{match}")
       end
-      txt
+      @text
     end
 
-    def remove_newline_in_middle_of_word(txt)
-      txt.apply NewLineInMiddleOfWordRule
+    def remove_newline_in_middle_of_word
+      @text.apply NewLineInMiddleOfWordRule
     end
 
-    def replace_escaped_newlines(txt)
-      txt.apply EscapedNewLineRule, EscapedCarriageReturnRule,
+    def replace_escaped_newlines
+      @text.apply EscapedNewLineRule, EscapedCarriageReturnRule,
         TypoEscapedNewLineRule, TypoEscapedCarriageReturnRule
     end
 
-    def replace_double_newlines(txt)
-      txt.apply DoubleNewLineWithSpaceRule, DoubleNewLineRule
+    def replace_double_newlines
+      @text.apply DoubleNewLineWithSpaceRule, DoubleNewLineRule
     end
 
-    def replace_newlines(txt)
+    def replace_newlines
       if doc_type.eql?('pdf')
-        remove_pdf_line_breaks(txt)
+        remove_pdf_line_breaks
       else
-        txt.apply NewLineFollowedByPeriodRule,
+        @text.apply NewLineFollowedByPeriodRule,
           ReplaceNewlineWithCarriageReturnRule
       end
     end
 
-    def remove_pdf_line_breaks(txt)
-      txt.apply NewLineFollowedByBulletRule,
-        PDF_NewLineInMiddleOfSentenceRule,
-        PDF_NewLineInMiddleOfSentenceNoSpacesRule
+    def remove_pdf_line_breaks
+      @text.apply NewLineFollowedByBulletRule,
+
+        PDF::NewLineInMiddleOfSentenceRule,
+        PDF::NewLineInMiddleOfSentenceNoSpacesRule
     end
 
-    def clean_quotations(txt)
-      txt.apply QuotationsFirstRule, QuotationsSecondRule
+    def clean_quotations
+      @text.apply QuotationsFirstRule, QuotationsSecondRule
     end
 
-    def clean_table_of_contents(txt)
-      txt.apply TableOfContentsRule, ConsecutivePeriodsRule,
+    def clean_table_of_contents
+      @text.apply TableOfContentsRule, ConsecutivePeriodsRule,
         ConsecutiveForwardSlashRule
     end
 
-    def clean_consecutive_characters(txt)
-      txt.apply ConsecutivePeriodsRule, ConsecutiveForwardSlashRule
+    def clean_consecutive_characters
+      @text.apply ConsecutivePeriodsRule, ConsecutiveForwardSlashRule
     end
   end
 end

@@ -6,13 +6,13 @@ module PragmaticSegmenter
       class Cleaner < Cleaner
         def clean
           super
-          clean_quotations(@clean_text)
+          clean_quotations
         end
 
         private
 
-        def clean_quotations(txt)
-          txt.gsub(/`/, "'")
+        def clean_quotations
+          @text.gsub(/`/, "'")
         end
 
         def abbreviations

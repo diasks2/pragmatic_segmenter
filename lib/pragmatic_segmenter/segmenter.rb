@@ -4,16 +4,16 @@ require 'pragmatic_segmenter/languages'
 module PragmaticSegmenter
   # This class segments a text into an array of sentences.
   class Segmenter
-    include Languages
     attr_reader :text, :language, :doc_type
 
-    def initialize(text:, language: nil, doc_type: nil, clean: true)
+    def initialize(text:, language: 'en', doc_type: nil, clean: true)
       return unless text
-      @language = language || 'en'
+      @language = language
+      @language_module = Languages.get_language_by_code(language)
       @doc_type = doc_type
 
       if clean
-        @text = cleaner_class.new(text: text, doc_type: @doc_type).clean
+        @text = cleaner.new(text: text, doc_type: @doc_type, language: @language_module).clean
       else
         @text = text
       end
@@ -21,7 +21,21 @@ module PragmaticSegmenter
 
     def segment
       return [] unless @text
-      process_class.new(text: @text, language: language_module).process
+      process.new(language: @language_module).process(text: @text)
+    end
+
+    private
+
+    def process
+      @language_module::Process
+    rescue
+      Process
+    end
+
+    def cleaner
+      @language_module::Cleaner
+    rescue
+      Cleaner
     end
   end
 end

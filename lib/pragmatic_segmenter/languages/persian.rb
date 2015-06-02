@@ -9,20 +9,6 @@ module PragmaticSegmenter
       ReplaceColonBetweenNumbersRule = Rule.new(/(?<=\d):(?=\d)/, '♭')
       ReplaceNonSentenceBoundaryCommaRule = Rule.new(/،(?=\s\S+،)/, '♬')
 
-      class Process < Process
-        private
-
-        def sentence_boundary_punctuation(txt)
-          txt = txt.apply ReplaceColonBetweenNumbersRule,
-            ReplaceNonSentenceBoundaryCommaRule
-          txt.scan(SENTENCE_BOUNDARY_REGEX)
-        end
-
-        def replace_abbreviations(txt)
-          AbbreviationReplacer.new(text: txt).replace
-        end
-      end
-
       class AbbreviationReplacer  < AbbreviationReplacer
         private
 

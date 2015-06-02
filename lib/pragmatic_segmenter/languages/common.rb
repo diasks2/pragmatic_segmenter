@@ -1,3 +1,6 @@
+require_relative 'common/numbers'
+require_relative 'common/ellipsis'
+
 module PragmaticSegmenter
   module Languages
     module Common
@@ -11,69 +14,89 @@ module PragmaticSegmenter
         NUMBER_ABBREVIATIONS = ['art', 'ext', 'no', 'nos', 'p', 'pp']
       end
 
-      SENTENCE_BOUNDARY_REGEX = /\u{ff08}(?:[^\u{ff09}])*\u{ff09}(?=\s?[A-Z])|\u{300c}(?:[^\u{300d}])*\u{300d}(?=\s[A-Z])|\((?:[^\)]){2,}\)(?=\s[A-Z])|'(?:[^'])*[^,]'(?=\s[A-Z])|"(?:[^"])*[^,]"(?=\s[A-Z])|“(?:[^”])*[^,]”(?=\s[A-Z])|\S.*?[。．.！!?？ȸȹ☉☈☇☄]/
-
-      include Rules
-      # Rubular: http://rubular.com/r/NqCqv372Ix
-      QUOTATION_AT_END_OF_SENTENCE_REGEX = /[!?\.-][\"\'\u{201d}\u{201c}]\s{1}[A-Z]/
-
-      # Rubular: http://rubular.com/r/6flGnUMEVl
-      PARENS_BETWEEN_DOUBLE_QUOTES_REGEX = /["”]\s\(.*\)\s["“]/
-
-      # Rubular: http://rubular.com/r/TYzr4qOW1Q
-      BETWEEN_DOUBLE_QUOTES_REGEX = /"(?:[^"])*[^,]"|“(?:[^”])*[^,]”/
-
-      # Rubular: http://rubular.com/r/JMjlZHAT4g
-      SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX = /(?<=[!?\.-][\"\'\u{201d}\u{201c}])\s{1}(?=[A-Z])/
-
-      # Rubular: http://rubular.com/r/mQ8Es9bxtk
-      CONTINUOUS_PUNCTUATION_REGEX = /(?<=\S)(!|\?){3,}(?=(\s|\z|$))/
-
-      # Rubular: http://rubular.com/r/yqa4Rit8EY
-      PossessiveAbbreviationRule = Rule.new(/\.(?='s\s)|\.(?='s$)|\.(?='s\z)/, '∯')
-
-      # Rubular: http://rubular.com/r/NEv265G2X2
-      KommanditgesellschaftRule = Rule.new(/(?<=Co)\.(?=\sKG)/, '∯')
-
-      # Rubular: http://rubular.com/r/xDkpFZ0EgH
-      MULTI_PERIOD_ABBREVIATION_REGEX = /\b[a-z](?:\.[a-z])+[.]/i
-
-      module AmPmRules
-        # Rubular: http://rubular.com/r/Vnx3m4Spc8
-        UpperCasePmRule = Rule.new(/(?<=P∯M)∯(?=\s[A-Z])/, '.')
-
-        # Rubular: http://rubular.com/r/AJMCotJVbW
-        UpperCaseAmRule = Rule.new(/(?<=A∯M)∯(?=\s[A-Z])/, '.')
-
-        # Rubular: http://rubular.com/r/13q7SnOhgA
-        LowerCasePmRule = Rule.new(/(?<=p∯m)∯(?=\s[A-Z])/, '.')
-
-        # Rubular: http://rubular.com/r/DgUDq4mLz5
-        LowerCaseAmRule = Rule.new(/(?<=a∯m)∯(?=\s[A-Z])/, '.')
-
-        All = [UpperCasePmRule, UpperCaseAmRule, LowerCasePmRule, LowerCaseAmRule]
+      module Abbreviations
+        # Rubular: http://rubular.com/r/EUbZCNfgei
+        WithMultiplePeriodsAndEmailRule = Rule.new(/(\w)(\.)(\w)/, '\1∮\3')
       end
 
-      # This class searches for periods within an abbreviation and
-      # replaces the periods.
-      module SingleLetterAbbreviationRules
-        # Rubular: http://rubular.com/r/e3H6kwnr6H
-        SingleUpperCaseLetterAtStartOfLineRule = Rule.new(/(?<=^[A-Z])\.(?=\s)/, '∯')
+      # Rubular: http://rubular.com/r/G2opjedIm9
+      GeoLocationRule = Rule.new(/(?<=[a-zA-z]°)\.(?=\s*\d+)/, '∯')
 
-        # Rubular: http://rubular.com/r/gitvf0YWH4
-        SingleUpperCaseLetterRule = Rule.new(/(?<=\s[A-Z])\.(?=\s)/, '∯')
+      SingleNewLineRule = Rule.new(/\n/, 'ȹ')
 
-        All = [
-          SingleUpperCaseLetterAtStartOfLineRule,
-          SingleUpperCaseLetterRule
-        ]
+      module DoublePunctuationRules
+        FirstRule = Rule.new(/\?!/, '☉')
+        SecondRule = Rule.new(/!\?/, '☈')
+        ThirdRule = Rule.new(/\?\?/, '☇')
+        ForthRule = Rule.new(/!!/, '☄')
+
+        All = [ FirstRule, SecondRule, ThirdRule, ForthRule ]
       end
 
 
-      class Process < PragmaticSegmenter::Process
+      # Rubular: http://rubular.com/r/aXPUGm6fQh
+      QuestionMarkInQuotationRule = Rule.new(/\?(?=(\'|\"))/, '&ᓷ&')
+
+
+      module ExclamationPointRules
+        # Rubular: http://rubular.com/r/XS1XXFRfM2
+        InQuotationRule = Rule.new(/\!(?=(\'|\"))/, '&ᓴ&')
+
+        # Rubular: http://rubular.com/r/sl57YI8LkA
+        BeforeCommaMidSentenceRule = Rule.new(/\!(?=\,\s[a-z])/, '&ᓴ&')
+
+        # Rubular: http://rubular.com/r/f9zTjmkIPb
+        MidSentenceRule = Rule.new(/\!(?=\s[a-z])/, '&ᓴ&')
+
+        All = [ InQuotationRule, BeforeCommaMidSentenceRule, MidSentenceRule ]
       end
-      class Cleaner < PragmaticSegmenter::Cleaner
+
+      module SubSymbolsRules
+        Period = Rule.new(/∯/, '.')
+        ArabicComma = Rule.new(/♬/, '،')
+        SemiColon = Rule.new(/♭/, ':')
+        FullWidthPeriod = Rule.new(/&ᓰ&/, '。')
+        SpecialPeriod = Rule.new(/&ᓱ&/, '．')
+        FullWidthExclamation = Rule.new(/&ᓳ&/, '！')
+        ExclamationPoint = Rule.new(/&ᓴ&/, '!')
+        QuestionMark = Rule.new(/&ᓷ&/, '?')
+        FullWidthQuestionMark = Rule.new(/&ᓸ&/, '？')
+        MixedDoubleQE = Rule.new(/☉/, '?!')
+        MixedDoubleQQ = Rule.new(/☇/, '??')
+        MixedDoubleEQ = Rule.new(/☈/, '!?')
+        MixedDoubleEE = Rule.new(/☄/, '!!')
+        LeftParens = Rule.new(/&✂&/, '(')
+        RightParens = Rule.new(/&⌬&/, ')')
+        TemporaryEndingPunctutation = Rule.new('ȸ', '')
+        Newline = Rule.new(/ȹ/, "\n")
+
+        All = [ Period, ArabicComma,
+                SemiColon, FullWidthPeriod,
+                SpecialPeriod, FullWidthExclamation,
+                ExclamationPoint, QuestionMark,
+                FullWidthQuestionMark, MixedDoubleQE,
+                MixedDoubleQQ, MixedDoubleEQ,
+                MixedDoubleEE, LeftParens,
+                RightParens, TemporaryEndingPunctutation,
+                Newline ]
       end
+
+
+      module ReinsertEllipsisRules
+        SubThreeConsecutivePeriod = Rule.new(/ƪ/, '...')
+        SubThreeSpacePeriod = Rule.new(/♟/, ' . . . ')
+        SubFourSpacePeriod = Rule.new(/♝/, '. . . .')
+        SubTwoConsecutivePeriod = Rule.new(/☏/, '..')
+        SubOnePeriod = Rule.new(/∮/, '.')
+
+        All = [ SubThreeConsecutivePeriod, SubThreeSpacePeriod,
+                SubFourSpacePeriod, SubTwoConsecutivePeriod,
+                SubOnePeriod ]
+      end
+
+      ExtraWhiteSpaceRule = Rule.new(/\s{3,}/, ' ')
+
+      SubSingleQuoteRule = Rule.new(/&⎋&/, "'")
     end
   end
 end

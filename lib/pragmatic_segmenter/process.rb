@@ -1,36 +1,35 @@
 # -*- encoding : utf-8 -*-
-require 'pragmatic_segmenter/list'
-require 'pragmatic_segmenter/abbreviation_replacer'
-require 'pragmatic_segmenter/number'
-require 'pragmatic_segmenter/rules/ellipsis'
-require 'pragmatic_segmenter/exclamation_words'
 require 'pragmatic_segmenter/punctuation_replacer'
 require 'pragmatic_segmenter/between_punctuation'
+
+
+require 'pragmatic_segmenter/list'
+require 'pragmatic_segmenter/abbreviation_replacer'
+require 'pragmatic_segmenter/exclamation_words'
 
 module PragmaticSegmenter
   # This class processing segmenting the text.
   class Process
 
     attr_reader :text
-    def initialize(text:, language: Languages::Common)
-      @text = text
+    def initialize(language: Languages::Common)
       @language = language
     end
 
-    def process
-      reformatted_text = List.new(text: text).add_line_break
-      reformatted_text = replace_abbreviations(reformatted_text)
-      reformatted_text = replace_numbers(reformatted_text)
-      reformatted_text = replace_continuous_punctuation(reformatted_text)
-      reformatted_text.apply(@language::AbbreviationsWithMultiplePeriodsAndEmailRule)
-      reformatted_text.apply(@language::GeoLocationRule)
-      split_into_segments(reformatted_text)
+    def process(text:)
+      @text = List.new(text: text).add_line_break
+      replace_abbreviations
+      replace_numbers
+      replace_continuous_punctuation
+      @text.apply(@language::Abbreviations::WithMultiplePeriodsAndEmailRule)
+      @text.apply(@language::GeoLocationRule)
+      split_into_segments
     end
 
     private
 
-    def split_into_segments(txt)
-      check_for_parens_between_quotes(txt).split("\r")
+    def split_into_segments
+      check_for_parens_between_quotes(@text).split("\r")
          .map! { |segment| segment.apply(@language::SingleNewLineRule, @language::EllipsisRules::All) }
          .map { |segment| check_for_punctuation(segment) }.flatten
          .map! { |segment| segment.apply(@language::SubSymbolsRules::All) }
@@ -41,7 +40,11 @@ module PragmaticSegmenter
 
     def post_process_segments(txt)
       return if consecutive_underscore?(txt) || txt.length < 2
-      txt.apply(@language::ReinsertEllipsisRules::All).apply(@language::ExtraWhiteSpaceRule)
+      txt.apply(
+        @language::ReinsertEllipsisRules::All,
+        @language::ExtraWhiteSpaceRule
+      )
+
       if txt =~ @language::QUOTATION_AT_END_OF_SENTENCE_REGEX
         txt.split(@language::SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX)
       else
@@ -56,9 +59,8 @@ module PragmaticSegmenter
       end
     end
 
-    def replace_continuous_punctuation(txt)
-      return txt unless txt =~ @language::CONTINUOUS_PUNCTUATION_REGEX
-      txt.gsub!(@language::CONTINUOUS_PUNCTUATION_REGEX) do |match|
+    def replace_continuous_punctuation
+      @text.gsub!(@language::CONTINUOUS_PUNCTUATION_REGEX) do |match|
         match.gsub(/!/, '&ᓴ&').gsub(/\?/, '&ᓷ&')
       end
     end
@@ -89,19 +91,38 @@ module PragmaticSegmenter
       sentence_boundary_punctuation(txt)
     end
 
-    def replace_numbers(txt)
-      Number.new(text: txt).replace
+    def replace_numbers
+      @text.apply @language::Numbers::All
     end
 
-    def replace_abbreviations(txt)
-      AbbreviationReplacer.new(text: txt, language: @language).replace
+    def abbreviations_replacer
+      if defined? @language::AbbreviationReplacer
+        @language::AbbreviationReplacer
+      else
+        AbbreviationReplacer
+      end
+    end
+
+    def replace_abbreviations
+      @text = abbreviations_replacer.new(text: @text, language: @language).replace
+    end
+
+    def between_punctuation_processor
+      if defined? @language::BetweenPunctuation
+        @language::BetweenPunctuation
+      else
+        BetweenPunctuation
+      end
     end
 
     def between_punctuation(txt)
-      BetweenPunctuation.new(text: txt).replace
+      between_punctuation_processor.new(text: txt).replace
     end
 
     def sentence_boundary_punctuation(txt)
+      txt = txt.apply @language::ReplaceColonBetweenNumbersRule if defined? @language::ReplaceColonBetweenNumbersRule
+      txt = txt.apply @language::ReplaceNonSentenceBoundaryCommaRule if defined? @language::ReplaceNonSentenceBoundaryCommaRule
+
       txt.scan(@language::SENTENCE_BOUNDARY_REGEX)
     end
   end

@@ -9,33 +9,8 @@ module PragmaticSegmenter
         NUMBER_ABBREVIATIONS = []
       end
 
-      class Process < Process
-        private
-
-        def replace_abbreviations(txt)
-          AbbreviationReplacer.new(text: txt, language: Russian).replace
-        end
-      end
-
       class AbbreviationReplacer  < AbbreviationReplacer
         private
-
-        def scan_for_replacements(txt, am, index, character_array)
-          character = character_array[index]
-          prepositive = @language::Abbreviation::PREPOSITIVE_ABBREVIATIONS
-          number_abbr = @language::Abbreviation::NUMBER_ABBREVIATIONS
-          upper = /[[:upper:]]/.match(character.to_s)
-          if upper.nil? || prepositive.include?(am.downcase.strip)
-            if prepositive.include?(am.downcase.strip)
-              txt = replace_prepositive_abbr(txt, am)
-            elsif number_abbr.include?(am.downcase.strip)
-              txt = replace_pre_number_abbr(txt, am)
-            else
-              txt = replace_period_of_abbr(txt, am)
-            end
-          end
-          txt
-        end
 
         def replace_period_of_abbr(txt, abbr)
           txt.gsub(/(?<=\s#{abbr.strip})\./, '∯')

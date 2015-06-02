@@ -3,27 +3,19 @@ module PragmaticSegmenter
     module Japanese
       include Languages::Common
 
-      class Process < Process
-        private
-
-        def between_punctuation(txt)
-          BetweenPunctuation.new(text: txt).replace
-        end
-      end
-
       class Cleaner < PragmaticSegmenter::Cleaner
         # Rubular: http://rubular.com/r/N4kPuJgle7
         NewLineInMiddleOfWordRule = Rule.new(/(?<=の)\n(?=\S)/, '')
 
         def clean
           super
-          @clean_text = remove_newline_in_middle_of_word(@clean_text)
+          remove_newline_in_middle_of_word
         end
 
         private
 
-        def remove_newline_in_middle_of_word(txt)
-          txt.apply(NewLineInMiddleOfWordRule)
+        def remove_newline_in_middle_of_word
+          @text.apply NewLineInMiddleOfWordRule
         end
       end
 
@@ -42,14 +34,14 @@ module PragmaticSegmenter
         end
 
         def sub_punctuation_between_quotes_ja(txt)
-          PragmaticSegmenter::PunctuationReplacer.new(
+          PunctuationReplacer.new(
             matches_array: txt.scan(BETWEEN_QUOTE_JA_REGEX),
             text: txt
           ).replace
         end
 
         def sub_punctuation_between_parens_ja(txt)
-          PragmaticSegmenter::PunctuationReplacer.new(
+          PunctuationReplacer.new(
             matches_array: txt.scan(BETWEEN_PARENS_JA_REGEX),
             text: txt
           ).replace

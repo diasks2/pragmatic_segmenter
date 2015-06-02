@@ -18,19 +18,6 @@ module PragmaticSegmenter
       # Rubular: http://rubular.com/r/kPRgApNHUg
       ReplaceNonSentenceBoundaryCommaRule = Rule.new(/،(?=\s\S+،)/, '♬')
 
-      class Process < Process
-        private
-
-        def sentence_boundary_punctuation(txt)
-          txt = txt.apply(ReplaceColonBetweenNumbersRule, ReplaceNonSentenceBoundaryCommaRule)
-          txt.scan(SENTENCE_BOUNDARY_REGEX)
-        end
-
-        def replace_abbreviations(txt)
-          AbbreviationReplacer.new(text: txt, language: Arabic).replace
-        end
-      end
-
       class AbbreviationReplacer  < AbbreviationReplacer
         private
 
