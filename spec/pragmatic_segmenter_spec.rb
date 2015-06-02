@@ -59,22 +59,6 @@ RSpec.describe PragmaticSegmenter::Segmenter do
     end
   end
 
-  describe "Urdu", '(ur)' do
-    context "Golden Rules" do
-      it "Sentence ending punctuation #001" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "کیا حال ہے؟ ميرا نام ___ ەے۔ میں حالا تاوان دےدوں؟", language: 'ur')
-        expect(ps.segment).to eq(["کیا حال ہے؟", "ميرا نام ___ ەے۔", "میں حالا تاوان دےدوں؟"])
-      end
-    end
-
-    describe '#segment' do
-      it 'correctly segments text #001' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "کیا حال ہے؟ ميرا نام ___ ەے۔ میں حالا تاوان دےدوں؟", language: 'ur')
-        expect(ps.segment).to eq(["کیا حال ہے؟", "ميرا نام ___ ەے۔", "میں حالا تاوان دےدوں؟"])
-      end
-    end
-  end
-
   describe "Dutch", '(nl)' do
     context "Golden Rules" do
       it "Sentence starting with a number #001" do
