@@ -59,475 +59,271 @@ RSpec.describe PragmaticSegmenter::Segmenter do
     end
   end
 
-  context "Golden Rules (English)" do
-    it "Simple period to end sentence #001" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "Hello World. My name is Jonas.", language: "en")
-      expect(ps.segment).to eq(["Hello World.", "My name is Jonas."])
-    end
+  describe "English", "(en)" do
 
-    it "Question mark to end sentence #002" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "What is your name? My name is Jonas.", language: "en")
-      expect(ps.segment).to eq(["What is your name?", "My name is Jonas."])
-    end
-
-    it "Exclamation point to end sentence #003" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "There it is! I found it.", language: "en")
-      expect(ps.segment).to eq(["There it is!", "I found it."])
-    end
-
-    it "One letter upper case abbreviations #004" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "My name is Jonas E. Smith.", language: "en")
-      expect(ps.segment).to eq(["My name is Jonas E. Smith."])
-    end
-
-    it "One letter lower case abbreviations #005" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "Please turn to p. 55.", language: "en")
-      expect(ps.segment).to eq(["Please turn to p. 55."])
-    end
-
-    it "Two letter lower case abbreviations in the middle of a sentence #006" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "Were Jane and co. at the party?", language: "en")
-      expect(ps.segment).to eq(["Were Jane and co. at the party?"])
-    end
-
-    it "Two letter upper case abbreviations in the middle of a sentence #007" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "They closed the deal with Pitt, Briggs & Co. at noon.", language: "en")
-      expect(ps.segment).to eq(["They closed the deal with Pitt, Briggs & Co. at noon."])
-    end
-
-    it "Two letter lower case abbreviations at the end of a sentence #008" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "Let's ask Jane and co. They should know.", language: "en")
-      expect(ps.segment).to eq(["Let's ask Jane and co.", "They should know."])
-    end
-
-    it "Two letter upper case abbreviations at the end of a sentence #009" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "They closed the deal with Pitt, Briggs & Co. It closed yesterday.", language: "en")
-      expect(ps.segment).to eq(["They closed the deal with Pitt, Briggs & Co.", "It closed yesterday."])
-    end
-
-    it "Two letter (prepositive) abbreviations #010" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "I can see Mt. Fuji from here.", language: "en")
-      expect(ps.segment).to eq(["I can see Mt. Fuji from here."])
-    end
-
-    it "Two letter (prepositive & postpositive) abbreviations #011" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "St. Michael's Church is on 5th st. near the light.", language: "en")
-      expect(ps.segment).to eq(["St. Michael's Church is on 5th st. near the light."])
-    end
-
-    it "Possesive two letter abbreviations #012" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "That is JFK Jr.'s book.", language: "en")
-      expect(ps.segment).to eq(["That is JFK Jr.'s book."])
-    end
-
-    it "Multi-period abbreviations in the middle of a sentence #013" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "I visited the U.S.A. last year.", language: "en")
-      expect(ps.segment).to eq(["I visited the U.S.A. last year."])
-    end
-
-    it "Multi-period abbreviations at the end of a sentence #014" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "I live in the E.U. How about you?", language: "en")
-      expect(ps.segment).to eq(["I live in the E.U.", "How about you?"])
-    end
-
-    it "U.S. as sentence boundary #015" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "I live in the U.S. How about you?", language: "en")
-      expect(ps.segment).to eq(["I live in the U.S.", "How about you?"])
-    end
-
-    it "U.S. as non sentence boundary with next word capitalized #016" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "I work for the U.S. Government in Virginia.", language: "en")
-      expect(ps.segment).to eq(["I work for the U.S. Government in Virginia."])
-    end
-
-    it "U.S. as non sentence boundary #017" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "I have lived in the U.S. for 20 years.", language: "en")
-      expect(ps.segment).to eq(["I have lived in the U.S. for 20 years."])
-    end
-
-    it "A.M. / P.M. as non sentence boundary and sentence boundary #018" do
-      skip "NOT IMPLEMENTED"
-      ps = PragmaticSegmenter::Segmenter.new(text: "At 5 a.m. Mr. Smith went to the bank. He left the bank at 6 P.M. Mr. Smith then went to the store.", language: "en")
-      expect(ps.segment).to eq(["At 5 a.m. Mr. Smith went to the bank.", "He left the bank at 6 P.M.", "Mr. Smith then went to the store."])
-    end
-
-    it "Number as non sentence boundary #019" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "She has $100.00 in her bag.", language: "en")
-      expect(ps.segment).to eq(["She has $100.00 in her bag."])
-    end
-
-    it "Number as sentence boundary #020" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "She has $100.00. It is in her bag.", language: "en")
-      expect(ps.segment).to eq(["She has $100.00.", "It is in her bag."])
-    end
-
-    it "Parenthetical inside sentence #021" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "He teaches science (He previously worked for 5 years as an engineer.) at the local University.", language: "en")
-      expect(ps.segment).to eq(["He teaches science (He previously worked for 5 years as an engineer.) at the local University."])
-    end
-
-    it "Email addresses #022" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "Her email is Jane.Doe@example.com. I sent her an email.", language: "en")
-      expect(ps.segment).to eq(["Her email is Jane.Doe@example.com.", "I sent her an email."])
-    end
-
-    it "Web addresses #023" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "The site is: https://www.example.50.com/new-site/awesome_content.html. Please check it out.", language: "en")
-      expect(ps.segment).to eq(["The site is: https://www.example.50.com/new-site/awesome_content.html.", "Please check it out."])
-    end
-
-    it "Single quotations inside sentence #024" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "She turned to him, 'This is great.' she said.", language: "en")
-      expect(ps.segment).to eq(["She turned to him, 'This is great.' she said."])
-    end
-
-    it "Double quotations inside sentence #025" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "She turned to him, \"This is great.\" she said.", language: "en")
-      expect(ps.segment).to eq(["She turned to him, \"This is great.\" she said."])
-    end
-
-    it "Double quotations at the end of a sentence #026" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "She turned to him, \"This is great.\" She held the book out to show him.", language: "en")
-      expect(ps.segment).to eq(["She turned to him, \"This is great.\"", "She held the book out to show him."])
-    end
-
-    it "Double punctuation (exclamation point) #027" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "Hello!! Long time no see.", language: "en")
-      expect(ps.segment).to eq(["Hello!!", "Long time no see."])
-    end
-
-    it "Double punctuation (question mark) #028" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "Hello?? Who is there?", language: "en")
-      expect(ps.segment).to eq(["Hello??", "Who is there?"])
-    end
-
-    it "Double punctuation (exclamation point / question mark) #029" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "Hello!? Is that you?", language: "en")
-      expect(ps.segment).to eq(["Hello!?", "Is that you?"])
-    end
-
-    it "Double punctuation (question mark / exclamation point) #030" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "Hello?! Is that you?", language: "en")
-      expect(ps.segment).to eq(["Hello?!", "Is that you?"])
-    end
-
-    it "List (period followed by parens and no period to end item) #031" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "1.) The first item 2.) The second item", language: "en")
-      expect(ps.segment).to eq(["1.) The first item", "2.) The second item"])
-    end
-
-    it "List (period followed by parens and period to end item) #032" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "1.) The first item. 2.) The second item.", language: "en")
-      expect(ps.segment).to eq(["1.) The first item.", "2.) The second item."])
-    end
-
-    it "List (parens and no period to end item) #033" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "1) The first item 2) The second item", language: "en")
-      expect(ps.segment).to eq(["1) The first item", "2) The second item"])
-    end
-
-    it "List (parens and period to end item) #034" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "1) The first item. 2) The second item.", language: "en")
-      expect(ps.segment).to eq(["1) The first item.", "2) The second item."])
-    end
-
-    it "List (period to mark list and no period to end item) #035" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "1. The first item 2. The second item", language: "en")
-      expect(ps.segment).to eq(["1. The first item", "2. The second item"])
-    end
-
-    it "List (period to mark list and period to end item) #036" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "1. The first item. 2. The second item.", language: "en")
-      expect(ps.segment).to eq(["1. The first item.", "2. The second item."])
-    end
-
-    it "List with bullet #037" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "• 9. The first item • 10. The second item", language: "en")
-      expect(ps.segment).to eq(["• 9. The first item", "• 10. The second item"])
-    end
-
-    it "List with hypthen #038" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "⁃9. The first item ⁃10. The second item", language: "en")
-      expect(ps.segment).to eq(["⁃9. The first item", "⁃10. The second item"])
-    end
-
-    it "Alphabetical list #039" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "a. The first item b. The second item c. The third list item", language: "en")
-      expect(ps.segment).to eq(["a. The first item", "b. The second item", "c. The third list item"])
-    end
-
-    it "Errant newlines in the middle of sentences (PDF) #040" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "This is a sentence\ncut off in the middle because pdf.", language: "en", doc_type: "pdf")
-      expect(ps.segment).to eq(["This is a sentence cut off in the middle because pdf."])
-    end
-
-    it "Errant newlines in the middle of sentences #041" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "It was a cold \nnight in the city.", language: "en")
-      expect(ps.segment).to eq(["It was a cold night in the city."])
-    end
-
-    it "Lower case list separated by newline #042" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "features\ncontact manager\nevents, activities\n", language: "en")
-      expect(ps.segment).to eq(["features", "contact manager", "events, activities"])
-    end
-
-    it "Geo Coordinates #043" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "You can find it at N°. 1026.253.553. That is where the treasure is.", language: "en")
-      expect(ps.segment).to eq(["You can find it at N°. 1026.253.553.", "That is where the treasure is."])
-    end
-
-    it "Named entities with an exclamation point #044" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "She works at Yahoo! in the accounting department.", language: "en")
-      expect(ps.segment).to eq(["She works at Yahoo! in the accounting department."])
-    end
-
-    it "I as a sentence boundary and I as an abbreviation #045" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "We make a good team, you and I. Did you see Albert I. Jones yesterday?", language: "en")
-      expect(ps.segment).to eq(["We make a good team, you and I.", "Did you see Albert I. Jones yesterday?"])
-    end
-
-    it "Ellipsis at end of quotation #046" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "Thoreau argues that by simplifying one’s life, “the laws of the universe will appear less complex. . . .”", language: "en")
-      expect(ps.segment).to eq(["Thoreau argues that by simplifying one’s life, “the laws of the universe will appear less complex. . . .”"])
-    end
-
-    it "Ellipsis with square brackets #047" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "\"Bohr [...] used the analogy of parallel stairways [...]\" (Smith 55).", language: "en")
-      expect(ps.segment).to eq(["\"Bohr [...] used the analogy of parallel stairways [...]\" (Smith 55)."])
-    end
-
-    it "Ellipsis as sentence boundary (standard ellipsis rules) #048" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "If words are left off at the end of a sentence, and that is all that is omitted, indicate the omission with ellipsis marks (preceded and followed by a space) and then indicate the end of the sentence with a period . . . . Next sentence.", language: "en")
-      expect(ps.segment).to eq(["If words are left off at the end of a sentence, and that is all that is omitted, indicate the omission with ellipsis marks (preceded and followed by a space) and then indicate the end of the sentence with a period . . . .", "Next sentence."])
-    end
-
-    it "Ellipsis as sentence boundary (non-standard ellipsis rules) #049" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "I never meant that.... She left the store.", language: "en")
-      expect(ps.segment).to eq(["I never meant that....", "She left the store."])
-    end
-
-    it "Ellipsis as non sentence boundary #050" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "I wasn’t really ... well, what I mean...see . . . what I'm saying, the thing is . . . I didn’t mean it.", language: "en")
-      expect(ps.segment).to eq(["I wasn’t really ... well, what I mean...see . . . what I'm saying, the thing is . . . I didn’t mean it."])
-    end
-
-    it "4-dot ellipsis #051" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "One further habit which was somewhat weakened . . . was that of combining words into self-interpreting compounds. . . . The practice was not abandoned. . . .", language: "en")
-      expect(ps.segment).to eq(["One further habit which was somewhat weakened . . . was that of combining words into self-interpreting compounds.", ". . . The practice was not abandoned. . . ."])
-    end
-
-    it "No whitespace in between sentences #052" do
-      ps = PragmaticSegmenter::Segmenter.new(text: "Hello world.Today is Tuesday.Mr. Smith went to the store and bought 1,000.That is a lot.", language: "en")
-      expect(ps.segment).to eq(["Hello world.", "Today is Tuesday.", "Mr. Smith went to the store and bought 1,000.", "That is a lot."])
-    end
-  end
-
-  context "Golden Rules (languages other than English)" do
-    context "Golden Rules (German)" do
-      it "Quotation at end of sentence #001" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "„Ich habe heute keine Zeit“, sagte die Frau und flüsterte leise: „Und auch keine Lust.“ Wir haben 1.000.000 Euro.", language: "de")
-        expect(ps.segment).to eq(["„Ich habe heute keine Zeit“, sagte die Frau und flüsterte leise: „Und auch keine Lust.“", "Wir haben 1.000.000 Euro."])
-      end
-
-      it "Abbreviations #002" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Es gibt jedoch einige Vorsichtsmaßnahmen, die Du ergreifen kannst, z. B. ist es sehr empfehlenswert, dass Du Dein Zuhause von allem Junkfood befreist.", language: "de")
-        expect(ps.segment).to eq(["Es gibt jedoch einige Vorsichtsmaßnahmen, die Du ergreifen kannst, z. B. ist es sehr empfehlenswert, dass Du Dein Zuhause von allem Junkfood befreist."])
-      end
-
-      it "Numbers #003" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Was sind die Konsequenzen der Abstimmung vom 12. Juni?", language: "de")
-        expect(ps.segment).to eq(["Was sind die Konsequenzen der Abstimmung vom 12. Juni?"])
-      end
-    end
-
-    context "Golden Rules (Japanese)" do
+    context "Golden Rules" do
       it "Simple period to end sentence #001" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "これはペンです。それはマーカーです。", language: "ja")
-        expect(ps.segment).to eq(["これはペンです。", "それはマーカーです。"])
+        ps = PragmaticSegmenter::Segmenter.new(text: "Hello World. My name is Jonas.", language: "en")
+        expect(ps.segment).to eq(["Hello World.", "My name is Jonas."])
       end
 
       it "Question mark to end sentence #002" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "それは何ですか？ペンですか？", language: "ja")
-        expect(ps.segment).to eq(["それは何ですか？", "ペンですか？"])
+        ps = PragmaticSegmenter::Segmenter.new(text: "What is your name? My name is Jonas.", language: "en")
+        expect(ps.segment).to eq(["What is your name?", "My name is Jonas."])
       end
 
       it "Exclamation point to end sentence #003" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "良かったね！すごい！", language: "ja")
-        expect(ps.segment).to eq(["良かったね！", "すごい！"])
+        ps = PragmaticSegmenter::Segmenter.new(text: "There it is! I found it.", language: "en")
+        expect(ps.segment).to eq(["There it is!", "I found it."])
       end
 
-      it "Quotation #004" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "自民党税制調査会の幹部は、「引き下げ幅は３．２９％以上を目指すことになる」と指摘していて、今後、公明党と合意したうえで、３０日に決定する与党税制改正大綱に盛り込むことにしています。２％台後半を目指すとする方向で最終調整に入りました。", language: "ja")
-        expect(ps.segment).to eq(["自民党税制調査会の幹部は、「引き下げ幅は３．２９％以上を目指すことになる」と指摘していて、今後、公明党と合意したうえで、３０日に決定する与党税制改正大綱に盛り込むことにしています。", "２％台後半を目指すとする方向で最終調整に入りました。"])
+      it "One letter upper case abbreviations #004" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "My name is Jonas E. Smith.", language: "en")
+        expect(ps.segment).to eq(["My name is Jonas E. Smith."])
       end
 
-      it "Errant newlines in the middle of sentences #005" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "これは父の\n家です。", language: "ja")
-        expect(ps.segment).to eq(["これは父の家です。"])
+      it "One letter lower case abbreviations #005" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Please turn to p. 55.", language: "en")
+        expect(ps.segment).to eq(["Please turn to p. 55."])
+      end
+
+      it "Two letter lower case abbreviations in the middle of a sentence #006" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Were Jane and co. at the party?", language: "en")
+        expect(ps.segment).to eq(["Were Jane and co. at the party?"])
+      end
+
+      it "Two letter upper case abbreviations in the middle of a sentence #007" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "They closed the deal with Pitt, Briggs & Co. at noon.", language: "en")
+        expect(ps.segment).to eq(["They closed the deal with Pitt, Briggs & Co. at noon."])
+      end
+
+      it "Two letter lower case abbreviations at the end of a sentence #008" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Let's ask Jane and co. They should know.", language: "en")
+        expect(ps.segment).to eq(["Let's ask Jane and co.", "They should know."])
+      end
+
+      it "Two letter upper case abbreviations at the end of a sentence #009" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "They closed the deal with Pitt, Briggs & Co. It closed yesterday.", language: "en")
+        expect(ps.segment).to eq(["They closed the deal with Pitt, Briggs & Co.", "It closed yesterday."])
+      end
+
+      it "Two letter (prepositive) abbreviations #010" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "I can see Mt. Fuji from here.", language: "en")
+        expect(ps.segment).to eq(["I can see Mt. Fuji from here."])
+      end
+
+      it "Two letter (prepositive & postpositive) abbreviations #011" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "St. Michael's Church is on 5th st. near the light.", language: "en")
+        expect(ps.segment).to eq(["St. Michael's Church is on 5th st. near the light."])
+      end
+
+      it "Possesive two letter abbreviations #012" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "That is JFK Jr.'s book.", language: "en")
+        expect(ps.segment).to eq(["That is JFK Jr.'s book."])
+      end
+
+      it "Multi-period abbreviations in the middle of a sentence #013" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "I visited the U.S.A. last year.", language: "en")
+        expect(ps.segment).to eq(["I visited the U.S.A. last year."])
+      end
+
+      it "Multi-period abbreviations at the end of a sentence #014" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "I live in the E.U. How about you?", language: "en")
+        expect(ps.segment).to eq(["I live in the E.U.", "How about you?"])
+      end
+
+      it "U.S. as sentence boundary #015" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "I live in the U.S. How about you?", language: "en")
+        expect(ps.segment).to eq(["I live in the U.S.", "How about you?"])
+      end
+
+      it "U.S. as non sentence boundary with next word capitalized #016" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "I work for the U.S. Government in Virginia.", language: "en")
+        expect(ps.segment).to eq(["I work for the U.S. Government in Virginia."])
+      end
+
+      it "U.S. as non sentence boundary #017" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "I have lived in the U.S. for 20 years.", language: "en")
+        expect(ps.segment).to eq(["I have lived in the U.S. for 20 years."])
+      end
+
+      it "A.M. / P.M. as non sentence boundary and sentence boundary #018" do
+        skip "NOT IMPLEMENTED"
+        ps = PragmaticSegmenter::Segmenter.new(text: "At 5 a.m. Mr. Smith went to the bank. He left the bank at 6 P.M. Mr. Smith then went to the store.", language: "en")
+        expect(ps.segment).to eq(["At 5 a.m. Mr. Smith went to the bank.", "He left the bank at 6 P.M.", "Mr. Smith then went to the store."])
+      end
+
+      it "Number as non sentence boundary #019" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "She has $100.00 in her bag.", language: "en")
+        expect(ps.segment).to eq(["She has $100.00 in her bag."])
+      end
+
+      it "Number as sentence boundary #020" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "She has $100.00. It is in her bag.", language: "en")
+        expect(ps.segment).to eq(["She has $100.00.", "It is in her bag."])
+      end
+
+      it "Parenthetical inside sentence #021" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "He teaches science (He previously worked for 5 years as an engineer.) at the local University.", language: "en")
+        expect(ps.segment).to eq(["He teaches science (He previously worked for 5 years as an engineer.) at the local University."])
+      end
+
+      it "Email addresses #022" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Her email is Jane.Doe@example.com. I sent her an email.", language: "en")
+        expect(ps.segment).to eq(["Her email is Jane.Doe@example.com.", "I sent her an email."])
+      end
+
+      it "Web addresses #023" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "The site is: https://www.example.50.com/new-site/awesome_content.html. Please check it out.", language: "en")
+        expect(ps.segment).to eq(["The site is: https://www.example.50.com/new-site/awesome_content.html.", "Please check it out."])
+      end
+
+      it "Single quotations inside sentence #024" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "She turned to him, 'This is great.' she said.", language: "en")
+        expect(ps.segment).to eq(["She turned to him, 'This is great.' she said."])
+      end
+
+      it "Double quotations inside sentence #025" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "She turned to him, \"This is great.\" she said.", language: "en")
+        expect(ps.segment).to eq(["She turned to him, \"This is great.\" she said."])
+      end
+
+      it "Double quotations at the end of a sentence #026" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "She turned to him, \"This is great.\" She held the book out to show him.", language: "en")
+        expect(ps.segment).to eq(["She turned to him, \"This is great.\"", "She held the book out to show him."])
+      end
+
+      it "Double punctuation (exclamation point) #027" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Hello!! Long time no see.", language: "en")
+        expect(ps.segment).to eq(["Hello!!", "Long time no see."])
+      end
+
+      it "Double punctuation (question mark) #028" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Hello?? Who is there?", language: "en")
+        expect(ps.segment).to eq(["Hello??", "Who is there?"])
+      end
+
+      it "Double punctuation (exclamation point / question mark) #029" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Hello!? Is that you?", language: "en")
+        expect(ps.segment).to eq(["Hello!?", "Is that you?"])
+      end
+
+      it "Double punctuation (question mark / exclamation point) #030" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Hello?! Is that you?", language: "en")
+        expect(ps.segment).to eq(["Hello?!", "Is that you?"])
+      end
+
+      it "List (period followed by parens and no period to end item) #031" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "1.) The first item 2.) The second item", language: "en")
+        expect(ps.segment).to eq(["1.) The first item", "2.) The second item"])
+      end
+
+      it "List (period followed by parens and period to end item) #032" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "1.) The first item. 2.) The second item.", language: "en")
+        expect(ps.segment).to eq(["1.) The first item.", "2.) The second item."])
+      end
+
+      it "List (parens and no period to end item) #033" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "1) The first item 2) The second item", language: "en")
+        expect(ps.segment).to eq(["1) The first item", "2) The second item"])
+      end
+
+      it "List (parens and period to end item) #034" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "1) The first item. 2) The second item.", language: "en")
+        expect(ps.segment).to eq(["1) The first item.", "2) The second item."])
+      end
+
+      it "List (period to mark list and no period to end item) #035" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "1. The first item 2. The second item", language: "en")
+        expect(ps.segment).to eq(["1. The first item", "2. The second item"])
+      end
+
+      it "List (period to mark list and period to end item) #036" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "1. The first item. 2. The second item.", language: "en")
+        expect(ps.segment).to eq(["1. The first item.", "2. The second item."])
+      end
+
+      it "List with bullet #037" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "• 9. The first item • 10. The second item", language: "en")
+        expect(ps.segment).to eq(["• 9. The first item", "• 10. The second item"])
+      end
+
+      it "List with hypthen #038" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "⁃9. The first item ⁃10. The second item", language: "en")
+        expect(ps.segment).to eq(["⁃9. The first item", "⁃10. The second item"])
+      end
+
+      it "Alphabetical list #039" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "a. The first item b. The second item c. The third list item", language: "en")
+        expect(ps.segment).to eq(["a. The first item", "b. The second item", "c. The third list item"])
+      end
+
+      it "Errant newlines in the middle of sentences (PDF) #040" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "This is a sentence\ncut off in the middle because pdf.", language: "en", doc_type: "pdf")
+        expect(ps.segment).to eq(["This is a sentence cut off in the middle because pdf."])
+      end
+
+      it "Errant newlines in the middle of sentences #041" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "It was a cold \nnight in the city.", language: "en")
+        expect(ps.segment).to eq(["It was a cold night in the city."])
+      end
+
+      it "Lower case list separated by newline #042" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "features\ncontact manager\nevents, activities\n", language: "en")
+        expect(ps.segment).to eq(["features", "contact manager", "events, activities"])
+      end
+
+      it "Geo Coordinates #043" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "You can find it at N°. 1026.253.553. That is where the treasure is.", language: "en")
+        expect(ps.segment).to eq(["You can find it at N°. 1026.253.553.", "That is where the treasure is."])
+      end
+
+      it "Named entities with an exclamation point #044" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "She works at Yahoo! in the accounting department.", language: "en")
+        expect(ps.segment).to eq(["She works at Yahoo! in the accounting department."])
+      end
+
+      it "I as a sentence boundary and I as an abbreviation #045" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "We make a good team, you and I. Did you see Albert I. Jones yesterday?", language: "en")
+        expect(ps.segment).to eq(["We make a good team, you and I.", "Did you see Albert I. Jones yesterday?"])
+      end
+
+      it "Ellipsis at end of quotation #046" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Thoreau argues that by simplifying one’s life, “the laws of the universe will appear less complex. . . .”", language: "en")
+        expect(ps.segment).to eq(["Thoreau argues that by simplifying one’s life, “the laws of the universe will appear less complex. . . .”"])
+      end
+
+      it "Ellipsis with square brackets #047" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "\"Bohr [...] used the analogy of parallel stairways [...]\" (Smith 55).", language: "en")
+        expect(ps.segment).to eq(["\"Bohr [...] used the analogy of parallel stairways [...]\" (Smith 55)."])
+      end
+
+      it "Ellipsis as sentence boundary (standard ellipsis rules) #048" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "If words are left off at the end of a sentence, and that is all that is omitted, indicate the omission with ellipsis marks (preceded and followed by a space) and then indicate the end of the sentence with a period . . . . Next sentence.", language: "en")
+        expect(ps.segment).to eq(["If words are left off at the end of a sentence, and that is all that is omitted, indicate the omission with ellipsis marks (preceded and followed by a space) and then indicate the end of the sentence with a period . . . .", "Next sentence."])
+      end
+
+      it "Ellipsis as sentence boundary (non-standard ellipsis rules) #049" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "I never meant that.... She left the store.", language: "en")
+        expect(ps.segment).to eq(["I never meant that....", "She left the store."])
+      end
+
+      it "Ellipsis as non sentence boundary #050" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "I wasn’t really ... well, what I mean...see . . . what I'm saying, the thing is . . . I didn’t mean it.", language: "en")
+        expect(ps.segment).to eq(["I wasn’t really ... well, what I mean...see . . . what I'm saying, the thing is . . . I didn’t mean it."])
+      end
+
+      it "4-dot ellipsis #051" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "One further habit which was somewhat weakened . . . was that of combining words into self-interpreting compounds. . . . The practice was not abandoned. . . .", language: "en")
+        expect(ps.segment).to eq(["One further habit which was somewhat weakened . . . was that of combining words into self-interpreting compounds.", ". . . The practice was not abandoned. . . ."])
+      end
+
+      it "No whitespace in between sentences #052" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Hello world.Today is Tuesday.Mr. Smith went to the store and bought 1,000.That is a lot.", language: "en")
+        expect(ps.segment).to eq(["Hello world.", "Today is Tuesday.", "Mr. Smith went to the store and bought 1,000.", "That is a lot."])
       end
     end
 
-    context "Golden Rules (Arabic)" do
-      it "Regular punctuation #001" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "سؤال وجواب: ماذا حدث بعد الانتخابات الايرانية؟ طرح الكثير من التساؤلات غداة ظهور نتائج الانتخابات الرئاسية الايرانية التي أججت مظاهرات واسعة واعمال عنف بين المحتجين على النتائج ورجال الامن. يقول معارضو الرئيس الإيراني إن الطريقة التي اعلنت بها النتائج كانت مثيرة للاستغراب.", language: "ar")
-        expect(ps.segment).to eq(["سؤال وجواب:", "ماذا حدث بعد الانتخابات الايرانية؟", "طرح الكثير من التساؤلات غداة ظهور نتائج الانتخابات الرئاسية الايرانية التي أججت مظاهرات واسعة واعمال عنف بين المحتجين على النتائج ورجال الامن.", "يقول معارضو الرئيس الإيراني إن الطريقة التي اعلنت بها النتائج كانت مثيرة للاستغراب."])
-      end
-
-      it "Abbreviations #002" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "وقال د‪.‬ ديفيد ريدي و الأطباء الذين كانوا يعالجونها في مستشفى برمنجهام إنها كانت تعاني من أمراض أخرى. وليس معروفا ما اذا كانت قد توفيت بسبب اصابتها بأنفلونزا الخنازير.", language: "ar")
-        expect(ps.segment).to eq(["وقال د‪.‬ ديفيد ريدي و الأطباء الذين كانوا يعالجونها في مستشفى برمنجهام إنها كانت تعاني من أمراض أخرى.", "وليس معروفا ما اذا كانت قد توفيت بسبب اصابتها بأنفلونزا الخنازير."])
-      end
-
-      it "Numbers and Dates #003" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "ومن المنتظر أن يكتمل مشروع خط أنابيب نابوكو البالغ طوله 3300 كليومترا في 12‪/‬08‪/‬2014 بتكلفة تُقدر بـ 7.9 مليارات يورو أي نحو 10.9 مليارات دولار. ومن المقرر أن تصل طاقة ضخ الغاز في المشروع 31 مليار متر مكعب انطلاقا من بحر قزوين مرورا بالنمسا وتركيا ودول البلقان دون المرور على الأراضي الروسية.", language: "ar")
-        expect(ps.segment).to eq(["ومن المنتظر أن يكتمل مشروع خط أنابيب نابوكو البالغ طوله 3300 كليومترا في 12‪/‬08‪/‬2014 بتكلفة تُقدر بـ 7.9 مليارات يورو أي نحو 10.9 مليارات دولار.", "ومن المقرر أن تصل طاقة ضخ الغاز في المشروع 31 مليار متر مكعب انطلاقا من بحر قزوين مرورا بالنمسا وتركيا ودول البلقان دون المرور على الأراضي الروسية."])
-      end
-
-      it "Time #004" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "الاحد, 21 فبراير/ شباط, 2010, 05:01 GMT الصنداي تايمز: رئيس الموساد قد يصبح ضحية الحرب السرية التي شتنها بنفسه. العقل المنظم هو مئير داجان رئيس الموساد الإسرائيلي الذي يشتبه بقيامه باغتيال القائد الفلسطيني في حركة حماس محمود المبحوح في دبي.", language: "ar")
-        expect(ps.segment).to eq(["الاحد, 21 فبراير/ شباط, 2010, 05:01 GMT الصنداي تايمز:", "رئيس الموساد قد يصبح ضحية الحرب السرية التي شتنها بنفسه.", "العقل المنظم هو مئير داجان رئيس الموساد الإسرائيلي الذي يشتبه بقيامه باغتيال القائد الفلسطيني في حركة حماس محمود المبحوح في دبي."])
-      end
-
-      it "Comma #005" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "عثر في الغرفة على بعض أدوية علاج ارتفاع ضغط الدم، والقلب، زرعها عملاء الموساد كما تقول مصادر إسرائيلية، وقرر الطبيب أن الفلسطيني قد توفي وفاة طبيعية ربما إثر نوبة قلبية، وبدأت مراسم الحداد عليه", language: "ar")
-        expect(ps.segment).to eq(["عثر في الغرفة على بعض أدوية علاج ارتفاع ضغط الدم، والقلب،", "زرعها عملاء الموساد كما تقول مصادر إسرائيلية،", "وقرر الطبيب أن الفلسطيني قد توفي وفاة طبيعية ربما إثر نوبة قلبية،", "وبدأت مراسم الحداد عليه"])
-      end
-    end
-
-    context "Golden Rules (Italian)" do
-      it "Abbreviations #001" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Salve Sig.ra Mengoni! Come sta oggi?", language: "it")
-        expect(ps.segment).to eq(["Salve Sig.ra Mengoni!", "Come sta oggi?"])
-      end
-
-      it "Quotations #002" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Una lettera si può iniziare in questo modo «Il/la sottoscritto/a.».", language: "it")
-        expect(ps.segment).to eq(["Una lettera si può iniziare in questo modo «Il/la sottoscritto/a.»."])
-      end
-
-      it "Numbers #003" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "La casa costa 170.500.000,00€!", language: "it")
-        expect(ps.segment).to eq(["La casa costa 170.500.000,00€!"])
-      end
-    end
-
-    context "Golden Rules (Russian)" do
-      it "Abbreviations #001" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Объем составляет 5 куб.м.", language: "ru")
-        expect(ps.segment).to eq(["Объем составляет 5 куб.м."])
-      end
-
-      it "Quotations #002" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Маленькая девочка бежала и кричала: «Не видали маму?».", language: "ru")
-        expect(ps.segment).to eq(["Маленькая девочка бежала и кричала: «Не видали маму?»."])
-      end
-
-      it "Numbers #003" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Сегодня 27.10.14", language: "ru")
-        expect(ps.segment).to eq(["Сегодня 27.10.14"])
-      end
-    end
-
-    context "Golden Rules (Spanish)" do
-      it "Question mark to end sentence #001" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "¿Cómo está hoy? Espero que muy bien.", language: "es")
-        expect(ps.segment).to eq(["¿Cómo está hoy?", "Espero que muy bien."])
-      end
-
-      it "Exclamation point to end sentence #002" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "¡Hola señorita! Espero que muy bien.", language: "es")
-        expect(ps.segment).to eq(["¡Hola señorita!", "Espero que muy bien."])
-      end
-
-      it "Abbreviations #003" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Hola Srta. Ledesma. Buenos días, soy el Lic. Naser Pastoriza, y él es mi padre, el Dr. Naser.", language: "es")
-        expect(ps.segment).to eq(["Hola Srta. Ledesma.", "Buenos días, soy el Lic. Naser Pastoriza, y él es mi padre, el Dr. Naser."])
-      end
-
-      it "Numbers #004" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "¡La casa cuesta $170.500.000,00! ¡Muy costosa! Se prevé una disminución del 12.5% para el próximo año.", language: "es")
-        expect(ps.segment).to eq(["¡La casa cuesta $170.500.000,00!", "¡Muy costosa!", "Se prevé una disminución del 12.5% para el próximo año."])
-      end
-
-      it "Quotations #005" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "«Ninguna mente extraordinaria está exenta de un toque de demencia.», dijo Aristóteles.", language: "es")
-        expect(ps.segment).to eq(["«Ninguna mente extraordinaria está exenta de un toque de demencia.», dijo Aristóteles."])
-      end
-    end
-
-    context "Golden Rules (Greek)" do
-      it "Question mark to end sentence #001" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Με συγχωρείτε· πού είναι οι τουαλέτες; Τις Κυριακές δε δούλευε κανένας. το κόστος του σπιτιού ήταν £260.950,00.", language: "el")
-        expect(ps.segment).to eq(["Με συγχωρείτε· πού είναι οι τουαλέτες;", "Τις Κυριακές δε δούλευε κανένας.", "το κόστος του σπιτιού ήταν £260.950,00."])
-      end
-    end
-
-    context "Golden Rules (Hindi)" do
-      it "Full stop #001" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "सच्चाई यह है कि इसे कोई नहीं जानता। हो सकता है यह फ़्रेन्को के खिलाफ़ कोई विद्रोह रहा हो, या फिर बेकाबू हो गया कोई आनंदोत्सव।", language: "hi")
-        expect(ps.segment).to eq(["सच्चाई यह है कि इसे कोई नहीं जानता।", "हो सकता है यह फ़्रेन्को के खिलाफ़ कोई विद्रोह रहा हो, या फिर बेकाबू हो गया कोई आनंदोत्सव।"])
-      end
-    end
-
-    context "Golden Rules (Armenian)" do
-      it "Sentence ending punctuation #001" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Ի՞նչ ես մտածում: Ոչինչ:", language: "hy")
-        expect(ps.segment).to eq(["Ի՞նչ ես մտածում:", "Ոչինչ:"])
-      end
-
-      it "Ellipsis #002" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Ապրիլի 24-ին սկսեց անձրևել...Այդպես էի գիտեի:", language: "hy")
-        expect(ps.segment).to eq(["Ապրիլի 24-ին սկսեց անձրևել...Այդպես էի գիտեի:"])
-      end
-
-      it "Period is not a sentence boundary #003" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Այսպիսով` մոտենում ենք ավարտին: Տրամաբանությյունը հետևյալն է. պարզություն և աշխատանք:", language: "hy")
-        expect(ps.segment).to eq(["Այսպիսով` մոտենում ենք ավարտին:", "Տրամաբանությյունը հետևյալն է. պարզություն և աշխատանք:"])
-      end
-    end
-
-    context "Golden Rules (Burmese)" do
-      it "Sentence ending punctuation #001" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "ခင္ဗ်ားနာမည္ဘယ္လိုေခၚလဲ။၇ွင္ေနေကာင္းလား။", language: 'my')
-        expect(ps.segment).to eq(["ခင္ဗ်ားနာမည္ဘယ္လိုေခၚလဲ။", "၇ွင္ေနေကာင္းလား။"])
-      end
-    end
-
-    context "Golden Rules (Amharic)" do
-      it "Sentence ending punctuation #001" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "እንደምን አለህ፧መልካም ቀን ይሁንልህ።እባክሽ ያልሽዉን ድገሚልኝ።", language: 'am')
-        expect(ps.segment).to eq(["እንደምን አለህ፧", "መልካም ቀን ይሁንልህ።", "እባክሽ ያልሽዉን ድገሚልኝ።"])
-      end
-    end
-
-    context "Golden Rules (Persian)" do
-      it "Sentence ending punctuation #001" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "خوشبختم، آقای رضا. شما کجایی هستید؟ من از تهران هستم.", language: 'fa')
-        expect(ps.segment).to eq(["خوشبختم، آقای رضا.", "شما کجایی هستید؟", "من از تهران هستم."])
-      end
-    end
-
-    context "Golden Rules (Urdu)" do
-      it "Sentence ending punctuation #001" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "کیا حال ہے؟ ميرا نام ___ ەے۔ میں حالا تاوان دےدوں؟", language: 'ur')
-        expect(ps.segment).to eq(["کیا حال ہے؟", "ميرا نام ___ ەے۔", "میں حالا تاوان دےدوں؟"])
-      end
-    end
-
-    context "Golden Rules (Dutch)" do
-      it "Sentence starting with a number #001" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Hij schoot op de JP8-brandstof toen de Surface-to-Air (sam)-missiles op hem af kwamen. 81 procent van de schoten was raak.", language: 'nl')
-        expect(ps.segment).to eq(["Hij schoot op de JP8-brandstof toen de Surface-to-Air (sam)-missiles op hem af kwamen.", "81 procent van de schoten was raak."])
-      end
-
-      it "Sentence starting with an ellipsis #002" do
-        ps = PragmaticSegmenter::Segmenter.new(text: "81 procent van de schoten was raak. ...en toen barste de hel los.", language: 'nl')
-        expect(ps.segment).to eq(["81 procent van de schoten was raak.", "...en toen barste de hel los."])
-      end
-    end
-  end
-
-  context 'Language: English (en)' do
     describe '#segment' do
       it 'correctly segments text #001' do
         ps = PragmaticSegmenter::Segmenter.new(text: "Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, 'and what is the use of a book,' thought Alice 'without pictures or conversations?'\nSo she was considering in her own mind (as well as she could, for the hot day made her feel very sleepy and stupid), whether the pleasure of making a daisy-chain would be worth the trouble of getting up and picking the daisies, when suddenly a White Rabbit with pink eyes ran close by her.", language: 'en')
@@ -1608,9 +1404,225 @@ RSpec.describe PragmaticSegmenter::Segmenter do
         expect(ps.segment).to eq(["SEC. 1262 AUTHORIZATION OF APPROPRIATIONS."])
       end
     end
+
   end
 
-  context 'Language: Japanese (ja)' do
+  describe "German", '(de)' do
+    context "Golden Rules" do
+      it "Quotation at end of sentence #001" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "„Ich habe heute keine Zeit“, sagte die Frau und flüsterte leise: „Und auch keine Lust.“ Wir haben 1.000.000 Euro.", language: "de")
+        expect(ps.segment).to eq(["„Ich habe heute keine Zeit“, sagte die Frau und flüsterte leise: „Und auch keine Lust.“", "Wir haben 1.000.000 Euro."])
+      end
+
+      it "Abbreviations #002" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Es gibt jedoch einige Vorsichtsmaßnahmen, die Du ergreifen kannst, z. B. ist es sehr empfehlenswert, dass Du Dein Zuhause von allem Junkfood befreist.", language: "de")
+        expect(ps.segment).to eq(["Es gibt jedoch einige Vorsichtsmaßnahmen, die Du ergreifen kannst, z. B. ist es sehr empfehlenswert, dass Du Dein Zuhause von allem Junkfood befreist."])
+      end
+
+      it "Numbers #003" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Was sind die Konsequenzen der Abstimmung vom 12. Juni?", language: "de")
+        expect(ps.segment).to eq(["Was sind die Konsequenzen der Abstimmung vom 12. Juni?"])
+      end
+    end
+
+    # Thanks to Silvia Busse for the German test examples.
+    describe '#segment' do
+      it 'correctly segments text #001' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "\n   \n\n   http:www.babycentre.co.uk/midwives \n\n \n\n \n\n10 steps to a healthy pregnancy (German) \n\n10 Schritte zu einer gesunden Schwangerschaft \n \n• 1. Planen und organisieren Sie die Zeit der Schwangerschaft frühzeitig! \n• 2. Essen Sie gesund! \n• 3. Seien Sie achtsam bei der Auswahl der Nahrungsmittel! \n• 4. Nehmen Sie zusätzlich Folsäurepräparate und essen Sie Fisch! \n• 5. Treiben Sie regelmäßig Sport! \n• 6. Beginnen Sie mit Übungen für die Beckenbodenmuskulatur! \n• 7. Reduzieren Sie Ihren Alkoholgenuss! \n• 8. Reduzieren Sie Ihren Koffeingenuß! \n• 9. Hören Sie mit dem Rauchen auf! \n• 10. Gönnen Sie sich Erholung! \n \n \nZehn einfach zu befolgende Tipps sollen Ihnen helfen, eine möglichst problemlose \nSchwangerschaft zu erleben und ein gesundes Baby auf die Welt zu bringen:  \n\n1. Planen und organisieren Sie die Zeit der Schwangerschaft frühzeitig!", language: 'de', doc_type: 'pdf')
+        expect(ps.segment).to eq(["http:www.babycentre.co.uk/midwives", "10 steps to a healthy pregnancy (German)", "10 Schritte zu einer gesunden Schwangerschaft", "• 1. Planen und organisieren Sie die Zeit der Schwangerschaft frühzeitig!", "• 2. Essen Sie gesund!", "• 3. Seien Sie achtsam bei der Auswahl der Nahrungsmittel!", "• 4. Nehmen Sie zusätzlich Folsäurepräparate und essen Sie Fisch!", "• 5. Treiben Sie regelmäßig Sport!", "• 6. Beginnen Sie mit Übungen für die Beckenbodenmuskulatur!", "• 7. Reduzieren Sie Ihren Alkoholgenuss!", "• 8. Reduzieren Sie Ihren Koffeingenuß!", "• 9. Hören Sie mit dem Rauchen auf!", "• 10. Gönnen Sie sich Erholung!", "Zehn einfach zu befolgende Tipps sollen Ihnen helfen, eine möglichst problemlose Schwangerschaft zu erleben und ein gesundes Baby auf die Welt zu bringen:", "1. Planen und organisieren Sie die Zeit der Schwangerschaft frühzeitig!"])
+      end
+
+      it 'correctly segments text #002' do
+        ps = PragmaticSegmenter::Segmenter.new(text: '„Ich habe heute keine Zeit“, sagte die Frau und flüsterte leise: „Und auch keine Lust.“ Wir haben 1.000.000 Euro.', language: 'de')
+        expect(ps.segment).to eq(["„Ich habe heute keine Zeit“, sagte die Frau und flüsterte leise: „Und auch keine Lust.“", "Wir haben 1.000.000 Euro."])
+      end
+
+      it 'correctly segments text #003' do
+        ps = PragmaticSegmenter::Segmenter.new(text: 'Thomas sagte: ,,Wann kommst zu mir?” ,,Das weiß ich noch nicht“, antwortete Susi, ,,wahrscheinlich am Sonntag.“ Wir haben 1.000.000 Euro.', language: 'de')
+        expect(ps.segment).to eq(["Thomas sagte: ,,Wann kommst zu mir?” ,,Das weiß ich noch nicht“, antwortete Susi, ,,wahrscheinlich am Sonntag.“", "Wir haben 1.000.000 Euro."])
+      end
+
+      it 'correctly segments text #004' do
+        ps = PragmaticSegmenter::Segmenter.new(text: '„Lass uns jetzt essen gehen!“, sagte die Mutter zu ihrer Freundin, „am besten zum Italiener.“', language: 'de')
+        expect(ps.segment).to eq(['„Lass uns jetzt essen gehen!“, sagte die Mutter zu ihrer Freundin, „am besten zum Italiener.“'])
+      end
+
+      it 'correctly segments text #005' do
+        ps = PragmaticSegmenter::Segmenter.new(text: 'Wir haben 1.000.000 Euro.', language: 'de')
+        expect(ps.segment).to eq(['Wir haben 1.000.000 Euro.'])
+      end
+
+      it 'correctly segments text #006' do
+        ps = PragmaticSegmenter::Segmenter.new(text: 'Sie bekommen 3,50 Euro zurück.', language: 'de')
+        expect(ps.segment).to eq(['Sie bekommen 3,50 Euro zurück.'])
+      end
+
+      it 'correctly segments text #007' do
+        ps = PragmaticSegmenter::Segmenter.new(text: 'Dafür brauchen wir 5,5 Stunden.', language: 'de')
+        expect(ps.segment).to eq(['Dafür brauchen wir 5,5 Stunden.'])
+      end
+
+      it 'correctly segments text #008' do
+        ps = PragmaticSegmenter::Segmenter.new(text: 'Bitte überweisen Sie 5.300,25 Euro.', language: 'de')
+        expect(ps.segment).to eq(['Bitte überweisen Sie 5.300,25 Euro.'])
+      end
+
+      it 'correctly segments text #009' do
+        ps = PragmaticSegmenter::Segmenter.new(text: '1. Dies ist eine Punkteliste.', language: 'de')
+        expect(ps.segment).to eq(['1. Dies ist eine Punkteliste.'])
+      end
+
+      it 'correctly segments text #010' do
+        ps = PragmaticSegmenter::Segmenter.new(text: 'Wir trafen Dr. med. Meyer in der Stadt.', language: 'de')
+        expect(ps.segment).to eq(['Wir trafen Dr. med. Meyer in der Stadt.'])
+      end
+
+      it 'correctly segments text #011' do
+        ps = PragmaticSegmenter::Segmenter.new(text: 'Wir brauchen Getränke, z. B. Wasser, Saft, Bier usw.', language: 'de')
+        expect(ps.segment).to eq(['Wir brauchen Getränke, z. B. Wasser, Saft, Bier usw.'])
+      end
+
+      it 'correctly segments text #012' do
+        ps = PragmaticSegmenter::Segmenter.new(text: 'Ich kann u.a. Spanisch sprechen.', language: 'de')
+        expect(ps.segment).to eq(['Ich kann u.a. Spanisch sprechen.'])
+      end
+
+      it 'correctly segments text #013' do
+        ps = PragmaticSegmenter::Segmenter.new(text: 'Frau Prof. Schulze ist z. Z. nicht da.', language: 'de')
+        expect(ps.segment).to eq(['Frau Prof. Schulze ist z. Z. nicht da.'])
+      end
+
+      it 'correctly segments text #014' do
+        ps = PragmaticSegmenter::Segmenter.new(text: 'Sie erhalten ein neues Bank-Statement bzw. ein neues Schreiben.', language: 'de')
+        expect(ps.segment).to eq(['Sie erhalten ein neues Bank-Statement bzw. ein neues Schreiben.'])
+      end
+
+      it 'correctly segments text #015' do
+        ps = PragmaticSegmenter::Segmenter.new(text: 'Z. T. ist die Lieferung unvollständig.', language: 'de')
+        expect(ps.segment).to eq(['Z. T. ist die Lieferung unvollständig.'])
+      end
+
+      it 'correctly segments text #016' do
+        ps = PragmaticSegmenter::Segmenter.new(text: 'Das finden Sie auf S. 225.', language: 'de')
+        expect(ps.segment).to eq(['Das finden Sie auf S. 225.'])
+      end
+
+      it 'correctly segments text #017' do
+        ps = PragmaticSegmenter::Segmenter.new(text: 'Sie besucht eine kath. Schule.', language: 'de')
+        expect(ps.segment).to eq(['Sie besucht eine kath. Schule.'])
+      end
+
+      it 'correctly segments text #018' do
+        ps = PragmaticSegmenter::Segmenter.new(text: 'Wir benötigen Zeitungen, Zeitschriften u. Ä. für unser Projekt.', language: 'de')
+        expect(ps.segment).to eq(['Wir benötigen Zeitungen, Zeitschriften u. Ä. für unser Projekt.'])
+      end
+
+      it 'correctly segments text #019' do
+        ps = PragmaticSegmenter::Segmenter.new(text: 'Das steht auf S. 23, s. vorherige Anmerkung.', language: 'de')
+        expect(ps.segment).to eq(['Das steht auf S. 23, s. vorherige Anmerkung.'])
+      end
+
+      it 'correctly segments text #020' do
+        ps = PragmaticSegmenter::Segmenter.new(text: 'Dies ist meine Adresse: Dr. Meier, Berliner Str. 5, 21234 Bremen.', language: 'de')
+        expect(ps.segment).to eq(['Dies ist meine Adresse: Dr. Meier, Berliner Str. 5, 21234 Bremen.'])
+      end
+
+      it 'correctly segments text #021' do
+        ps = PragmaticSegmenter::Segmenter.new(text: 'Er sagte: „Hallo, wie geht´s Ihnen, Frau Prof. Müller?“', language: 'de')
+        expect(ps.segment).to eq(['Er sagte: „Hallo, wie geht´s Ihnen, Frau Prof. Müller?“'])
+      end
+
+      it 'correctly segments text #022' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Fit in vier Wochen\n\nDeine Anleitung für eine reine Ernährung und ein gesünderes und glücklicheres Leben\n\nRECHTLICHE HINWEISE\n\nOhne die ausdrückliche schriftliche Genehmigung der Eigentümerin von instafemmefitness, Anna Anderson, darf dieses E-Book weder teilweise noch in vollem Umfang reproduziert, gespeichert, kopiert oder auf irgendeine Weise übertragen werden. Wenn Du das E-Book auf einem öffentlich zugänglichen Computer ausdruckst, musst Du es nach dem Ausdrucken von dem Computer löschen. Jedes E-Book wird mit einem Benutzernamen und Transaktionsinformationen versehen.\n\nVerstöße gegen dieses Urheberrecht werden im vollen gesetzlichen Umfang geltend gemacht. Obgleich die Autorin und Herausgeberin alle Anstrengungen unternommen hat, sicherzustellen, dass die Informationen in diesem Buch zum Zeitpunkt der Drucklegung korrekt sind, übernimmt die Autorin und Herausgeberin keine Haftung für etwaige Verluste, Schäden oder Störungen, die durch Fehler oder Auslassungen in Folge von Fahrlässigkeit, zufälligen Umständen oder sonstigen Ursachen entstehen, und lehnt hiermit jedwede solche Haftung ab.\n\nDieses Buch ist kein Ersatz für die medizinische Beratung durch Ärzte. Der Leser/die Leserin sollte regelmäßig einen Arzt/eine Ärztin hinsichtlich Fragen zu seiner/ihrer Gesundheit und vor allem in Bezug auf Symptome, die eventuell einer ärztlichen Diagnose oder Behandlung bedürfen, konsultieren.\n\nDie Informationen in diesem Buch sind dazu gedacht, ein ordnungsgemäßes Training zu ergänzen, nicht aber zu ersetzen. Wie jeder andere Sport, der Geschwindigkeit, Ausrüstung, Gleichgewicht und Umweltfaktoren einbezieht, stellt dieser Sport ein gewisses Risiko dar. Die Autorin und Herausgeberin rät den Lesern dazu, die volle Verantwortung für die eigene Sicherheit zu übernehmen und die eigenen Grenzen zu beachten. Vor dem Ausüben der in diesem Buch beschriebenen Übungen solltest Du sicherstellen, dass Deine Ausrüstung in gutem Zustand ist, und Du solltest keine Risiken außerhalb Deines Erfahrungs- oder Trainingsniveaus, Deiner Fähigkeiten oder Deines Komfortbereichs eingehen.\nHintergrundillustrationen Urheberrecht © 2013 bei Shuttershock, Buchgestaltung und -produktion durch Anna Anderson Verfasst von Anna Anderson\nUrheberrecht © 2014 Instafemmefitness. Alle Rechte vorbehalten\n\nÜber mich", language: 'de')
+        expect(ps.segment).to eq(["Fit in vier Wochen", "Deine Anleitung für eine reine Ernährung und ein gesünderes und glücklicheres Leben", "RECHTLICHE HINWEISE", "Ohne die ausdrückliche schriftliche Genehmigung der Eigentümerin von instafemmefitness, Anna Anderson, darf dieses E-Book weder teilweise noch in vollem Umfang reproduziert, gespeichert, kopiert oder auf irgendeine Weise übertragen werden.", "Wenn Du das E-Book auf einem öffentlich zugänglichen Computer ausdruckst, musst Du es nach dem Ausdrucken von dem Computer löschen.", "Jedes E-Book wird mit einem Benutzernamen und Transaktionsinformationen versehen.", "Verstöße gegen dieses Urheberrecht werden im vollen gesetzlichen Umfang geltend gemacht.", "Obgleich die Autorin und Herausgeberin alle Anstrengungen unternommen hat, sicherzustellen, dass die Informationen in diesem Buch zum Zeitpunkt der Drucklegung korrekt sind, übernimmt die Autorin und Herausgeberin keine Haftung für etwaige Verluste, Schäden oder Störungen, die durch Fehler oder Auslassungen in Folge von Fahrlässigkeit, zufälligen Umständen oder sonstigen Ursachen entstehen, und lehnt hiermit jedwede solche Haftung ab.", "Dieses Buch ist kein Ersatz für die medizinische Beratung durch Ärzte.", "Der Leser/die Leserin sollte regelmäßig einen Arzt/eine Ärztin hinsichtlich Fragen zu seiner/ihrer Gesundheit und vor allem in Bezug auf Symptome, die eventuell einer ärztlichen Diagnose oder Behandlung bedürfen, konsultieren.", "Die Informationen in diesem Buch sind dazu gedacht, ein ordnungsgemäßes Training zu ergänzen, nicht aber zu ersetzen.", "Wie jeder andere Sport, der Geschwindigkeit, Ausrüstung, Gleichgewicht und Umweltfaktoren einbezieht, stellt dieser Sport ein gewisses Risiko dar.", "Die Autorin und Herausgeberin rät den Lesern dazu, die volle Verantwortung für die eigene Sicherheit zu übernehmen und die eigenen Grenzen zu beachten.", "Vor dem Ausüben der in diesem Buch beschriebenen Übungen solltest Du sicherstellen, dass Deine Ausrüstung in gutem Zustand ist, und Du solltest keine Risiken außerhalb Deines Erfahrungs- oder Trainingsniveaus, Deiner Fähigkeiten oder Deines Komfortbereichs eingehen.", "Hintergrundillustrationen Urheberrecht © 2013 bei Shuttershock, Buchgestaltung und -produktion durch Anna Anderson Verfasst von Anna Anderson", "Urheberrecht © 2014 Instafemmefitness.", "Alle Rechte vorbehalten", "Über mich"])
+      end
+
+      it 'correctly segments text #023' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Es gibt jedoch einige Vorsichtsmaßnahmen, die Du ergreifen kannst, z. B. ist es sehr empfehlenswert, dass Du Dein Zuhause von allem Junkfood befreist. Ich persönlich kaufe kein Junkfood oder etwas, das nicht rein ist (ich traue mir da selbst nicht!). Ich finde jeden Vorwand, um das Junkfood zu essen, vor allem die Vorstellung, dass ich nicht mehr in Versuchung kommen werde, wenn ich es jetzt aufesse und es weg ist. Es ist schon komisch, was unser Verstand mitunter anstellt!", language: 'de')
+        expect(ps.segment).to eq(["Es gibt jedoch einige Vorsichtsmaßnahmen, die Du ergreifen kannst, z. B. ist es sehr empfehlenswert, dass Du Dein Zuhause von allem Junkfood befreist.", "Ich persönlich kaufe kein Junkfood oder etwas, das nicht rein ist (ich traue mir da selbst nicht!).", "Ich finde jeden Vorwand, um das Junkfood zu essen, vor allem die Vorstellung, dass ich nicht mehr in Versuchung kommen werde, wenn ich es jetzt aufesse und es weg ist.", "Es ist schon komisch, was unser Verstand mitunter anstellt!"])
+      end
+
+      it 'correctly segments text #024' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Ob Sie in Hannover nur auf der Durchreise, für einen längeren Aufenthalt oder zum Besuch einer der zahlreichen Messen sind: Die Hauptstadt des Landes Niedersachsens hat viele Sehenswürdigkeiten und ist zu jeder Jahreszeit eine Reise Wert. \nHannovers Ursprünge können bis zur römischen Kaiserzeit zurückverfolgt werden, und zwar durch Ausgrabungen von Tongefäßen aus dem 1. -3. Jahrhundert nach Christus, die an mehreren Stellen im Untergrund des Stadtzentrums durchgeführt wurden.", language: 'de')
+        expect(ps.segment).to eq(["Ob Sie in Hannover nur auf der Durchreise, für einen längeren Aufenthalt oder zum Besuch einer der zahlreichen Messen sind: Die Hauptstadt des Landes Niedersachsens hat viele Sehenswürdigkeiten und ist zu jeder Jahreszeit eine Reise Wert.", "Hannovers Ursprünge können bis zur römischen Kaiserzeit zurückverfolgt werden, und zwar durch Ausgrabungen von Tongefäßen aus dem 1. -3. Jahrhundert nach Christus, die an mehreren Stellen im Untergrund des Stadtzentrums durchgeführt wurden."])
+      end
+
+      it 'correctly segments text #025' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "• 3. Seien Sie achtsam bei der Auswahl der Nahrungsmittel! \n• 4. Nehmen Sie zusätzlich Folsäurepräparate und essen Sie Fisch! \n• 5. Treiben Sie regelmäßig Sport! \n• 6. Beginnen Sie mit Übungen für die Beckenbodenmuskulatur! \n• 7. Reduzieren Sie Ihren Alkoholgenuss! \n", language: 'de')
+        expect(ps.segment).to eq(["• 3. Seien Sie achtsam bei der Auswahl der Nahrungsmittel!", "• 4. Nehmen Sie zusätzlich Folsäurepräparate und essen Sie Fisch!", "• 5. Treiben Sie regelmäßig Sport!", "• 6. Beginnen Sie mit Übungen für die Beckenbodenmuskulatur!", "• 7. Reduzieren Sie Ihren Alkoholgenuss!"])
+      end
+
+      it 'correctly segments text #026' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Schwangere Frauen sollten während der \nersten drei Monate eine tägliche Dosis von 400 Mikrogramm Folsäure zusätzlich nehmen. \nFolsäure befindet sich auch in einigen Gemüse- und Müslisorten.", language: 'de', doc_type: 'pdf')
+        expect(ps.segment).to eq(["Schwangere Frauen sollten während der ersten drei Monate eine tägliche Dosis von 400 Mikrogramm Folsäure zusätzlich nehmen.", "Folsäure befindet sich auch in einigen Gemüse- und Müslisorten."])
+      end
+
+      it 'correctly segments text #027' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Andere \nFischsorten (z.B. Hai, Thunfisch, Aal und Seeteufel) weisen einen erhöhten Quecksilbergehalt \nauf und sollten deshalb in der Schwangerschaft nur selten verzehrt werden.", language: 'de', doc_type: 'pdf')
+        expect(ps.segment).to eq(["Andere Fischsorten (z.B. Hai, Thunfisch, Aal und Seeteufel) weisen einen erhöhten Quecksilbergehalt auf und sollten deshalb in der Schwangerschaft nur selten verzehrt werden."])
+      end
+
+      it 'correctly segments text #028' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Übung Präsens\n1. Ich ___ gern Tennis.\nspielen\nspielt\nspiele\n2. Karl __ mir den Ball.\ngebt\ngibt\ngeben\n3. Ihr ___ fast jeden Tag.\narbeitet\narbeite\narbeiten\n4. ___ Susi Deutsch?\nSprichst\nSprecht\nSpricht\n5. Wann ___ Karl und Julia? Heute?\nkommen\nkommt\nkomme\n\n\n\n\n", language: 'de', doc_type: 'docx')
+        expect(ps.segment).to eq(["Übung Präsens", "1. Ich ___ gern Tennis.", "spielen", "spielt", "spiele", "2. Karl __ mir den Ball.", "gebt", "gibt", "geben", "3. Ihr ___ fast jeden Tag.", "arbeitet", "arbeite", "arbeiten", "4. ___ Susi Deutsch?", "Sprichst", "Sprecht", "Spricht", "5. Wann ___ Karl und Julia?", "Heute?", "kommen", "kommt", "komme"])
+      end
+
+      it 'correctly segments text #029' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "\n• einige Sorten Weichkäse  \n• rohes oder nicht ganz durchgebratenes Fleisch  \n• ungeputztes Gemüse und ungewaschener Salat  \n• nicht ganz durchgebratenes Hühnerfleisch, rohe oder nur weich gekochte Eier", language: 'de', doc_type: 'pdf')
+        expect(ps.segment).to eq(["• einige Sorten Weichkäse", "• rohes oder nicht ganz durchgebratenes Fleisch", "• ungeputztes Gemüse und ungewaschener Salat", "• nicht ganz durchgebratenes Hühnerfleisch, rohe oder nur weich gekochte Eier"])
+      end
+
+      it 'correctly segments text #030' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Was sind die Konsequenzen der Abstimmung vom 12. Juni?", language: 'de')
+        expect(ps.segment).to eq(["Was sind die Konsequenzen der Abstimmung vom 12. Juni?"])
+      end
+
+      it 'correctly segments text #031' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Was pro Jahr10. Zudem pro Jahr um 0.3 %11. Der gängigen Theorie nach erfolgt der Anstieg.", language: 'de')
+        expect(ps.segment).to eq(["Was pro Jahr10.", "Zudem pro Jahr um 0.3 %11.", "Der gängigen Theorie nach erfolgt der Anstieg."])
+      end
+
+      it 'correctly segments text #032' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "s. vorherige Anmerkung.", language: 'de')
+        expect(ps.segment).to eq(["s. vorherige Anmerkung."])
+      end
+
+      it 'correctly segments text #033' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Mit Inkrafttreten des Mindestlohngesetzes (MiLoG) zum 01. Januar 2015 werden in Bezug auf den Einsatz von Leistungs.", language: 'de')
+        expect(ps.segment).to eq(["Mit Inkrafttreten des Mindestlohngesetzes (MiLoG) zum 01. Januar 2015 werden in Bezug auf den Einsatz von Leistungs."])
+      end
+    end
+
+  end
+
+  describe "Japanese", "(ja)" do
+    context "Golden Rules" do
+      it "Simple period to end sentence #001" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "これはペンです。それはマーカーです。", language: "ja")
+        expect(ps.segment).to eq(["これはペンです。", "それはマーカーです。"])
+      end
+
+      it "Question mark to end sentence #002" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "それは何ですか？ペンですか？", language: "ja")
+        expect(ps.segment).to eq(["それは何ですか？", "ペンですか？"])
+      end
+
+      it "Exclamation point to end sentence #003" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "良かったね！すごい！", language: "ja")
+        expect(ps.segment).to eq(["良かったね！", "すごい！"])
+      end
+
+      it "Quotation #004" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "自民党税制調査会の幹部は、「引き下げ幅は３．２９％以上を目指すことになる」と指摘していて、今後、公明党と合意したうえで、３０日に決定する与党税制改正大綱に盛り込むことにしています。２％台後半を目指すとする方向で最終調整に入りました。", language: "ja")
+        expect(ps.segment).to eq(["自民党税制調査会の幹部は、「引き下げ幅は３．２９％以上を目指すことになる」と指摘していて、今後、公明党と合意したうえで、３０日に決定する与党税制改正大綱に盛り込むことにしています。", "２％台後半を目指すとする方向で最終調整に入りました。"])
+      end
+
+      it "Errant newlines in the middle of sentences #005" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "これは父の\n家です。", language: "ja")
+        expect(ps.segment).to eq(["これは父の家です。"])
+      end
+    end
+
     describe '#segment' do
       it 'correctly segments text #001' do
         ps = PragmaticSegmenter::Segmenter.new(text: "これは山です \nこれは山です \nこれは山です（「これは山です」） \nこれは山です（これは山です「これは山です」）これは山です・これは山です、これは山です。 \nこれは山です（これは山です。これは山です）。これは山です、これは山です、これは山です、これは山です（これは山です。これは山です）これは山です、これは山です、これは山です「これは山です」これは山です（これは山です：0円）これは山です。 \n1.）これは山です、これは山です（これは山です、これは山です6円（※1））これは山です。 \n※1　これは山です。 \n2.）これは山です、これは山です、これは山です、これは山です。 \n3.）これは山です、これは山です・これは山です、これは山です、これは山です、これは山です（これは山です「これは山です」）これは山です、これは山です、これは山です、これは山です。 \n4.）これは山です、これは山です（これは山です、これは山です、これは山です。これは山です）これは山です、これは山です（これは山です、これは山です）。 \nこれは山です、これは山です、これは山です、これは山です、これは山です（者）これは山です。 \n(1) 「これは山です」（これは山です：0円）　（※1） \n① これは山です", language: 'ja')
@@ -1632,9 +1644,37 @@ RSpec.describe PragmaticSegmenter::Segmenter do
         expect(ps.segment).to eq(["これは山です", "これは山です", "これは山です（「これは山です」）", "これは山です（これは山です「これは山です」）これは山です・これは山です、これは山です！", "これは山です（これは山です！これは山です）！", "これは山です、これは山です、これは山です、これは山です（これは山です！これは山です）これは山です、これは山です、これは山です「これは山です」これは山です（これは山です：0円）これは山です！", "1.）これは山です、これは山です（これは山です、これは山です6円（※1））これは山です！", "※1　これは山です！", "2.）これは山です、これは山です、これは山です、これは山です！", "3.）これは山です、これは山です・これは山です、これは山です、これは山です、これは山です（これは山です「これは山です」）これは山です、これは山です、これは山です、これは山です！", "4.）これは山です、これは山です（これは山です、これは山です、これは山です！これは山です）これは山です、これは山です（これは山です、これは山です）！", "これは山です、これは山です、これは山です、これは山です、これは山です（者）これは山です！", "(1) 「これは山です」（これは山です：0円）　（※1）", "① これは山です"])
       end
     end
+
   end
 
-  context 'Language: Arabic (ar)' do
+  describe "Arabic", '(ar)' do
+    context "Golden Rules" do
+      it "Regular punctuation #001" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "سؤال وجواب: ماذا حدث بعد الانتخابات الايرانية؟ طرح الكثير من التساؤلات غداة ظهور نتائج الانتخابات الرئاسية الايرانية التي أججت مظاهرات واسعة واعمال عنف بين المحتجين على النتائج ورجال الامن. يقول معارضو الرئيس الإيراني إن الطريقة التي اعلنت بها النتائج كانت مثيرة للاستغراب.", language: "ar")
+        expect(ps.segment).to eq(["سؤال وجواب:", "ماذا حدث بعد الانتخابات الايرانية؟", "طرح الكثير من التساؤلات غداة ظهور نتائج الانتخابات الرئاسية الايرانية التي أججت مظاهرات واسعة واعمال عنف بين المحتجين على النتائج ورجال الامن.", "يقول معارضو الرئيس الإيراني إن الطريقة التي اعلنت بها النتائج كانت مثيرة للاستغراب."])
+      end
+
+      it "Abbreviations #002" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "وقال د‪.‬ ديفيد ريدي و الأطباء الذين كانوا يعالجونها في مستشفى برمنجهام إنها كانت تعاني من أمراض أخرى. وليس معروفا ما اذا كانت قد توفيت بسبب اصابتها بأنفلونزا الخنازير.", language: "ar")
+        expect(ps.segment).to eq(["وقال د‪.‬ ديفيد ريدي و الأطباء الذين كانوا يعالجونها في مستشفى برمنجهام إنها كانت تعاني من أمراض أخرى.", "وليس معروفا ما اذا كانت قد توفيت بسبب اصابتها بأنفلونزا الخنازير."])
+      end
+
+      it "Numbers and Dates #003" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "ومن المنتظر أن يكتمل مشروع خط أنابيب نابوكو البالغ طوله 3300 كليومترا في 12‪/‬08‪/‬2014 بتكلفة تُقدر بـ 7.9 مليارات يورو أي نحو 10.9 مليارات دولار. ومن المقرر أن تصل طاقة ضخ الغاز في المشروع 31 مليار متر مكعب انطلاقا من بحر قزوين مرورا بالنمسا وتركيا ودول البلقان دون المرور على الأراضي الروسية.", language: "ar")
+        expect(ps.segment).to eq(["ومن المنتظر أن يكتمل مشروع خط أنابيب نابوكو البالغ طوله 3300 كليومترا في 12‪/‬08‪/‬2014 بتكلفة تُقدر بـ 7.9 مليارات يورو أي نحو 10.9 مليارات دولار.", "ومن المقرر أن تصل طاقة ضخ الغاز في المشروع 31 مليار متر مكعب انطلاقا من بحر قزوين مرورا بالنمسا وتركيا ودول البلقان دون المرور على الأراضي الروسية."])
+      end
+
+      it "Time #004" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "الاحد, 21 فبراير/ شباط, 2010, 05:01 GMT الصنداي تايمز: رئيس الموساد قد يصبح ضحية الحرب السرية التي شتنها بنفسه. العقل المنظم هو مئير داجان رئيس الموساد الإسرائيلي الذي يشتبه بقيامه باغتيال القائد الفلسطيني في حركة حماس محمود المبحوح في دبي.", language: "ar")
+        expect(ps.segment).to eq(["الاحد, 21 فبراير/ شباط, 2010, 05:01 GMT الصنداي تايمز:", "رئيس الموساد قد يصبح ضحية الحرب السرية التي شتنها بنفسه.", "العقل المنظم هو مئير داجان رئيس الموساد الإسرائيلي الذي يشتبه بقيامه باغتيال القائد الفلسطيني في حركة حماس محمود المبحوح في دبي."])
+      end
+
+      it "Comma #005" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "عثر في الغرفة على بعض أدوية علاج ارتفاع ضغط الدم، والقلب، زرعها عملاء الموساد كما تقول مصادر إسرائيلية، وقرر الطبيب أن الفلسطيني قد توفي وفاة طبيعية ربما إثر نوبة قلبية، وبدأت مراسم الحداد عليه", language: "ar")
+        expect(ps.segment).to eq(["عثر في الغرفة على بعض أدوية علاج ارتفاع ضغط الدم، والقلب،", "زرعها عملاء الموساد كما تقول مصادر إسرائيلية،", "وقرر الطبيب أن الفلسطيني قد توفي وفاة طبيعية ربما إثر نوبة قلبية،", "وبدأت مراسم الحداد عليه"])
+      end
+    end
+
     # Thanks to Mahmoud Holmez for the Arabic test examples.
     describe '#segment' do
       it 'correctly segments text #001' do
@@ -1662,9 +1702,27 @@ RSpec.describe PragmaticSegmenter::Segmenter do
         expect(ps.segment).to eq(["عثر في الغرفة على بعض أدوية علاج ارتفاع ضغط الدم، والقلب،", "زرعها عملاء الموساد كما تقول مصادر إسرائيلية،", "وقرر الطبيب أن الفلسطيني قد توفي وفاة طبيعية ربما إثر نوبة قلبية،", "وبدأت مراسم الحداد عليه"])
       end
     end
+
   end
 
-  context 'Language: Italian (it)' do
+  describe "Italian", "(it)" do
+    context "Golden Rules" do
+      it "Abbreviations #001" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Salve Sig.ra Mengoni! Come sta oggi?", language: "it")
+        expect(ps.segment).to eq(["Salve Sig.ra Mengoni!", "Come sta oggi?"])
+      end
+
+      it "Quotations #002" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Una lettera si può iniziare in questo modo «Il/la sottoscritto/a.».", language: "it")
+        expect(ps.segment).to eq(["Una lettera si può iniziare in questo modo «Il/la sottoscritto/a.»."])
+      end
+
+      it "Numbers #003" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "La casa costa 170.500.000,00€!", language: "it")
+        expect(ps.segment).to eq(["La casa costa 170.500.000,00€!"])
+      end
+    end
+
     # Thanks to Davide Fornelli for the Italian test examples.
     describe '#segment' do
 
@@ -1833,9 +1891,28 @@ RSpec.describe PragmaticSegmenter::Segmenter do
         expect(ps.segment).to eq(["La macchina viaggiava a 100 km/h."])
       end
     end
+
+
   end
 
-  context 'Language: Russian (ru)' do
+  describe "Russian", "(ru)" do
+    context "Golden Rules" do
+      it "Abbreviations #001" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Объем составляет 5 куб.м.", language: "ru")
+        expect(ps.segment).to eq(["Объем составляет 5 куб.м."])
+      end
+
+      it "Quotations #002" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Маленькая девочка бежала и кричала: «Не видали маму?».", language: "ru")
+        expect(ps.segment).to eq(["Маленькая девочка бежала и кричала: «Не видали маму?»."])
+      end
+
+      it "Numbers #003" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Сегодня 27.10.14", language: "ru")
+        expect(ps.segment).to eq(["Сегодня 27.10.14"])
+      end
+    end
+
     # Thanks to Anastasiia Tsvitailo for the Russian test examples.
     describe '#segment' do
       it 'correctly segments text #001' do
@@ -2033,179 +2110,38 @@ RSpec.describe PragmaticSegmenter::Segmenter do
         expect(ps.segment).to eq(["Л.Н. Толстой написал \"Войну и мир\".", "Кроме Волконских, Л. Н. Толстой состоял в близком родстве с некоторыми другими аристократическими родами.", "Дом, где родился Л.Н.Толстой, 1898 г. В 1854 году дом продан по распоряжению писателя на вывоз в село Долгое."])
       end
     end
+
+
   end
 
-  context 'Language: German (de)' do
-    # Thanks to Silvia Busse for the German test examples.
-    describe '#segment' do
-      it 'correctly segments text #001' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "\n   \n\n   http:www.babycentre.co.uk/midwives \n\n \n\n \n\n10 steps to a healthy pregnancy (German) \n\n10 Schritte zu einer gesunden Schwangerschaft \n \n• 1. Planen und organisieren Sie die Zeit der Schwangerschaft frühzeitig! \n• 2. Essen Sie gesund! \n• 3. Seien Sie achtsam bei der Auswahl der Nahrungsmittel! \n• 4. Nehmen Sie zusätzlich Folsäurepräparate und essen Sie Fisch! \n• 5. Treiben Sie regelmäßig Sport! \n• 6. Beginnen Sie mit Übungen für die Beckenbodenmuskulatur! \n• 7. Reduzieren Sie Ihren Alkoholgenuss! \n• 8. Reduzieren Sie Ihren Koffeingenuß! \n• 9. Hören Sie mit dem Rauchen auf! \n• 10. Gönnen Sie sich Erholung! \n \n \nZehn einfach zu befolgende Tipps sollen Ihnen helfen, eine möglichst problemlose \nSchwangerschaft zu erleben und ein gesundes Baby auf die Welt zu bringen:  \n\n1. Planen und organisieren Sie die Zeit der Schwangerschaft frühzeitig!", language: 'de', doc_type: 'pdf')
-        expect(ps.segment).to eq(["http:www.babycentre.co.uk/midwives", "10 steps to a healthy pregnancy (German)", "10 Schritte zu einer gesunden Schwangerschaft", "• 1. Planen und organisieren Sie die Zeit der Schwangerschaft frühzeitig!", "• 2. Essen Sie gesund!", "• 3. Seien Sie achtsam bei der Auswahl der Nahrungsmittel!", "• 4. Nehmen Sie zusätzlich Folsäurepräparate und essen Sie Fisch!", "• 5. Treiben Sie regelmäßig Sport!", "• 6. Beginnen Sie mit Übungen für die Beckenbodenmuskulatur!", "• 7. Reduzieren Sie Ihren Alkoholgenuss!", "• 8. Reduzieren Sie Ihren Koffeingenuß!", "• 9. Hören Sie mit dem Rauchen auf!", "• 10. Gönnen Sie sich Erholung!", "Zehn einfach zu befolgende Tipps sollen Ihnen helfen, eine möglichst problemlose Schwangerschaft zu erleben und ein gesundes Baby auf die Welt zu bringen:", "1. Planen und organisieren Sie die Zeit der Schwangerschaft frühzeitig!"])
+  describe "Spanish", '(es)' do
+    context "Golden Rules" do
+      it "Question mark to end sentence #001" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "¿Cómo está hoy? Espero que muy bien.", language: "es")
+        expect(ps.segment).to eq(["¿Cómo está hoy?", "Espero que muy bien."])
       end
 
-      it 'correctly segments text #002' do
-        ps = PragmaticSegmenter::Segmenter.new(text: '„Ich habe heute keine Zeit“, sagte die Frau und flüsterte leise: „Und auch keine Lust.“ Wir haben 1.000.000 Euro.', language: 'de')
-        expect(ps.segment).to eq(["„Ich habe heute keine Zeit“, sagte die Frau und flüsterte leise: „Und auch keine Lust.“", "Wir haben 1.000.000 Euro."])
+      it "Exclamation point to end sentence #002" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "¡Hola señorita! Espero que muy bien.", language: "es")
+        expect(ps.segment).to eq(["¡Hola señorita!", "Espero que muy bien."])
       end
 
-      it 'correctly segments text #003' do
-        ps = PragmaticSegmenter::Segmenter.new(text: 'Thomas sagte: ,,Wann kommst zu mir?” ,,Das weiß ich noch nicht“, antwortete Susi, ,,wahrscheinlich am Sonntag.“ Wir haben 1.000.000 Euro.', language: 'de')
-        expect(ps.segment).to eq(["Thomas sagte: ,,Wann kommst zu mir?” ,,Das weiß ich noch nicht“, antwortete Susi, ,,wahrscheinlich am Sonntag.“", "Wir haben 1.000.000 Euro."])
+      it "Abbreviations #003" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Hola Srta. Ledesma. Buenos días, soy el Lic. Naser Pastoriza, y él es mi padre, el Dr. Naser.", language: "es")
+        expect(ps.segment).to eq(["Hola Srta. Ledesma.", "Buenos días, soy el Lic. Naser Pastoriza, y él es mi padre, el Dr. Naser."])
       end
 
-      it 'correctly segments text #004' do
-        ps = PragmaticSegmenter::Segmenter.new(text: '„Lass uns jetzt essen gehen!“, sagte die Mutter zu ihrer Freundin, „am besten zum Italiener.“', language: 'de')
-        expect(ps.segment).to eq(['„Lass uns jetzt essen gehen!“, sagte die Mutter zu ihrer Freundin, „am besten zum Italiener.“'])
+      it "Numbers #004" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "¡La casa cuesta $170.500.000,00! ¡Muy costosa! Se prevé una disminución del 12.5% para el próximo año.", language: "es")
+        expect(ps.segment).to eq(["¡La casa cuesta $170.500.000,00!", "¡Muy costosa!", "Se prevé una disminución del 12.5% para el próximo año."])
       end
 
-      it 'correctly segments text #005' do
-        ps = PragmaticSegmenter::Segmenter.new(text: 'Wir haben 1.000.000 Euro.', language: 'de')
-        expect(ps.segment).to eq(['Wir haben 1.000.000 Euro.'])
-      end
-
-      it 'correctly segments text #006' do
-        ps = PragmaticSegmenter::Segmenter.new(text: 'Sie bekommen 3,50 Euro zurück.', language: 'de')
-        expect(ps.segment).to eq(['Sie bekommen 3,50 Euro zurück.'])
-      end
-
-      it 'correctly segments text #007' do
-        ps = PragmaticSegmenter::Segmenter.new(text: 'Dafür brauchen wir 5,5 Stunden.', language: 'de')
-        expect(ps.segment).to eq(['Dafür brauchen wir 5,5 Stunden.'])
-      end
-
-      it 'correctly segments text #008' do
-        ps = PragmaticSegmenter::Segmenter.new(text: 'Bitte überweisen Sie 5.300,25 Euro.', language: 'de')
-        expect(ps.segment).to eq(['Bitte überweisen Sie 5.300,25 Euro.'])
-      end
-
-      it 'correctly segments text #009' do
-        ps = PragmaticSegmenter::Segmenter.new(text: '1. Dies ist eine Punkteliste.', language: 'de')
-        expect(ps.segment).to eq(['1. Dies ist eine Punkteliste.'])
-      end
-
-      it 'correctly segments text #010' do
-        ps = PragmaticSegmenter::Segmenter.new(text: 'Wir trafen Dr. med. Meyer in der Stadt.', language: 'de')
-        expect(ps.segment).to eq(['Wir trafen Dr. med. Meyer in der Stadt.'])
-      end
-
-      it 'correctly segments text #011' do
-        ps = PragmaticSegmenter::Segmenter.new(text: 'Wir brauchen Getränke, z. B. Wasser, Saft, Bier usw.', language: 'de')
-        expect(ps.segment).to eq(['Wir brauchen Getränke, z. B. Wasser, Saft, Bier usw.'])
-      end
-
-      it 'correctly segments text #012' do
-        ps = PragmaticSegmenter::Segmenter.new(text: 'Ich kann u.a. Spanisch sprechen.', language: 'de')
-        expect(ps.segment).to eq(['Ich kann u.a. Spanisch sprechen.'])
-      end
-
-      it 'correctly segments text #013' do
-        ps = PragmaticSegmenter::Segmenter.new(text: 'Frau Prof. Schulze ist z. Z. nicht da.', language: 'de')
-        expect(ps.segment).to eq(['Frau Prof. Schulze ist z. Z. nicht da.'])
-      end
-
-      it 'correctly segments text #014' do
-        ps = PragmaticSegmenter::Segmenter.new(text: 'Sie erhalten ein neues Bank-Statement bzw. ein neues Schreiben.', language: 'de')
-        expect(ps.segment).to eq(['Sie erhalten ein neues Bank-Statement bzw. ein neues Schreiben.'])
-      end
-
-      it 'correctly segments text #015' do
-        ps = PragmaticSegmenter::Segmenter.new(text: 'Z. T. ist die Lieferung unvollständig.', language: 'de')
-        expect(ps.segment).to eq(['Z. T. ist die Lieferung unvollständig.'])
-      end
-
-      it 'correctly segments text #016' do
-        ps = PragmaticSegmenter::Segmenter.new(text: 'Das finden Sie auf S. 225.', language: 'de')
-        expect(ps.segment).to eq(['Das finden Sie auf S. 225.'])
-      end
-
-      it 'correctly segments text #017' do
-        ps = PragmaticSegmenter::Segmenter.new(text: 'Sie besucht eine kath. Schule.', language: 'de')
-        expect(ps.segment).to eq(['Sie besucht eine kath. Schule.'])
-      end
-
-      it 'correctly segments text #018' do
-        ps = PragmaticSegmenter::Segmenter.new(text: 'Wir benötigen Zeitungen, Zeitschriften u. Ä. für unser Projekt.', language: 'de')
-        expect(ps.segment).to eq(['Wir benötigen Zeitungen, Zeitschriften u. Ä. für unser Projekt.'])
-      end
-
-      it 'correctly segments text #019' do
-        ps = PragmaticSegmenter::Segmenter.new(text: 'Das steht auf S. 23, s. vorherige Anmerkung.', language: 'de')
-        expect(ps.segment).to eq(['Das steht auf S. 23, s. vorherige Anmerkung.'])
-      end
-
-      it 'correctly segments text #020' do
-        ps = PragmaticSegmenter::Segmenter.new(text: 'Dies ist meine Adresse: Dr. Meier, Berliner Str. 5, 21234 Bremen.', language: 'de')
-        expect(ps.segment).to eq(['Dies ist meine Adresse: Dr. Meier, Berliner Str. 5, 21234 Bremen.'])
-      end
-
-      it 'correctly segments text #021' do
-        ps = PragmaticSegmenter::Segmenter.new(text: 'Er sagte: „Hallo, wie geht´s Ihnen, Frau Prof. Müller?“', language: 'de')
-        expect(ps.segment).to eq(['Er sagte: „Hallo, wie geht´s Ihnen, Frau Prof. Müller?“'])
-      end
-
-      it 'correctly segments text #022' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Fit in vier Wochen\n\nDeine Anleitung für eine reine Ernährung und ein gesünderes und glücklicheres Leben\n\nRECHTLICHE HINWEISE\n\nOhne die ausdrückliche schriftliche Genehmigung der Eigentümerin von instafemmefitness, Anna Anderson, darf dieses E-Book weder teilweise noch in vollem Umfang reproduziert, gespeichert, kopiert oder auf irgendeine Weise übertragen werden. Wenn Du das E-Book auf einem öffentlich zugänglichen Computer ausdruckst, musst Du es nach dem Ausdrucken von dem Computer löschen. Jedes E-Book wird mit einem Benutzernamen und Transaktionsinformationen versehen.\n\nVerstöße gegen dieses Urheberrecht werden im vollen gesetzlichen Umfang geltend gemacht. Obgleich die Autorin und Herausgeberin alle Anstrengungen unternommen hat, sicherzustellen, dass die Informationen in diesem Buch zum Zeitpunkt der Drucklegung korrekt sind, übernimmt die Autorin und Herausgeberin keine Haftung für etwaige Verluste, Schäden oder Störungen, die durch Fehler oder Auslassungen in Folge von Fahrlässigkeit, zufälligen Umständen oder sonstigen Ursachen entstehen, und lehnt hiermit jedwede solche Haftung ab.\n\nDieses Buch ist kein Ersatz für die medizinische Beratung durch Ärzte. Der Leser/die Leserin sollte regelmäßig einen Arzt/eine Ärztin hinsichtlich Fragen zu seiner/ihrer Gesundheit und vor allem in Bezug auf Symptome, die eventuell einer ärztlichen Diagnose oder Behandlung bedürfen, konsultieren.\n\nDie Informationen in diesem Buch sind dazu gedacht, ein ordnungsgemäßes Training zu ergänzen, nicht aber zu ersetzen. Wie jeder andere Sport, der Geschwindigkeit, Ausrüstung, Gleichgewicht und Umweltfaktoren einbezieht, stellt dieser Sport ein gewisses Risiko dar. Die Autorin und Herausgeberin rät den Lesern dazu, die volle Verantwortung für die eigene Sicherheit zu übernehmen und die eigenen Grenzen zu beachten. Vor dem Ausüben der in diesem Buch beschriebenen Übungen solltest Du sicherstellen, dass Deine Ausrüstung in gutem Zustand ist, und Du solltest keine Risiken außerhalb Deines Erfahrungs- oder Trainingsniveaus, Deiner Fähigkeiten oder Deines Komfortbereichs eingehen.\nHintergrundillustrationen Urheberrecht © 2013 bei Shuttershock, Buchgestaltung und -produktion durch Anna Anderson Verfasst von Anna Anderson\nUrheberrecht © 2014 Instafemmefitness. Alle Rechte vorbehalten\n\nÜber mich", language: 'de')
-        expect(ps.segment).to eq(["Fit in vier Wochen", "Deine Anleitung für eine reine Ernährung und ein gesünderes und glücklicheres Leben", "RECHTLICHE HINWEISE", "Ohne die ausdrückliche schriftliche Genehmigung der Eigentümerin von instafemmefitness, Anna Anderson, darf dieses E-Book weder teilweise noch in vollem Umfang reproduziert, gespeichert, kopiert oder auf irgendeine Weise übertragen werden.", "Wenn Du das E-Book auf einem öffentlich zugänglichen Computer ausdruckst, musst Du es nach dem Ausdrucken von dem Computer löschen.", "Jedes E-Book wird mit einem Benutzernamen und Transaktionsinformationen versehen.", "Verstöße gegen dieses Urheberrecht werden im vollen gesetzlichen Umfang geltend gemacht.", "Obgleich die Autorin und Herausgeberin alle Anstrengungen unternommen hat, sicherzustellen, dass die Informationen in diesem Buch zum Zeitpunkt der Drucklegung korrekt sind, übernimmt die Autorin und Herausgeberin keine Haftung für etwaige Verluste, Schäden oder Störungen, die durch Fehler oder Auslassungen in Folge von Fahrlässigkeit, zufälligen Umständen oder sonstigen Ursachen entstehen, und lehnt hiermit jedwede solche Haftung ab.", "Dieses Buch ist kein Ersatz für die medizinische Beratung durch Ärzte.", "Der Leser/die Leserin sollte regelmäßig einen Arzt/eine Ärztin hinsichtlich Fragen zu seiner/ihrer Gesundheit und vor allem in Bezug auf Symptome, die eventuell einer ärztlichen Diagnose oder Behandlung bedürfen, konsultieren.", "Die Informationen in diesem Buch sind dazu gedacht, ein ordnungsgemäßes Training zu ergänzen, nicht aber zu ersetzen.", "Wie jeder andere Sport, der Geschwindigkeit, Ausrüstung, Gleichgewicht und Umweltfaktoren einbezieht, stellt dieser Sport ein gewisses Risiko dar.", "Die Autorin und Herausgeberin rät den Lesern dazu, die volle Verantwortung für die eigene Sicherheit zu übernehmen und die eigenen Grenzen zu beachten.", "Vor dem Ausüben der in diesem Buch beschriebenen Übungen solltest Du sicherstellen, dass Deine Ausrüstung in gutem Zustand ist, und Du solltest keine Risiken außerhalb Deines Erfahrungs- oder Trainingsniveaus, Deiner Fähigkeiten oder Deines Komfortbereichs eingehen.", "Hintergrundillustrationen Urheberrecht © 2013 bei Shuttershock, Buchgestaltung und -produktion durch Anna Anderson Verfasst von Anna Anderson", "Urheberrecht © 2014 Instafemmefitness.", "Alle Rechte vorbehalten", "Über mich"])
-      end
-
-      it 'correctly segments text #023' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Es gibt jedoch einige Vorsichtsmaßnahmen, die Du ergreifen kannst, z. B. ist es sehr empfehlenswert, dass Du Dein Zuhause von allem Junkfood befreist. Ich persönlich kaufe kein Junkfood oder etwas, das nicht rein ist (ich traue mir da selbst nicht!). Ich finde jeden Vorwand, um das Junkfood zu essen, vor allem die Vorstellung, dass ich nicht mehr in Versuchung kommen werde, wenn ich es jetzt aufesse und es weg ist. Es ist schon komisch, was unser Verstand mitunter anstellt!", language: 'de')
-        expect(ps.segment).to eq(["Es gibt jedoch einige Vorsichtsmaßnahmen, die Du ergreifen kannst, z. B. ist es sehr empfehlenswert, dass Du Dein Zuhause von allem Junkfood befreist.", "Ich persönlich kaufe kein Junkfood oder etwas, das nicht rein ist (ich traue mir da selbst nicht!).", "Ich finde jeden Vorwand, um das Junkfood zu essen, vor allem die Vorstellung, dass ich nicht mehr in Versuchung kommen werde, wenn ich es jetzt aufesse und es weg ist.", "Es ist schon komisch, was unser Verstand mitunter anstellt!"])
-      end
-
-      it 'correctly segments text #024' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Ob Sie in Hannover nur auf der Durchreise, für einen längeren Aufenthalt oder zum Besuch einer der zahlreichen Messen sind: Die Hauptstadt des Landes Niedersachsens hat viele Sehenswürdigkeiten und ist zu jeder Jahreszeit eine Reise Wert. \nHannovers Ursprünge können bis zur römischen Kaiserzeit zurückverfolgt werden, und zwar durch Ausgrabungen von Tongefäßen aus dem 1. -3. Jahrhundert nach Christus, die an mehreren Stellen im Untergrund des Stadtzentrums durchgeführt wurden.", language: 'de')
-        expect(ps.segment).to eq(["Ob Sie in Hannover nur auf der Durchreise, für einen längeren Aufenthalt oder zum Besuch einer der zahlreichen Messen sind: Die Hauptstadt des Landes Niedersachsens hat viele Sehenswürdigkeiten und ist zu jeder Jahreszeit eine Reise Wert.", "Hannovers Ursprünge können bis zur römischen Kaiserzeit zurückverfolgt werden, und zwar durch Ausgrabungen von Tongefäßen aus dem 1. -3. Jahrhundert nach Christus, die an mehreren Stellen im Untergrund des Stadtzentrums durchgeführt wurden."])
-      end
-
-      it 'correctly segments text #025' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "• 3. Seien Sie achtsam bei der Auswahl der Nahrungsmittel! \n• 4. Nehmen Sie zusätzlich Folsäurepräparate und essen Sie Fisch! \n• 5. Treiben Sie regelmäßig Sport! \n• 6. Beginnen Sie mit Übungen für die Beckenbodenmuskulatur! \n• 7. Reduzieren Sie Ihren Alkoholgenuss! \n", language: 'de')
-        expect(ps.segment).to eq(["• 3. Seien Sie achtsam bei der Auswahl der Nahrungsmittel!", "• 4. Nehmen Sie zusätzlich Folsäurepräparate und essen Sie Fisch!", "• 5. Treiben Sie regelmäßig Sport!", "• 6. Beginnen Sie mit Übungen für die Beckenbodenmuskulatur!", "• 7. Reduzieren Sie Ihren Alkoholgenuss!"])
-      end
-
-      it 'correctly segments text #026' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Schwangere Frauen sollten während der \nersten drei Monate eine tägliche Dosis von 400 Mikrogramm Folsäure zusätzlich nehmen. \nFolsäure befindet sich auch in einigen Gemüse- und Müslisorten.", language: 'de', doc_type: 'pdf')
-        expect(ps.segment).to eq(["Schwangere Frauen sollten während der ersten drei Monate eine tägliche Dosis von 400 Mikrogramm Folsäure zusätzlich nehmen.", "Folsäure befindet sich auch in einigen Gemüse- und Müslisorten."])
-      end
-
-      it 'correctly segments text #027' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Andere \nFischsorten (z.B. Hai, Thunfisch, Aal und Seeteufel) weisen einen erhöhten Quecksilbergehalt \nauf und sollten deshalb in der Schwangerschaft nur selten verzehrt werden.", language: 'de', doc_type: 'pdf')
-        expect(ps.segment).to eq(["Andere Fischsorten (z.B. Hai, Thunfisch, Aal und Seeteufel) weisen einen erhöhten Quecksilbergehalt auf und sollten deshalb in der Schwangerschaft nur selten verzehrt werden."])
-      end
-
-      it 'correctly segments text #028' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Übung Präsens\n1. Ich ___ gern Tennis.\nspielen\nspielt\nspiele\n2. Karl __ mir den Ball.\ngebt\ngibt\ngeben\n3. Ihr ___ fast jeden Tag.\narbeitet\narbeite\narbeiten\n4. ___ Susi Deutsch?\nSprichst\nSprecht\nSpricht\n5. Wann ___ Karl und Julia? Heute?\nkommen\nkommt\nkomme\n\n\n\n\n", language: 'de', doc_type: 'docx')
-        expect(ps.segment).to eq(["Übung Präsens", "1. Ich ___ gern Tennis.", "spielen", "spielt", "spiele", "2. Karl __ mir den Ball.", "gebt", "gibt", "geben", "3. Ihr ___ fast jeden Tag.", "arbeitet", "arbeite", "arbeiten", "4. ___ Susi Deutsch?", "Sprichst", "Sprecht", "Spricht", "5. Wann ___ Karl und Julia?", "Heute?", "kommen", "kommt", "komme"])
-      end
-
-      it 'correctly segments text #029' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "\n• einige Sorten Weichkäse  \n• rohes oder nicht ganz durchgebratenes Fleisch  \n• ungeputztes Gemüse und ungewaschener Salat  \n• nicht ganz durchgebratenes Hühnerfleisch, rohe oder nur weich gekochte Eier", language: 'de', doc_type: 'pdf')
-        expect(ps.segment).to eq(["• einige Sorten Weichkäse", "• rohes oder nicht ganz durchgebratenes Fleisch", "• ungeputztes Gemüse und ungewaschener Salat", "• nicht ganz durchgebratenes Hühnerfleisch, rohe oder nur weich gekochte Eier"])
-      end
-
-      it 'correctly segments text #030' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Was sind die Konsequenzen der Abstimmung vom 12. Juni?", language: 'de')
-        expect(ps.segment).to eq(["Was sind die Konsequenzen der Abstimmung vom 12. Juni?"])
-      end
-
-      it 'correctly segments text #031' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Was pro Jahr10. Zudem pro Jahr um 0.3 %11. Der gängigen Theorie nach erfolgt der Anstieg.", language: 'de')
-        expect(ps.segment).to eq(["Was pro Jahr10.", "Zudem pro Jahr um 0.3 %11.", "Der gängigen Theorie nach erfolgt der Anstieg."])
-      end
-
-      it 'correctly segments text #032' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "s. vorherige Anmerkung.", language: 'de')
-        expect(ps.segment).to eq(["s. vorherige Anmerkung."])
-      end
-
-      it 'correctly segments text #033' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Mit Inkrafttreten des Mindestlohngesetzes (MiLoG) zum 01. Januar 2015 werden in Bezug auf den Einsatz von Leistungs.", language: 'de')
-        expect(ps.segment).to eq(["Mit Inkrafttreten des Mindestlohngesetzes (MiLoG) zum 01. Januar 2015 werden in Bezug auf den Einsatz von Leistungs."])
+      it "Quotations #005" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "«Ninguna mente extraordinaria está exenta de un toque de demencia.», dijo Aristóteles.", language: "es")
+        expect(ps.segment).to eq(["«Ninguna mente extraordinaria está exenta de un toque de demencia.», dijo Aristóteles."])
       end
     end
-  end
 
-  context 'Language: Spanish (es)' do
     # Thanks to Alejandro Naser Pastoriza for the Spanish test examples.
     describe '#segment' do
       it 'correctly segments text #001' do
@@ -2365,16 +2301,14 @@ RSpec.describe PragmaticSegmenter::Segmenter do
     end
   end
 
-  context 'Language: Hindi (hi)' do
-    describe '#segment' do
-      it 'correctly segments text #001' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "सच्चाई यह है कि इसे कोई नहीं जानता। हो सकता है यह फ़्रेन्को के खिलाफ़ कोई विद्रोह रहा हो, या फिर बेकाबू हो गया कोई आनंदोत्सव।", language: 'hi')
-        expect(ps.segment).to eq(["सच्चाई यह है कि इसे कोई नहीं जानता।", "हो सकता है यह फ़्रेन्को के खिलाफ़ कोई विद्रोह रहा हो, या फिर बेकाबू हो गया कोई आनंदोत्सव।"])
+  describe "Greek", '(el)' do
+    context "Golden Rules" do
+      it "Question mark to end sentence #001" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Με συγχωρείτε· πού είναι οι τουαλέτες; Τις Κυριακές δε δούλευε κανένας. το κόστος του σπιτιού ήταν £260.950,00.", language: "el")
+        expect(ps.segment).to eq(["Με συγχωρείτε· πού είναι οι τουαλέτες;", "Τις Κυριακές δε δούλευε κανένας.", "το κόστος του σπιτιού ήταν £260.950,00."])
       end
     end
-  end
 
-  context 'Language: Greek (el)' do
     describe '#segment' do
       it 'correctly segments text #001' do
         ps = PragmaticSegmenter::Segmenter.new(text: "Με συγχωρείτε· πού είναι οι τουαλέτες; Τις Κυριακές δε δούλευε κανένας. το κόστος του σπιτιού ήταν £260.950,00.", language: 'el')
@@ -2383,36 +2317,40 @@ RSpec.describe PragmaticSegmenter::Segmenter do
     end
   end
 
-  context 'Language: French (fr)' do
+  describe 'Hindi', '(hi)' do
+    context "Golden Rules" do
+      it "Full stop #001" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "सच्चाई यह है कि इसे कोई नहीं जानता। हो सकता है यह फ़्रेन्को के खिलाफ़ कोई विद्रोह रहा हो, या फिर बेकाबू हो गया कोई आनंदोत्सव।", language: "hi")
+        expect(ps.segment).to eq(["सच्चाई यह है कि इसे कोई नहीं जानता।", "हो सकता है यह फ़्रेन्को के खिलाफ़ कोई विद्रोह रहा हो, या फिर बेकाबू हो गया कोई आनंदोत्सव।"])
+      end
+    end
+
     describe '#segment' do
       it 'correctly segments text #001' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Après avoir été l'un des acteurs du projet génome humain, le Genoscope met aujourd'hui le cap vers la génomique environnementale. L'exploitation des données de séquences, prolongée par l'identification expérimentale des fonctions biologiques, notamment dans le domaine de la biocatalyse, ouvrent des perspectives de développements en biotechnologie industrielle.", language: 'fr')
-        expect(ps.segment).to eq(["Après avoir été l'un des acteurs du projet génome humain, le Genoscope met aujourd'hui le cap vers la génomique environnementale.", "L'exploitation des données de séquences, prolongée par l'identification expérimentale des fonctions biologiques, notamment dans le domaine de la biocatalyse, ouvrent des perspectives de développements en biotechnologie industrielle."])
-      end
-
-      it 'correctly segments text #002' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "\"Airbus livrera comme prévu 30 appareils 380 cette année avec en ligne de mire l'objectif d'équilibre financier du programme en 2015\", a-t-il ajouté.", language: 'fr')
-        expect(ps.segment).to eq(["\"Airbus livrera comme prévu 30 appareils 380 cette année avec en ligne de mire l'objectif d'équilibre financier du programme en 2015\", a-t-il ajouté."])
-      end
-
-      it 'correctly segments text #003' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "À 11 heures ce matin, la direction ne décomptait que douze grévistes en tout sur la France : ce sont ceux du site de Saran (Loiret), dont l’effectif est de 809 salariés, dont la moitié d’intérimaires. Elle assure que ce mouvement « n’aura aucun impact sur les livraisons ».", language: 'fr')
-        expect(ps.segment).to eq(["À 11 heures ce matin, la direction ne décomptait que douze grévistes en tout sur la France : ce sont ceux du site de Saran (Loiret), dont l’effectif est de 809 salariés, dont la moitié d’intérimaires.", "Elle assure que ce mouvement « n’aura aucun impact sur les livraisons »."])
-      end
-
-      it 'correctly segments text #004' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Ce modèle permet d’afficher le texte « LL.AA.II.RR. » pour l’abréviation de « Leurs Altesses impériales et royales » avec son infobulle.", language: 'fr')
-        expect(ps.segment).to eq(["Ce modèle permet d’afficher le texte « LL.AA.II.RR. » pour l’abréviation de « Leurs Altesses impériales et royales » avec son infobulle."])
-      end
-
-      it 'correctly segments text #005' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "Les derniers ouvrages de Intercept Ltd. sont ici.", language: 'fr')
-        expect(ps.segment).to eq(["Les derniers ouvrages de Intercept Ltd. sont ici."])
+        ps = PragmaticSegmenter::Segmenter.new(text: "सच्चाई यह है कि इसे कोई नहीं जानता। हो सकता है यह फ़्रेन्को के खिलाफ़ कोई विद्रोह रहा हो, या फिर बेकाबू हो गया कोई आनंदोत्सव।", language: 'hi')
+        expect(ps.segment).to eq(["सच्चाई यह है कि इसे कोई नहीं जानता।", "हो सकता है यह फ़्रेन्को के खिलाफ़ कोई विद्रोह रहा हो, या फिर बेकाबू हो गया कोई आनंदोत्सव।"])
       end
     end
   end
 
-  context 'Language: Armenian (hy)' do
+  describe 'Armenian', '(hy)' do
+    context "Golden Rules" do
+      it "Sentence ending punctuation #001" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Ի՞նչ ես մտածում: Ոչինչ:", language: "hy")
+        expect(ps.segment).to eq(["Ի՞նչ ես մտածում:", "Ոչինչ:"])
+      end
+
+      it "Ellipsis #002" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Ապրիլի 24-ին սկսեց անձրևել...Այդպես էի գիտեի:", language: "hy")
+        expect(ps.segment).to eq(["Ապրիլի 24-ին սկսեց անձրևել...Այդպես էի գիտեի:"])
+      end
+
+      it "Period is not a sentence boundary #003" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Այսպիսով` մոտենում ենք ավարտին: Տրամաբանությյունը հետևյալն է. պարզություն և աշխատանք:", language: "hy")
+        expect(ps.segment).to eq(["Այսպիսով` մոտենում ենք ավարտին:", "Տրամաբանությյունը հետևյալն է. պարզություն և աշխատանք:"])
+      end
+    end
+
     describe '#segment' do
       # Thanks to Armine Abelyan for the Armenian test examples.
 
@@ -2553,7 +2491,14 @@ RSpec.describe PragmaticSegmenter::Segmenter do
     end
   end
 
-  context 'Language: Burmese (my)' do
+  describe "Burmese", '(my)' do
+    context "Golden Rules" do
+      it "Sentence ending punctuation #001" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "ခင္ဗ်ားနာမည္ဘယ္လိုေခၚလဲ။၇ွင္ေနေကာင္းလား။", language: 'my')
+        expect(ps.segment).to eq(["ခင္ဗ်ားနာမည္ဘယ္လိုေခၚလဲ။", "၇ွင္ေနေကာင္းလား။"])
+      end
+    end
+
     describe '#segment' do
       it 'correctly segments text #001' do
         ps = PragmaticSegmenter::Segmenter.new(text: "ခင္ဗ်ားနာမည္ဘယ္လိုေခၚလဲ။၇ွင္ေနေကာင္းလား။", language: 'my')
@@ -2562,7 +2507,14 @@ RSpec.describe PragmaticSegmenter::Segmenter do
     end
   end
 
-  context 'Language: Amharic (am)' do
+  describe "Amharic", '(am)' do
+    context "Golden Rules" do
+      it "Sentence ending punctuation #001" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "እንደምን አለህ፧መልካም ቀን ይሁንልህ።እባክሽ ያልሽዉን ድገሚልኝ።", language: 'am')
+        expect(ps.segment).to eq(["እንደምን አለህ፧", "መልካም ቀን ይሁንልህ።", "እባክሽ ያልሽዉን ድገሚልኝ።"])
+      end
+    end
+
     describe '#segment' do
       it 'correctly segments text #001' do
         ps = PragmaticSegmenter::Segmenter.new(text: "እንደምን አለህ፧መልካም ቀን ይሁንልህ።እባክሽ ያልሽዉን ድገሚልኝ።", language: 'am')
@@ -2571,7 +2523,14 @@ RSpec.describe PragmaticSegmenter::Segmenter do
     end
   end
 
-  context 'Language: Persian (fa)' do
+  describe "Persian", '(fa)' do
+    context "Golden Rules" do
+      it "Sentence ending punctuation #001" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "خوشبختم، آقای رضا. شما کجایی هستید؟ من از تهران هستم.", language: 'fa')
+        expect(ps.segment).to eq(["خوشبختم، آقای رضا.", "شما کجایی هستید؟", "من از تهران هستم."])
+      end
+    end
+
     describe '#segment' do
       it 'correctly segments text #001' do
         ps = PragmaticSegmenter::Segmenter.new(text: "خوشبختم، آقای رضا. شما کجایی هستید؟ من از تهران هستم.", language: 'fa')
@@ -2580,7 +2539,14 @@ RSpec.describe PragmaticSegmenter::Segmenter do
     end
   end
 
-  context 'Language: Urdu (ur)' do
+  describe "Urdu", '(ur)' do
+    context "Golden Rules" do
+      it "Sentence ending punctuation #001" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "کیا حال ہے؟ ميرا نام ___ ەے۔ میں حالا تاوان دےدوں؟", language: 'ur')
+        expect(ps.segment).to eq(["کیا حال ہے؟", "ميرا نام ___ ەے۔", "میں حالا تاوان دےدوں؟"])
+      end
+    end
+
     describe '#segment' do
       it 'correctly segments text #001' do
         ps = PragmaticSegmenter::Segmenter.new(text: "کیا حال ہے؟ ميرا نام ___ ەے۔ میں حالا تاوان دےدوں؟", language: 'ur')
@@ -2589,16 +2555,19 @@ RSpec.describe PragmaticSegmenter::Segmenter do
     end
   end
 
-  context 'Language: Chinese (zh)' do
-    describe '#segment' do
-      it 'correctly segments text #001' do
-        ps = PragmaticSegmenter::Segmenter.new(text: "安永已聯繫周怡安親屬，協助辦理簽證相關事宜，周怡安家屬1月1日晚間搭乘東方航空班機抵達上海，他們步入入境大廳時神情落寞、不發一語。周怡安來自台中，去年剛從元智大學畢業，同年9月加入安永。", language: 'zh')
-        expect(ps.segment).to eq(["安永已聯繫周怡安親屬，協助辦理簽證相關事宜，周怡安家屬1月1日晚間搭乘東方航空班機抵達上海，他們步入入境大廳時神情落寞、不發一語。", "周怡安來自台中，去年剛從元智大學畢業，同年9月加入安永。"])
+  describe "Dutch", '(nl)' do
+    context "Golden Rules" do
+      it "Sentence starting with a number #001" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Hij schoot op de JP8-brandstof toen de Surface-to-Air (sam)-missiles op hem af kwamen. 81 procent van de schoten was raak.", language: 'nl')
+        expect(ps.segment).to eq(["Hij schoot op de JP8-brandstof toen de Surface-to-Air (sam)-missiles op hem af kwamen.", "81 procent van de schoten was raak."])
+      end
+
+      it "Sentence starting with an ellipsis #002" do
+        ps = PragmaticSegmenter::Segmenter.new(text: "81 procent van de schoten was raak. ...en toen barste de hel los.", language: 'nl')
+        expect(ps.segment).to eq(["81 procent van de schoten was raak.", "...en toen barste de hel los."])
       end
     end
-  end
 
-  context 'Language: Dutch (nl)' do
     describe '#segment' do
       it 'correctly segments text #001' do
         ps = PragmaticSegmenter::Segmenter.new(text: "Afkorting aanw. vnw.", language: 'nl')
@@ -2607,7 +2576,46 @@ RSpec.describe PragmaticSegmenter::Segmenter do
     end
   end
 
-  context 'Language: Polish (pl)' do
+
+  describe 'French', '(fr)' do
+    describe '#segment' do
+      it 'correctly segments text #001' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Après avoir été l'un des acteurs du projet génome humain, le Genoscope met aujourd'hui le cap vers la génomique environnementale. L'exploitation des données de séquences, prolongée par l'identification expérimentale des fonctions biologiques, notamment dans le domaine de la biocatalyse, ouvrent des perspectives de développements en biotechnologie industrielle.", language: 'fr')
+        expect(ps.segment).to eq(["Après avoir été l'un des acteurs du projet génome humain, le Genoscope met aujourd'hui le cap vers la génomique environnementale.", "L'exploitation des données de séquences, prolongée par l'identification expérimentale des fonctions biologiques, notamment dans le domaine de la biocatalyse, ouvrent des perspectives de développements en biotechnologie industrielle."])
+      end
+
+      it 'correctly segments text #002' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "\"Airbus livrera comme prévu 30 appareils 380 cette année avec en ligne de mire l'objectif d'équilibre financier du programme en 2015\", a-t-il ajouté.", language: 'fr')
+        expect(ps.segment).to eq(["\"Airbus livrera comme prévu 30 appareils 380 cette année avec en ligne de mire l'objectif d'équilibre financier du programme en 2015\", a-t-il ajouté."])
+      end
+
+      it 'correctly segments text #003' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "À 11 heures ce matin, la direction ne décomptait que douze grévistes en tout sur la France : ce sont ceux du site de Saran (Loiret), dont l’effectif est de 809 salariés, dont la moitié d’intérimaires. Elle assure que ce mouvement « n’aura aucun impact sur les livraisons ».", language: 'fr')
+        expect(ps.segment).to eq(["À 11 heures ce matin, la direction ne décomptait que douze grévistes en tout sur la France : ce sont ceux du site de Saran (Loiret), dont l’effectif est de 809 salariés, dont la moitié d’intérimaires.", "Elle assure que ce mouvement « n’aura aucun impact sur les livraisons »."])
+      end
+
+      it 'correctly segments text #004' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Ce modèle permet d’afficher le texte « LL.AA.II.RR. » pour l’abréviation de « Leurs Altesses impériales et royales » avec son infobulle.", language: 'fr')
+        expect(ps.segment).to eq(["Ce modèle permet d’afficher le texte « LL.AA.II.RR. » pour l’abréviation de « Leurs Altesses impériales et royales » avec son infobulle."])
+      end
+
+      it 'correctly segments text #005' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "Les derniers ouvrages de Intercept Ltd. sont ici.", language: 'fr')
+        expect(ps.segment).to eq(["Les derniers ouvrages de Intercept Ltd. sont ici."])
+      end
+    end
+  end
+
+  describe 'Chinese', '(zh)' do
+    describe '#segment' do
+      it 'correctly segments text #001' do
+        ps = PragmaticSegmenter::Segmenter.new(text: "安永已聯繫周怡安親屬，協助辦理簽證相關事宜，周怡安家屬1月1日晚間搭乘東方航空班機抵達上海，他們步入入境大廳時神情落寞、不發一語。周怡安來自台中，去年剛從元智大學畢業，同年9月加入安永。", language: 'zh')
+        expect(ps.segment).to eq(["安永已聯繫周怡安親屬，協助辦理簽證相關事宜，周怡安家屬1月1日晚間搭乘東方航空班機抵達上海，他們步入入境大廳時神情落寞、不發一語。", "周怡安來自台中，去年剛從元智大學畢業，同年9月加入安永。"])
+      end
+    end
+  end
+
+  describe 'Polish', '(pl)' do
     describe '#segment' do
       it 'correctly segments text #001' do
         ps = PragmaticSegmenter::Segmenter.new(text: "To słowo bałt. jestskrótem.", language: 'pl')
