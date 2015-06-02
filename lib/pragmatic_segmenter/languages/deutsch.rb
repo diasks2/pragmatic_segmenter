@@ -41,7 +41,7 @@ module PragmaticSegmenter
       # Rubular: http://rubular.com/r/iUNSkCuso0
       SingleLowerCaseLetterAtStartOfLineRule = Rule.new(/(?<=^[a-z])\.(?=\s)/, '∯')
 
-      class Process < PragmaticSegmenter::Process
+      class Processor < PragmaticSegmenter::Processor
         private
 
         def replace_numbers

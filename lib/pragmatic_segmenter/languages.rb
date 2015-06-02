@@ -1,5 +1,5 @@
 require 'pragmatic_segmenter/types'
-require 'pragmatic_segmenter/process'
+require 'pragmatic_segmenter/processor'
 require 'pragmatic_segmenter/cleaner'
 
 require 'pragmatic_segmenter/languages/common'

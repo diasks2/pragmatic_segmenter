@@ -9,7 +9,7 @@ require 'pragmatic_segmenter/exclamation_words'
 
 module PragmaticSegmenter
   # This class processing segmenting the text.
-  class Process
+  class Processor
 
     attr_reader :text
     def initialize(language: Languages::Common)
