@@ -67,7 +67,7 @@ module PragmaticSegmenter
       # Some might say that the set of words that follow an
       # abbreviation such as U.S. (i.e. U.S. Government) is smaller than
       # the set of words that could start a sentence and
-      # never follow U.S. However, we  are being conservative
+      # never follow U.S. However, we are being conservative
       # and not splitting by default, so we need to look for places
       # where we definitely can split. Obviously SENTENCE_STARTERS
       # will never cover all cases, but as the gem is named
