@@ -76,17 +76,17 @@ module PragmaticSegmenter
       # sentence but could never follow one of the abbreviations below.
 
       SENTENCE_STARTERS.each do |word|
-        txt = txt.gsub(/U∯S∯\s#{Regexp.escape(word)}\s/, "U∯S\.\s#{Regexp.escape(word)}\s")
-              .gsub(/U\.S∯\s#{Regexp.escape(word)}\s/, "U\.S\.\s#{Regexp.escape(word)}\s")
-              .gsub(/U∯K∯\s#{Regexp.escape(word)}\s/, "U∯K\.\s#{Regexp.escape(word)}\s")
-              .gsub(/U\.K∯\s#{Regexp.escape(word)}\s/, "U\.K\.\s#{Regexp.escape(word)}\s")
-              .gsub(/E∯U∯\s#{Regexp.escape(word)}\s/, "E∯U\.\s#{Regexp.escape(word)}\s")
-              .gsub(/E\.U∯\s#{Regexp.escape(word)}\s/, "E\.U\.\s#{Regexp.escape(word)}\s")
-              .gsub(/U∯S∯A∯\s#{Regexp.escape(word)}\s/, "U∯S∯A\.\s#{Regexp.escape(word)}\s")
-              .gsub(/U\.S\.A∯\s#{Regexp.escape(word)}\s/, "U\.S\.A\.\s#{Regexp.escape(word)}\s")
-              .gsub(/I∯\s#{Regexp.escape(word)}\s/, "I\.\s#{Regexp.escape(word)}\s")
-              .gsub(/i.v∯\s#{Regexp.escape(word)}\s/, "i\.v\.\s#{Regexp.escape(word)}\s")
-              .gsub(/I.V∯\s#{Regexp.escape(word)}\s/, "I\.V\.\s#{Regexp.escape(word)}\s")
+        txt.gsub!(/U∯S∯\s#{Regexp.escape(word)}\s/, "U∯S\.\s#{Regexp.escape(word)}\s")
+        txt.gsub!(/U\.S∯\s#{Regexp.escape(word)}\s/, "U\.S\.\s#{Regexp.escape(word)}\s")
+        txt.gsub!(/U∯K∯\s#{Regexp.escape(word)}\s/, "U∯K\.\s#{Regexp.escape(word)}\s")
+        txt.gsub!(/U\.K∯\s#{Regexp.escape(word)}\s/, "U\.K\.\s#{Regexp.escape(word)}\s")
+        txt.gsub!(/E∯U∯\s#{Regexp.escape(word)}\s/, "E∯U\.\s#{Regexp.escape(word)}\s")
+        txt.gsub!(/E\.U∯\s#{Regexp.escape(word)}\s/, "E\.U\.\s#{Regexp.escape(word)}\s")
+        txt.gsub!(/U∯S∯A∯\s#{Regexp.escape(word)}\s/, "U∯S∯A\.\s#{Regexp.escape(word)}\s")
+        txt.gsub!(/U\.S\.A∯\s#{Regexp.escape(word)}\s/, "U\.S\.A\.\s#{Regexp.escape(word)}\s")
+        txt.gsub!(/I∯\s#{Regexp.escape(word)}\s/, "I\.\s#{Regexp.escape(word)}\s")
+        txt.gsub!(/i.v∯\s#{Regexp.escape(word)}\s/, "i\.v\.\s#{Regexp.escape(word)}\s")
+        txt.gsub!(/I.V∯\s#{Regexp.escape(word)}\s/, "I\.V\.\s#{Regexp.escape(word)}\s")
       end
       txt
     end
@@ -95,29 +95,32 @@ module PragmaticSegmenter
       mpa = txt.scan(@language::MULTI_PERIOD_ABBREVIATION_REGEX)
       return txt if mpa.empty?
       mpa.each do |r|
-        txt = txt.gsub(/#{Regexp.escape(r)}/, "#{r.gsub!('.', '∯')}")
+        txt.gsub!(/#{Regexp.escape(r)}/, "#{r.gsub!('.', '∯')}")
       end
       txt
     end
 
     def replace_pre_number_abbr(txt, abbr)
-      txt.gsub(/(?<=\s#{abbr.strip})\.(?=\s\d)|(?<=^#{abbr.strip})\.(?=\s\d)/, '∯')
-         .gsub(/(?<=\s#{abbr.strip})\.(?=\s+\()|(?<=^#{abbr.strip})\.(?=\s+\()/, '∯')
-
+      txt.gsub!(/(?<=\s#{abbr.strip})\.(?=\s\d)|(?<=^#{abbr.strip})\.(?=\s\d)/, '∯')
+      txt.gsub!(/(?<=\s#{abbr.strip})\.(?=\s+\()|(?<=^#{abbr.strip})\.(?=\s+\()/, '∯')
+      txt
     end
 
     def replace_prepositive_abbr(txt, abbr)
-      txt.gsub(/(?<=\s#{abbr.strip})\.(?=\s)|(?<=^#{abbr.strip})\.(?=\s)/, '∯')
-         .gsub(/(?<=\s#{abbr.strip})\.(?=:\d+)|(?<=^#{abbr.strip})\.(?=:\d+)/, '∯')
+      txt.gsub!(/(?<=\s#{abbr.strip})\.(?=\s)|(?<=^#{abbr.strip})\.(?=\s)/, '∯')
+      txt.gsub!(/(?<=\s#{abbr.strip})\.(?=:\d+)|(?<=^#{abbr.strip})\.(?=:\d+)/, '∯')
+      txt
     end
 
     def replace_period_of_abbr(txt, abbr)
-      txt.gsub(/(?<=\s#{abbr.strip})\.(?=((\.|\:|\?)|(\s([a-z]|I\s|I'm|I'll|\d))))|(?<=^#{abbr.strip})\.(?=((\.|\:|\?)|(\s([a-z]|I\s|I'm|I'll|\d))))/, '∯')
-         .gsub(/(?<=\s#{abbr.strip})\.(?=,)|(?<=^#{abbr.strip})\.(?=,)/, '∯')
+      txt.gsub!(/(?<=\s#{abbr.strip})\.(?=((\.|\:|\?)|(\s([a-z]|I\s|I'm|I'll|\d))))|(?<=^#{abbr.strip})\.(?=((\.|\:|\?)|(\s([a-z]|I\s|I'm|I'll|\d))))/, '∯')
+      txt.gsub!(/(?<=\s#{abbr.strip})\.(?=,)|(?<=^#{abbr.strip})\.(?=,)/, '∯')
+      txt
     end
 
     def replace_possessive_abbreviations(txt)
-      txt.gsub(@language::POSSESSIVE_ABBREVIATION_REGEX, '∯')
+      txt.gsub!(@language::POSSESSIVE_ABBREVIATION_REGEX, '∯')
+      txt
     end
   end
 end
