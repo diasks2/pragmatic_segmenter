@@ -13,9 +13,10 @@ module PragmaticSegmenter
         private
 
         def replace_period_of_abbr(txt, abbr)
-          txt.gsub(/(?<=\s#{abbr.strip})\./, '∯')
-            .gsub(/(?<=\A#{abbr.strip})\./, '∯')
-            .gsub(/(?<=^#{abbr.strip})\./, '∯')
+          txt.gsub!(/(?<=\s#{abbr.strip})\./, '∯')
+          txt.gsub!(/(?<=\A#{abbr.strip})\./, '∯')
+          txt.gsub!(/(?<=^#{abbr.strip})\./, '∯')
+          txt
         end
       end
     end

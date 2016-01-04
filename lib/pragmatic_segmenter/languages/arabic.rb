@@ -22,7 +22,8 @@ module PragmaticSegmenter
         private
 
         def scan_for_replacements(txt, am, index, character_array)
-          txt.gsub(/(?<=#{am})\./, '∯')
+          txt.gsub!(/(?<=#{am})\./, '∯')
+          txt
         end
       end
     end
