@@ -58,5 +58,4 @@ RSpec.describe PragmaticSegmenter::Segmenter do
       end
     end
   end
-
 end
