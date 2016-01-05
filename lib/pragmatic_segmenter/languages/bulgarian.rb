@@ -14,6 +14,12 @@ module PragmaticSegmenter
 
       class AbbreviationReplacer < AbbreviationReplacer
         SENTENCE_STARTERS = [].freeze
+
+        private
+        def replace_period_of_abbr(txt, abbr)
+          txt.gsub!(/(?<=\s#{abbr.strip})\.|(?<=^#{abbr.strip})\./, '∯')
+          txt
+        end
       end
     end
   end
