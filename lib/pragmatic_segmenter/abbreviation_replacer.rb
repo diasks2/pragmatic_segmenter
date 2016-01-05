@@ -76,17 +76,18 @@ module PragmaticSegmenter
       # sentence but could never follow one of the abbreviations below.
 
       SENTENCE_STARTERS.each do |word|
-        txt.gsub!(/U∯S∯\s#{Regexp.escape(word)}\s/, "U∯S\.\s#{Regexp.escape(word)}\s")
-        txt.gsub!(/U\.S∯\s#{Regexp.escape(word)}\s/, "U\.S\.\s#{Regexp.escape(word)}\s")
-        txt.gsub!(/U∯K∯\s#{Regexp.escape(word)}\s/, "U∯K\.\s#{Regexp.escape(word)}\s")
-        txt.gsub!(/U\.K∯\s#{Regexp.escape(word)}\s/, "U\.K\.\s#{Regexp.escape(word)}\s")
-        txt.gsub!(/E∯U∯\s#{Regexp.escape(word)}\s/, "E∯U\.\s#{Regexp.escape(word)}\s")
-        txt.gsub!(/E\.U∯\s#{Regexp.escape(word)}\s/, "E\.U\.\s#{Regexp.escape(word)}\s")
-        txt.gsub!(/U∯S∯A∯\s#{Regexp.escape(word)}\s/, "U∯S∯A\.\s#{Regexp.escape(word)}\s")
-        txt.gsub!(/U\.S\.A∯\s#{Regexp.escape(word)}\s/, "U\.S\.A\.\s#{Regexp.escape(word)}\s")
-        txt.gsub!(/I∯\s#{Regexp.escape(word)}\s/, "I\.\s#{Regexp.escape(word)}\s")
-        txt.gsub!(/i.v∯\s#{Regexp.escape(word)}\s/, "i\.v\.\s#{Regexp.escape(word)}\s")
-        txt.gsub!(/I.V∯\s#{Regexp.escape(word)}\s/, "I\.V\.\s#{Regexp.escape(word)}\s")
+        escaped = Regexp.escape(word)
+        txt.gsub!(/U∯S∯\s#{escaped}\s/, "U∯S\.\s#{escaped}\s")
+        txt.gsub!(/U\.S∯\s#{escaped}\s/, "U\.S\.\s#{escaped}\s")
+        txt.gsub!(/U∯K∯\s#{escaped}\s/, "U∯K\.\s#{escaped}\s")
+        txt.gsub!(/U\.K∯\s#{escaped}\s/, "U\.K\.\s#{escaped}\s")
+        txt.gsub!(/E∯U∯\s#{escaped}\s/, "E∯U\.\s#{escaped}\s")
+        txt.gsub!(/E\.U∯\s#{escaped}\s/, "E\.U\.\s#{escaped}\s")
+        txt.gsub!(/U∯S∯A∯\s#{escaped}\s/, "U∯S∯A\.\s#{escaped}\s")
+        txt.gsub!(/U\.S\.A∯\s#{escaped}\s/, "U\.S\.A\.\s#{escaped}\s")
+        txt.gsub!(/I∯\s#{escaped}\s/, "I\.\s#{escaped}\s")
+        txt.gsub!(/i.v∯\s#{escaped}\s/, "i\.v\.\s#{escaped}\s")
+        txt.gsub!(/I.V∯\s#{escaped}\s/, "I\.V\.\s#{escaped}\s")
       end
       txt
     end
