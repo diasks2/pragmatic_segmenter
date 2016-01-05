@@ -817,7 +817,16 @@ To test the relative performance of different segmentation tools and libraries I
 * Add English abbreviations  
 
 **Version 0.3.3**  
-* Fix cleaner bug    
+* Fix cleaner bug  
+
+**Version 0.3.4**  
+* Large refactor   
+
+**Version 0.3.5**  
+* Reduce GC by replacing #gusb with #gsub! where possible  
+
+**Version 0.3.6**  
+* Refactor SENTENCE_STARTERS to each individual language and add SENTENCE_STARTERS for German    
 
 ## Contributing
 
