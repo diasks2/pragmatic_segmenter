@@ -9,7 +9,9 @@ module PragmaticSegmenter
         NUMBER_ABBREVIATIONS = []
       end
 
-      class AbbreviationReplacer  < AbbreviationReplacer
+      class AbbreviationReplacer < AbbreviationReplacer
+        SENTENCE_STARTERS = [].freeze
+
         private
 
         def replace_period_of_abbr(txt, abbr)

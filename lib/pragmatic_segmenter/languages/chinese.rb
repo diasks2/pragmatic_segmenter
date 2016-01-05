@@ -3,6 +3,9 @@ module PragmaticSegmenter
     module Chinese
       include Languages::Common
 
+      class AbbreviationReplacer < AbbreviationReplacer
+        SENTENCE_STARTERS = [].freeze
+      end
     end
   end
 end

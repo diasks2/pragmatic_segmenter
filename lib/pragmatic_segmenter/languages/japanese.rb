@@ -19,6 +19,10 @@ module PragmaticSegmenter
         end
       end
 
+      class AbbreviationReplacer < AbbreviationReplacer
+        SENTENCE_STARTERS = [].freeze
+      end
+
       class BetweenPunctuation < PragmaticSegmenter::BetweenPunctuation
         # Rubular: http://rubular.com/r/GnjOmry5Z2
         BETWEEN_QUOTE_JA_REGEX = /\u{300c}(?>[^\u{300c}\u{300d}\\]+|\\{2}|\\.)*\u{300d}/

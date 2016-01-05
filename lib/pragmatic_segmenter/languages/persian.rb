@@ -9,7 +9,9 @@ module PragmaticSegmenter
       ReplaceColonBetweenNumbersRule = Rule.new(/(?<=\d):(?=\d)/, '♭')
       ReplaceNonSentenceBoundaryCommaRule = Rule.new(/،(?=\s\S+،)/, '♬')
 
-      class AbbreviationReplacer  < AbbreviationReplacer
+      class AbbreviationReplacer < AbbreviationReplacer
+        SENTENCE_STARTERS = [].freeze
+
         private
 
         def scan_for_replacements(txt, am, index, character_array)

@@ -8,6 +8,10 @@ module PragmaticSegmenter
         PREPOSITIVE_ABBREVIATIONS = ['a', 'aero', 'ambi', 'an', 'anfi', 'ante', 'anti', 'archi', 'arci', 'auto', 'bi', 'bien', 'bis', 'co', 'com', 'con', 'contra', 'crio', 'cuadri', 'cuasi', 'cuatri', 'de', 'deci', 'des', 'di', 'dis', 'dr', 'ecto', 'ee', 'en', 'endo', 'entre', 'epi', 'equi', 'ex', 'extra', 'geo', 'hemi', 'hetero', 'hiper', 'hipo', 'homo', 'i', 'im', 'in', 'infra', 'inter', 'intra', 'iso', 'lic', 'macro', 'mega', 'micro', 'mini', 'mono', 'mt', 'multi', 'neo', 'omni', 'para', 'pen', 'ph', 'ph.d', 'pluri', 'poli', 'pos', 'post', 'pre', 'pro', 'prof', 'pseudo', 're', 'retro', 'semi', 'seudo', 'sobre', 'sub', 'super', 'supra', 'sra', 'srta', 'trans', 'tras', 'tri', 'ulter', 'ultra', 'un', 'uni', 'vice', 'yuxta']
         NUMBER_ABBREVIATIONS = ['cra', 'ext', 'no', 'nos', 'p', 'pp', 'tel']
       end
+
+      class AbbreviationReplacer < AbbreviationReplacer
+        SENTENCE_STARTERS = [].freeze
+      end
     end
   end
 end

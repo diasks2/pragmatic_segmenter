@@ -58,7 +58,7 @@ module PragmaticSegmenter
         end
       end
 
-      class AbbreviationReplacer  < AbbreviationReplacer
+      class AbbreviationReplacer < AbbreviationReplacer
 
         SENTENCE_STARTERS = %w(
           Am Auch Auf Bei Da Das Der Die Ein Eine Es Für Heute Ich Im In

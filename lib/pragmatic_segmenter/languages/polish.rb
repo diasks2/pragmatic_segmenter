@@ -8,6 +8,10 @@ module PragmaticSegmenter
         PREPOSITIVE_ABBREVIATIONS = []
         NUMBER_ABBREVIATIONS = []
       end
+
+      class AbbreviationReplacer < AbbreviationReplacer
+        SENTENCE_STARTERS = [].freeze
+      end
     end
   end
 end
