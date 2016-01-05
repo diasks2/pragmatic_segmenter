@@ -19,6 +19,13 @@ module PragmaticSegmenter
           []
         end
       end
+
+      class AbbreviationReplacer < AbbreviationReplacer
+        SENTENCE_STARTERS = %w(
+          A Being Did For He How However I In It Millions More She That The
+          There They We What When Where Who Why
+        ).freeze
+      end
     end
   end
 end

@@ -5,8 +5,6 @@ module PragmaticSegmenter
   # replaces the periods.
   class AbbreviationReplacer
 
-    SENTENCE_STARTERS = %w(A Being Did For He How However I In It Millions More She That The There They We What When Where Who Why)
-
     attr_reader :text
     def initialize(text:, language: )
       @text = Text.new(text)
@@ -75,7 +73,7 @@ module PragmaticSegmenter
       # and try to cover the words that most often start a
       # sentence but could never follow one of the abbreviations below.
 
-      SENTENCE_STARTERS.each do |word|
+      @language::AbbreviationReplacer::SENTENCE_STARTERS.each do |word|
         escaped = Regexp.escape(word)
         txt.gsub!(/U∯S∯\s#{escaped}\s/, "U∯S\.\s#{escaped}\s")
         txt.gsub!(/U\.S∯\s#{escaped}\s/, "U\.S\.\s#{escaped}\s")
