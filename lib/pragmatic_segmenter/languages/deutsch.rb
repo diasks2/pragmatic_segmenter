@@ -59,6 +59,12 @@ module PragmaticSegmenter
       end
 
       class AbbreviationReplacer  < AbbreviationReplacer
+
+        SENTENCE_STARTERS = %w(
+          Am Auch Auf Bei Da Das Der Die Ein Eine Es Für Heute Ich Im In
+          Ist Jetzt Mein Mit Nach So Und Warum Was Wenn Wer Wie Wir
+        ).freeze
+
         def replace
           @text = text.apply(
             @language::PossessiveAbbreviationRule,

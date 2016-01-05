@@ -97,6 +97,11 @@ module PragmaticSegmenter
       ExtraWhiteSpaceRule = Rule.new(/\s{3,}/, ' ')
 
       SubSingleQuoteRule = Rule.new(/&⎋&/, "'")
+
+      class AbbreviationReplacer < AbbreviationReplacer
+        SENTENCE_STARTERS = [].freeze
+      end
+
     end
   end
 end
