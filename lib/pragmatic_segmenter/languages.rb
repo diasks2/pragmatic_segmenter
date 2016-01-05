@@ -22,11 +22,13 @@ require 'pragmatic_segmenter/languages/japanese'
 require 'pragmatic_segmenter/languages/dutch'
 require 'pragmatic_segmenter/languages/polish'
 require 'pragmatic_segmenter/languages/chinese'
+require 'pragmatic_segmenter/languages/bulgarian'
 
 module PragmaticSegmenter
   module Languages
     LANGUAGE_CODES = {
       'en' => English,
+      'bg' => Bulgarian,
       'de' => Deutsch,
       'es' => Spanish,
       'fr' => French,

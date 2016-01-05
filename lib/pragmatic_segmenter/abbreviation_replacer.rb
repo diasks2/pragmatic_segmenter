@@ -112,6 +112,7 @@ module PragmaticSegmenter
     end
 
     def replace_period_of_abbr(txt, abbr)
+      txt.gsub!(/(?<=\s#{abbr.strip})\.|(?<=^#{abbr.strip})\./, '∯') if @language.eql?(PragmaticSegmenter::Languages::Bulgarian)
       txt.gsub!(/(?<=\s#{abbr.strip})\.(?=((\.|\:|\?)|(\s([a-z]|I\s|I'm|I'll|\d))))|(?<=^#{abbr.strip})\.(?=((\.|\:|\?)|(\s([a-z]|I\s|I'm|I'll|\d))))/, '∯')
       txt.gsub!(/(?<=\s#{abbr.strip})\.(?=,)|(?<=^#{abbr.strip})\.(?=,)/, '∯')
       txt
