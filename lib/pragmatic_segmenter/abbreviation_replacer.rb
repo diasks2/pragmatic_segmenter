@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+require 'unicode'
 
 module PragmaticSegmenter
   # This class searches for periods within an abbreviation and
@@ -26,7 +27,7 @@ module PragmaticSegmenter
 
     def search_for_abbreviations_in_string(txt)
       original = txt.dup
-      downcased = txt.downcase
+      downcased = Unicode::downcase(txt)
       @language::Abbreviation::ABBREVIATIONS.each do |a|
         next unless downcased.include?(a.strip)
         abbrev_match = original.scan(/(?:^|\s|\r|\n)#{Regexp.escape(a.strip)}/i)
@@ -45,10 +46,10 @@ module PragmaticSegmenter
       prepositive = @language::Abbreviation::PREPOSITIVE_ABBREVIATIONS
       number_abbr = @language::Abbreviation::NUMBER_ABBREVIATIONS
       upper = /[[:upper:]]/.match(character.to_s)
-      if upper.nil? || prepositive.include?(am.downcase.strip)
-        if prepositive.include?(am.downcase.strip)
+      if upper.nil? || prepositive.include?(Unicode::downcase(am.strip))
+        if prepositive.include?(Unicode::downcase(am.strip))
           txt = replace_prepositive_abbr(txt, am)
-        elsif number_abbr.include?(am.downcase.strip)
+        elsif number_abbr.include?(Unicode::downcase(am.strip))
           txt = replace_pre_number_abbr(txt, am)
         else
           txt = replace_period_of_abbr(txt, am)

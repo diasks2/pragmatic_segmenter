@@ -149,9 +149,9 @@ module PragmaticSegmenter
     def replace_alphabet_list_parens(a)
       @text.gsub!(EXTRACT_ALPHABETICAL_LIST_LETTERS_REGEX).with_index do |m|
         if m.include?('(')
-          a.eql?(m.dup.downcase.gsub!(/\(/, '')) ? "\r&✂&#{Regexp.escape(m.gsub!(/\(/, ''))}" : "#{m}"
+          a.eql?(Unicode::downcase(m.dup).gsub!(/\(/, '')) ? "\r&✂&#{Regexp.escape(m.gsub!(/\(/, ''))}" : "#{m}"
         else
-          a.eql?(m.dup.downcase) ? "\r#{Regexp.escape(m)}" : "#{m}"
+          a.eql?(Unicode::downcase(m.dup)) ? "\r#{Regexp.escape(m)}" : "#{m}"
         end
       end
     end
@@ -183,7 +183,7 @@ module PragmaticSegmenter
     end
 
     def iterate_alphabet_array(regex, parens: false, roman_numeral: false)
-      list_array = @text.scan(regex).map(&:downcase)
+      list_array = @text.scan(regex).map { |s| Unicode::downcase(s) }
       if roman_numeral
         alphabet = ROMAN_NUMERALS
       else

@@ -828,6 +828,9 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.3.6**  
 * Refactor SENTENCE_STARTERS to each individual language and add SENTENCE_STARTERS for German    
 
+**Version 0.3.7**  
+* Add `unicode` gem and use it for downcasing to better handle cyrillic languages  
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.
