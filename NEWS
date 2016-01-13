@@ -1,0 +1,124 @@
+0.3.7 (2016-01-12):
+
+* Improvement: Add `unicode` gem and use it for downcasing to better handle cyrillic languages
+
+0.3.6 (2016-01-05):
+
+* Improvement: Refactor SENTENCE_STARTERS to each individual language and add SENTENCE_STARTERS for German
+
+0.3.5 (2016-01-04):
+
+* Performance: Reduce GC by replacing #gsub with #gsub! where possible
+
+0.3.4 (2015-12-22):
+
+* Improvement: Large refactor
+
+0.3.3 (2015-05-27):
+
+* Bug Fix: Fix cleaner bug
+
+0.3.2 (2015-05-27):
+
+* Improvement: Add English abbreviations
+
+0.3.1 (2015-03-02):
+
+* Bug Fix: Fix undefined method 'gsub!' for nil:NilClass issue
+
+0.3.0 (2015-02-04):
+
+* Improvement: Add support for square brackets
+* Improvement: Add support for continuous exclamation points or questions marks or combinations of both
+* Bug Fix: Fix Roman numeral support
+* Improvement: Add English abbreviations
+
+0.2.0 (2015-01-26):
+
+* Improvement: Add Dutch Golden Rules and abbreviations
+* Improvement: Update README with additional tools
+* Improvement: Update segmentation test scores in README with results of new Golden Rule tests
+* Improvement: Add Polish abbreviations
+
+0.1.8 (2015-01-22):
+
+* Bug Fix: Fix bug in splitting new sentence after single quotes
+
+0.1.7 (2015-01-22):
+
+* Improvement: Add Alice in Wonderland specs
+* Bug Fix: Fix parenthesis between double quotations bug
+* Bug Fix: Fix split after quotation ending in dash bug
+
+0.1.6 (2015-01-16):
+
+* Bug Fix: Fix bug in numbered list finder (ignore longer digits)
+
+0.1.5 (2015-01-13):
+
+* Bug Fix: Fix comma at end of quotation bug
+
+0.1.4 (2015-01-13):
+
+* Bug Fix: Fix missing abbreviations
+
+0.1.3 (2015-01-13):
+
+* Improvement: Improve punctuation in bracket replacement
+
+0.1.2 (2015-01-13):
+
+* Bug Fix: Fix missing abbreviations
+* Improvement: Add footnote rule to `cleaner.rb`
+
+0.1.1 (2015-01-12):
+
+* Bug Fix: Fix handling of German dates
+
+0.1.0 (2015-01-12):
+
+* Improvement: Add Kommanditgesellschaft Rule
+
+0.0.9 (2015-01-12):
+
+* Improvement: Improve handling of alphabetical and roman numeral lists
+
+0.0.8 (2015-01-12):
+
+* Bug Fix: Fix error in `list.rb`
+
+0.0.7 (2015-01-12):
+
+* Improvement: Add change log to README
+* Improvement: Add passing spec for new end of sentence abbreviation (EN)
+* Improvement: Add roman numeral list support
+
+0.0.6 (2015-01-11):
+
+* Improvement: Add rule for escaped newlines that include a space between the slash and character
+* Improvement: Add Golden Rule #52 and code to make it pass
+
+0.0.5 (2015-01-10):
+
+* Improvement: Make symbol substitution safer
+* Improvement: Refactor `process.rb`
+* Improvement: Update cleaner with escaped newline rules
+
+0.0.4 (2015-01-10):
+
+* Improvement: Add `ConsecutiveForwardSlashRule` to cleaner
+* Improvement: Refactor `segmenter.rb` and `process.rb`
+
+0.0.3 (2015-01-07):
+
+* Improvement: Add travis.yml
+* Improvement: Add Code Climate
+* Improvement: Update README
+
+0.0.2 (2015-01-07):
+
+* Improvement: Major design refactor
+
+0.0.1 (2015-01-07):
+
+* Initial Release

@@ -823,7 +823,7 @@ To test the relative performance of different segmentation tools and libraries I
 * Large refactor   
 
 **Version 0.3.5**  
-* Reduce GC by replacing #gusb with #gsub! where possible  
+* Reduce GC by replacing `#gsub` with `#gsub!` where possible  
 
 **Version 0.3.6**  
 * Refactor SENTENCE_STARTERS to each individual language and add SENTENCE_STARTERS for German    
