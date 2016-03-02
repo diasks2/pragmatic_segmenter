@@ -4,7 +4,7 @@ module PragmaticSegmenter
       include Languages::Common
 
       SENTENCE_BOUNDARY_REGEX = /.*?[:\.!\?؟]|.*?\z|.*?$/
-      Punctuations = ['?', '!', ':', '.', '؟']
+      Punctuations = ['?', '!', ':', '.', '؟'].freeze
 
       ReplaceColonBetweenNumbersRule = Rule.new(/(?<=\d):(?=\d)/, '♭')
       ReplaceNonSentenceBoundaryCommaRule = Rule.new(/،(?=\s\S+،)/, '♬')

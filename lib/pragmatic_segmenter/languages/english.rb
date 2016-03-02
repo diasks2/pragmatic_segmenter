@@ -16,7 +16,7 @@ module PragmaticSegmenter
         end
 
         def abbreviations
-          []
+          [].freeze
         end
       end
 

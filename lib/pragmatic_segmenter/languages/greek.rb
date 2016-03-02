@@ -4,7 +4,7 @@ module PragmaticSegmenter
       include Languages::Common
 
       SENTENCE_BOUNDARY_REGEX = /.*?[\.;!\?]|.*?$/
-      Punctuations = ['.', '!', ';', '?']
+      Punctuations = ['.', '!', ';', '?'].freeze
 
       class AbbreviationReplacer < AbbreviationReplacer
         SENTENCE_STARTERS = [].freeze

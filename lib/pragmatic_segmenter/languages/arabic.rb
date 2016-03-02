@@ -3,13 +3,13 @@ module PragmaticSegmenter
     module Arabic
       include Languages::Common
 
-      Punctuations = ['?', '!', ':', '.', '؟', '،']
+      Punctuations = ['?', '!', ':', '.', '؟', '،'].freeze
       SENTENCE_BOUNDARY_REGEX = /.*?[:\.!\?؟،]|.*?\z|.*?$/
 
       module Abbreviation
-        ABBREVIATIONS = ['ا', 'ا. د', 'ا.د', 'ا.ش.ا', 'ا.ش.ا', 'إلخ', 'ت.ب', 'ت.ب', 'ج.ب', 'جم', 'ج.ب', 'ج.م.ع', 'ج.م.ع', 'س.ت', 'س.ت', 'سم', 'ص.ب.', 'ص.ب', 'كج.', 'كلم.', 'م', 'م.ب', 'م.ب', 'ه', 'د‪']
-        PREPOSITIVE_ABBREVIATIONS = []
-        NUMBER_ABBREVIATIONS = []
+        ABBREVIATIONS = Set.new(['ا', 'ا. د', 'ا.د', 'ا.ش.ا', 'ا.ش.ا', 'إلخ', 'ت.ب', 'ت.ب', 'ج.ب', 'جم', 'ج.ب', 'ج.م.ع', 'ج.م.ع', 'س.ت', 'س.ت', 'سم', 'ص.ب.', 'ص.ب', 'كج.', 'كلم.', 'م', 'م.ب', 'م.ب', 'ه', 'د‪']).freeze
+        PREPOSITIVE_ABBREVIATIONS = [].freeze
+        NUMBER_ABBREVIATIONS = [].freeze
       end
 
       # Rubular: http://rubular.com/r/RX5HpdDIyv
