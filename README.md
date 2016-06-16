@@ -831,6 +831,9 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.3.7**  
 * Add `unicode` gem and use it for downcasing to better handle cyrillic languages  
 
+**Version 0.3.8**  
+* Fix bug that cleaned away single letter segments  
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.
