@@ -834,6 +834,9 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.3.8**  
 * Fix bug that cleaned away single letter segments  
 
+**Version 0.3.9**  
+* Remove `guard-rspec` development dependency  
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.
