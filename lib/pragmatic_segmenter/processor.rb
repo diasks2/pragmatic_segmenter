@@ -39,6 +39,7 @@ module PragmaticSegmenter
     end
 
     def post_process_segments(txt)
+      return txt if txt.length < 2 && txt =~ /\A[a-zA-Z]*\Z/
       return if consecutive_underscore?(txt) || txt.length < 2
       txt.apply(
         @language::ReinsertEllipsisRules::All,

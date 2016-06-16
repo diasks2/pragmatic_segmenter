@@ -1344,5 +1344,10 @@ RSpec.describe PragmaticSegmenter::Languages::English, "(en)" do
       ps = PragmaticSegmenter::Segmenter.new(text: "SEC. 1262 AUTHORIZATION OF APPROPRIATIONS.")
       expect(ps.segment).to eq(["SEC. 1262 AUTHORIZATION OF APPROPRIATIONS."])
     end
+
+    it "correctly segments text #106" do
+      ps = PragmaticSegmenter::Segmenter.new(text: "a")
+      expect(ps.segment).to eq(["a"])
+    end
   end
 end
