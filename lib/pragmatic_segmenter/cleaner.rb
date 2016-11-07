@@ -83,11 +83,8 @@ module PragmaticSegmenter
     end
 
     def remove_newline_in_middle_of_sentence
-      @text.dup.gsub!(/(?:[^\.])*/) do |match|
-        next unless match.include?("\n")
-        orig = match.dup
-        match.gsub!(NEWLINE_IN_MIDDLE_OF_SENTENCE_REGEX, '')
-        @text.gsub!(/#{Regexp.escape(orig)}/, "#{match}")
+      @text.gsub!(/(?:[^\.])*/) do |match|
+        match.gsub(NEWLINE_IN_MIDDLE_OF_SENTENCE_REGEX, '')
       end
       @text
     end
