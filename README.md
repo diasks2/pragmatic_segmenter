@@ -837,6 +837,13 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.3.9**  
 * Remove `guard-rspec` development dependency  
 
+**Version 0.3.10**  
+* Change load order of dependencies to fix bug  
+
+**Version 0.3.11**  
+* Update German abbreviation list
+* Refactor 'remove_newline_in_middle_of_sentence' method   
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.

@@ -1,3 +1,20 @@
+0.3.11 (2016-11-08):
+
+* Improvement: Update German abbreviation list
+* Bug Fix: Refactor 'remove_newline_in_middle_of_sentence' method
+
+0.3.10 (2016-07-01):
+
+* Bug Fix: Change load order of dependencies
+
+0.3.9 (2016-06-16):
+
+* Improvement: Remove `guard-rspec` development dependency
+
+0.3.8 (2016-03-03):
+
+* Bug Fix: Fix bug that cleaned away single letter segments
+
 0.3.7 (2016-01-12):
 
 * Improvement: Add `unicode` gem and use it for downcasing to better handle cyrillic languages
