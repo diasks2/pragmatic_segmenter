@@ -844,6 +844,9 @@ To test the relative performance of different segmentation tools and libraries I
 * Update German abbreviation list
 * Refactor 'remove_newline_in_middle_of_sentence' method   
 
+**Version 0.3.12**  
+* Fix issue involving words with leading apostrophes
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.

@@ -1,3 +1,7 @@
+0.3.12 (2016-12-12):
+
+* Bug Fix: Issue with words with leading apostrophes
+
 0.3.11 (2016-11-08):
 
 * Improvement: Update German abbreviation list

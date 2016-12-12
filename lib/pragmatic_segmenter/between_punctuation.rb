@@ -22,6 +22,9 @@ module PragmaticSegmenter
     # Rubular: http://rubular.com/r/6tTityPflI
     BETWEEN_PARENS_REGEX = /\((?>[^\(\)\\]+|\\{2}|\\.)*\)/
 
+    # Rubular: http://rubular.com/r/mXf8cW025o
+    WORD_WITH_LEADING_APOSTROPHE = /(?<=\s)'(?:[^']|'[a-zA-Z])*'\S/
+
     attr_reader :text
     def initialize(text:)
       @text = text
@@ -57,11 +60,13 @@ module PragmaticSegmenter
     end
 
     def sub_punctuation_between_single_quotes(txt)
-      PragmaticSegmenter::PunctuationReplacer.new(
-        matches_array: txt.scan(BETWEEN_SINGLE_QUOTES_REGEX),
-        text: txt,
-        match_type: 'single'
-      ).replace
+      unless !(txt !~ WORD_WITH_LEADING_APOSTROPHE) && txt !~ /'\s/
+        PragmaticSegmenter::PunctuationReplacer.new(
+          matches_array: txt.scan(BETWEEN_SINGLE_QUOTES_REGEX),
+          text: txt,
+          match_type: 'single'
+        ).replace
+      end
     end
 
     def sub_punctuation_between_double_quotes(txt)
