@@ -847,6 +847,9 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.3.12**  
 * Fix issue involving words with leading apostrophes
 
+**Version 0.3.13**  
+* Fix issue involving unexpected sentence break between abbreviation and hyphen
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.

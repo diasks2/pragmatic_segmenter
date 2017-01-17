@@ -1359,5 +1359,15 @@ RSpec.describe PragmaticSegmenter::Languages::English, "(en)" do
       ps = PragmaticSegmenter::Segmenter.new(text: "I wrote this in the ’nineties.  It has four sentences.  This is the third, isn't it?  And this is the last")
       expect(ps.segment).to eq(["I wrote this in the ’nineties.", "It has four sentences.", "This is the third, isn't it?", "And this is the last"])
     end
+
+    it "correctly segments text #109" do
+      ps = PragmaticSegmenter::Segmenter.new(text: "He has Ph.D.-level training", clean: false)
+      expect(ps.segment).to eq(["He has Ph.D.-level training"])
+    end
+
+    it "correctly segments text #110" do
+      ps = PragmaticSegmenter::Segmenter.new(text: "He has Ph.D. level training", clean: false)
+      expect(ps.segment).to eq(["He has Ph.D. level training"])
+    end
   end
 end

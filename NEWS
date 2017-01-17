@@ -1,3 +1,7 @@
+0.3.13 (2017-01-17):
+
+* Bug Fix: Unexpected sentence break between abbreviation and hyphen
+
 0.3.12 (2016-12-12):
 
 * Bug Fix: Issue with words with leading apostrophes
