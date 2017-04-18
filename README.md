@@ -1,10 +1,10 @@
-#Pragmatic Segmenter  
+# Pragmatic Segmenter  
 
 [![Gem Version](https://badge.fury.io/rb/pragmatic_segmenter.svg)](http://badge.fury.io/rb/pragmatic_segmenter) [![Code Climate](https://codeclimate.com/github/diasks2/pragmatic_segmenter/badges/gpa.svg)](https://codeclimate.com/github/diasks2/pragmatic_segmenter) [![Build Status](https://travis-ci.org/diasks2/pragmatic_segmenter.png)](https://travis-ci.org/diasks2/pragmatic_segmenter) [![Test Coverage](https://codeclimate.com/github/diasks2/pragmatic_segmenter/badges/coverage.svg)](https://codeclimate.com/github/diasks2/pragmatic_segmenter) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](https://github.com/diasks2/pragmatic_segmenter/blob/master/LICENSE.txt)
 
 Pragmatic Segmenter is a rule-based sentence boundary detection gem that works out-of-the-box across many languages.  
 
-##Install  
+## Install  
 
 **Ruby**  
 *Supports Ruby 2.1.5 and above*  
@@ -18,7 +18,7 @@ Add this line to your application’s Gemfile:
 gem 'pragmatic_segmenter'
 ```
 
-##Usage  
+## Usage  
 
 * If no language is specified, the library will default to English.   
 * To specify a language use its two character [ISO 639-1 code](https://www.tm-town.com/languages).  
@@ -54,11 +54,11 @@ ps.clean
 # => "This is a sentence cut off in the middle because pdf."
 ```
 
-##Live Demo
+## Live Demo
 
 Try out a [live demo](https://www.tm-town.com/natural-language-processing) of Pragmatic Segmenter in the browser.
 
-##Background
+## Background
 
 According to Wikipedia, [sentence boundary disambiguation](http://en.wikipedia.org/wiki/Sentence_boundary_disambiguation) (aka sentence boundary detection, sentence segmentation) is defined as:
 
@@ -99,7 +99,7 @@ The Holy Grail of sentence segmentation appears to be **Golden Rule #18** as no 
 
 Download the Golden Rules: [[txt](https://s3.amazonaws.com/tm-town-nlp-resources/golden_rules.txt) | [Ruby RSpec](https://s3.amazonaws.com/tm-town-nlp-resources/golden_rules_rspec.rb)]
 
-####Golden Rules (English)
+#### Golden Rules (English)
 
 1.) **Simple period to end sentence**
 ```
@@ -413,7 +413,7 @@ Hello world.Today is Tuesday.Mr. Smith went to the store and bought 1,000.That i
 => ["Hello world.", "Today is Tuesday.", "Mr. Smith went to the store and bought 1,000.", "That is a lot."]
 ```
 
-####Golden Rules (German)
+#### Golden Rules (German)
 
 1.) **Quotation at end of sentence**
 ```
@@ -433,7 +433,7 @@ Was sind die Konsequenzen der Abstimmung vom 12. Juni?
 => ["Was sind die Konsequenzen der Abstimmung vom 12. Juni?"]
 ```
 
-####Golden Rules (Japanese)
+#### Golden Rules (Japanese)
 
 1.) **Simple period to end sentence**
 ```
@@ -465,7 +465,7 @@ Was sind die Konsequenzen der Abstimmung vom 12. Juni?
 => ["これは父の家です。"]
 ```
 
-####Golden Rules (Arabic)
+#### Golden Rules (Arabic)
 
 1.) **Regular punctuation**
 ```
@@ -497,7 +497,7 @@ Was sind die Konsequenzen der Abstimmung vom 12. Juni?
 => ["عثر في الغرفة على بعض أدوية علاج ارتفاع ضغط الدم، والقلب،", "زرعها عملاء الموساد كما تقول مصادر إسرائيلية،", "وقرر الطبيب أن الفلسطيني قد توفي وفاة طبيعية ربما إثر نوبة قلبية،", "وبدأت مراسم الحداد عليه"]
 ```
 
-####Golden Rules (Italian)
+#### Golden Rules (Italian)
 
 1.) **Abbreviations**
 ```
@@ -517,7 +517,7 @@ La casa costa 170.500.000,00€!
 => ["La casa costa 170.500.000,00€!"]
 ```
 
-####Golden Rules (Russian)
+#### Golden Rules (Russian)
 
 1.) **Abbreviations**
 ```
@@ -537,7 +537,7 @@ La casa costa 170.500.000,00€!
 => ["Сегодня 27.10.14"]
 ```
 
-####Golden Rules (Spanish)
+#### Golden Rules (Spanish)
 
 1.) **Question mark to end sentence**
 ```
@@ -569,7 +569,7 @@ Hola Srta. Ledesma. Buenos días, soy el Lic. Naser Pastoriza, y él es mi padre
 => ["«Ninguna mente extraordinaria está exenta de un toque de demencia.», dijo Aristóteles."]
 ```
 
-####Golden Rules (Greek)
+#### Golden Rules (Greek)
 
 1.) **Question mark to end sentence**
 ```
@@ -577,7 +577,7 @@ Hola Srta. Ledesma. Buenos días, soy el Lic. Naser Pastoriza, y él es mi padre
 => ["Με συγχωρείτε· πού είναι οι τουαλέτες;", "Τις Κυριακές δε δούλευε κανένας.", "το κόστος του σπιτιού ήταν £260.950,00."]
 ```
 
-####Golden Rules (Hindi)
+#### Golden Rules (Hindi)
 
 1.) **Full stop**
 ```
@@ -585,7 +585,7 @@ Hola Srta. Ledesma. Buenos días, soy el Lic. Naser Pastoriza, y él es mi padre
 => ["सच्चाई यह है कि इसे कोई नहीं जानता।", "हो सकता है यह फ़्रेन्को के खिलाफ़ कोई विद्रोह रहा हो, या फिर बेकाबू हो गया कोई आनंदोत्सव।"]
 ```
 
-####Golden Rules (Armenian)
+#### Golden Rules (Armenian)
 
 1.) **Sentence ending punctuation**
 ```
@@ -605,7 +605,7 @@ Hola Srta. Ledesma. Buenos días, soy el Lic. Naser Pastoriza, y él es mi padre
 => ["Այսպիսով` մոտենում ենք ավարտին:", "Տրամաբանությյունը հետևյալն է. պարզություն և աշխատանք:"]
 ```
 
-####Golden Rules (Burmese)
+#### Golden Rules (Burmese)
 
 1.) **Sentence ending punctuation**
 ```
@@ -613,7 +613,7 @@ Hola Srta. Ledesma. Buenos días, soy el Lic. Naser Pastoriza, y él es mi padre
 => ["ခင္ဗ်ားနာမည္ဘယ္လိုေခၚလဲ။", "၇ွင္ေနေကာင္းလား။"]
 ```
 
-####Golden Rules (Amharic)
+#### Golden Rules (Amharic)
 
 1.) **Sentence ending punctuation**
 ```
@@ -621,7 +621,7 @@ Hola Srta. Ledesma. Buenos días, soy el Lic. Naser Pastoriza, y él es mi padre
 => ["እንደምን አለህ፧", "መልካም ቀን ይሁንልህ።", "እባክሽ ያልሽዉን ድገሚልኝ።"]
 ```
 
-####Golden Rules (Persian)
+#### Golden Rules (Persian)
 
 1.) **Sentence ending punctuation**
 ```
@@ -629,7 +629,7 @@ Hola Srta. Ledesma. Buenos días, soy el Lic. Naser Pastoriza, y él es mi padre
 => ["خوشبختم، آقای رضا.", "شما کجایی هستید؟", "من از تهران هستم."]
 ```
 
-####Golden Rules (Urdu)
+#### Golden Rules (Urdu)
 
 1.) **Sentence ending punctuation**
 ```
@@ -637,7 +637,7 @@ Hola Srta. Ledesma. Buenos días, soy el Lic. Naser Pastoriza, y él es mi padre
 => ["کیا حال ہے؟", "ميرا نام ___ ەے۔", "میں حالا تاوان دےدوں؟"]
 ```
 
-####Golden Rules (Dutch)
+#### Golden Rules (Dutch)
 
 1.) **Sentence starting with a number**
 ```
@@ -701,7 +701,7 @@ To test the relative performance of different segmentation tools and libraries I
 * Persian
 * Urdu
 
-##Segmentation Papers and Books
+## Segmentation Papers and Books
 
 * *Elephant: Sequence Labeling for Word and Sentence Segmentation* - Kilian Evang, Valerio Basile, Grzegorz Chrupała and Johan Bos (2013) [[pdf](http://www.aclweb.org/anthology/D13-1146) | [mirror](https://s3.amazonaws.com/tm-town-nlp-resources/Elephant-+Sequence+Labeling+for+Word+and+Sentence+Segmentation.pdf)]
 * *Sentence Boundary Detection: A Long Solved Problem?* (Second Edition) - Jonathon Read, Rebecca Dridan, Stephan Oepen, Lars Jørgen Solberg (2012) [[pdf](http://www.aclweb.org/anthology/C12-2096) | [mirror](https://s3.amazonaws.com/tm-town-nlp-resources/C12-2096.pdf)]
