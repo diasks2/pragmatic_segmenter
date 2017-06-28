@@ -850,6 +850,9 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.3.13**  
 * Fix issue involving unexpected sentence break between abbreviation and hyphen
 
+**Version 0.3.14**  
+* Add English abbreviation Rs. to denote the Indian currency
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.

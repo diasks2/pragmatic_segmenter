@@ -1,3 +1,7 @@
+0.3.13 (2017-06-28):
+
+* Improvement: Add English abbreviation Rs. to denote the Indian currency
+
 0.3.13 (2017-01-17):
 
 * Bug Fix: Unexpected sentence break between abbreviation and hyphen

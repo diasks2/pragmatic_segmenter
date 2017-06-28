@@ -1369,5 +1369,20 @@ RSpec.describe PragmaticSegmenter::Languages::English, "(en)" do
       ps = PragmaticSegmenter::Segmenter.new(text: "He has Ph.D. level training", clean: false)
       expect(ps.segment).to eq(["He has Ph.D. level training"])
     end
+
+    it "correctly segments text #111" do
+      ps = PragmaticSegmenter::Segmenter.new(text: "I will be paid Rs. 16720/- in total for the time spent and the inconvenience caused to me, only after completion of all aspects of the study.", clean: false)
+      expect(ps.segment).to eq(["I will be paid Rs. 16720/- in total for the time spent and the inconvenience caused to me, only after completion of all aspects of the study."])
+    end
+
+    it "correctly segments text #112" do
+      ps = PragmaticSegmenter::Segmenter.new(text: "If I decide to withdraw from the study for other reasons, I will be paid only up to the extent of my participation amount according to the approved procedure of Apotex BEC. If I complete all aspects in Period 1, I will be paid Rs. 3520 and if I complete all aspects in Period 1 and Period 2, I will be paid Rs. 7790 and if I complete all aspects in Period 1, Period 2 and Period 3, I will be paid Rs. 12060 at the end of the study.", clean: false)
+      expect(ps.segment).to eq(["If I decide to withdraw from the study for other reasons, I will be paid only up to the extent of my participation amount according to the approved procedure of Apotex BEC.", "If I complete all aspects in Period 1, I will be paid Rs. 3520 and if I complete all aspects in Period 1 and Period 2, I will be paid Rs. 7790 and if I complete all aspects in Period 1, Period 2 and Period 3, I will be paid Rs. 12060 at the end of the study."])
+    end
+
+    it "correctly segments text #113" do
+      ps = PragmaticSegmenter::Segmenter.new(text: "After completion of each Period, I will be paid an advance amount of rs. 1000 and this amount will be deducted from my final study compensation.", clean: false)
+      expect(ps.segment).to eq(["After completion of each Period, I will be paid an advance amount of rs. 1000 and this amount will be deducted from my final study compensation."])
+    end
   end
 end
