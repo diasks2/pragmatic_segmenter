@@ -1,4 +1,8 @@
-0.3.13 (2017-06-28):
+0.3.15 (2017-06-28):
+
+* Improvement: Handle em dashes that appear in the middle of a sentence and include a sentence ending punctuation mark
+
+0.3.14 (2017-06-28):
 
 * Improvement: Add English abbreviation Rs. to denote the Indian currency
 

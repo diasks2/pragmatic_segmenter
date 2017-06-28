@@ -1384,5 +1384,20 @@ RSpec.describe PragmaticSegmenter::Languages::English, "(en)" do
       ps = PragmaticSegmenter::Segmenter.new(text: "After completion of each Period, I will be paid an advance amount of rs. 1000 and this amount will be deducted from my final study compensation.", clean: false)
       expect(ps.segment).to eq(["After completion of each Period, I will be paid an advance amount of rs. 1000 and this amount will be deducted from my final study compensation."])
     end
+
+    it "correctly segments text #114" do
+      ps = PragmaticSegmenter::Segmenter.new(text: "Mix it, put it in the oven, and -- voila! -- you have cake.", clean: false)
+      expect(ps.segment).to eq(["Mix it, put it in the oven, and -- voila! -- you have cake."])
+    end
+
+    it "correctly segments text #115" do
+      ps = PragmaticSegmenter::Segmenter.new(text: "Some can be -- if I may say so? -- a bit questionable.", clean: false)
+      expect(ps.segment).to eq(["Some can be -- if I may say so? -- a bit questionable."])
+    end
+
+    it "correctly segments text #116" do
+      ps = PragmaticSegmenter::Segmenter.new(text: "What do you see? - Posted like silent sentinels all around the town, stand thousands upon thousands of mortal men fixed in ocean reveries.", clean: false)
+      expect(ps.segment).to eq(["What do you see?", "- Posted like silent sentinels all around the town, stand thousands upon thousands of mortal men fixed in ocean reveries."])
+    end
   end
 end

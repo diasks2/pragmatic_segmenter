@@ -25,6 +25,9 @@ module PragmaticSegmenter
     # Rubular: http://rubular.com/r/mXf8cW025o
     WORD_WITH_LEADING_APOSTROPHE = /(?<=\s)'(?:[^']|'[a-zA-Z])*'\S/
 
+    # Rubular: http://rubular.com/r/jTtDKfjxzr
+    BETWEEN_EM_DASHES_REGEX = /\-\-(?>[^\-\-])*\-\-/
+
     attr_reader :text
     def initialize(text:)
       @text = text
@@ -42,6 +45,7 @@ module PragmaticSegmenter
       sub_punctuation_between_square_brackets(txt)
       sub_punctuation_between_parens(txt)
       sub_punctuation_between_quotes_arrow(txt)
+      sub_punctuation_between_em_dashes(txt)
       sub_punctuation_between_quotes_slanted(txt)
     end
 
@@ -83,6 +87,13 @@ module PragmaticSegmenter
     def sub_punctuation_between_quotes_arrow(txt)
       PragmaticSegmenter::PunctuationReplacer.new(
         matches_array: txt.scan(BETWEEN_QUOTE_ARROW_REGEX),
+        text: txt
+      ).replace
+    end
+
+    def sub_punctuation_between_em_dashes(txt)
+      PragmaticSegmenter::PunctuationReplacer.new(
+        matches_array: txt.scan(BETWEEN_EM_DASHES_REGEX),
         text: txt
       ).replace
     end

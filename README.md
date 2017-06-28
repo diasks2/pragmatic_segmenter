@@ -853,6 +853,9 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.3.14**  
 * Add English abbreviation Rs. to denote the Indian currency
 
+**Version 0.3.15** 
+* Handle em dashes that appear in the middle of a sentence and include a sentence ending punctuation mark
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.
