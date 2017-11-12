@@ -856,6 +856,9 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.3.15** 
 * Handle em dashes that appear in the middle of a sentence and include a sentence ending punctuation mark
 
+**Version 0.3.16** 
+* Add support and tests for Danish
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.
