@@ -1,3 +1,7 @@
+0.3.17 (2017-12-07):
+
+* Bug Fix: Regex for parsing HTML
+
 0.3.16 (2017-11-13):
 
 * Improvement: Support for Danish

@@ -1,27 +1,27 @@
-# Pragmatic Segmenter  
+# Pragmatic Segmenter
 
 [![Gem Version](https://badge.fury.io/rb/pragmatic_segmenter.svg)](http://badge.fury.io/rb/pragmatic_segmenter) [![Code Climate](https://codeclimate.com/github/diasks2/pragmatic_segmenter/badges/gpa.svg)](https://codeclimate.com/github/diasks2/pragmatic_segmenter) [![Build Status](https://travis-ci.org/diasks2/pragmatic_segmenter.png)](https://travis-ci.org/diasks2/pragmatic_segmenter) [![Test Coverage](https://codeclimate.com/github/diasks2/pragmatic_segmenter/badges/coverage.svg)](https://codeclimate.com/github/diasks2/pragmatic_segmenter) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](https://github.com/diasks2/pragmatic_segmenter/blob/master/LICENSE.txt)
 
-Pragmatic Segmenter is a rule-based sentence boundary detection gem that works out-of-the-box across many languages.  
+Pragmatic Segmenter is a rule-based sentence boundary detection gem that works out-of-the-box across many languages.
 
-## Install  
+## Install
 
-**Ruby**  
-*Supports Ruby 2.1.5 and above*  
+**Ruby**
+*Supports Ruby 2.1.5 and above*
 ```
 gem install pragmatic_segmenter
 ```
 
-**Ruby on Rails**  
-Add this line to your application’s Gemfile:  
-```ruby 
+**Ruby on Rails**
+Add this line to your application’s Gemfile:
+```ruby
 gem 'pragmatic_segmenter'
 ```
 
-## Usage  
+## Usage
 
-* If no language is specified, the library will default to English.   
-* To specify a language use its two character [ISO 639-1 code](https://www.tm-town.com/languages).  
+* If no language is specified, the library will default to English.
+* To specify a language use its two character [ISO 639-1 code](https://www.tm-town.com/languages).
 
 ```ruby
 text = "Hello world. My name is Mr. Smith. I work for the U.S. Government and I live in the U.S. I live in New York."
@@ -64,11 +64,11 @@ According to Wikipedia, [sentence boundary disambiguation](http://en.wikipedia.o
 
 > Sentence boundary disambiguation (SBD), also known as sentence breaking, is the problem in natural language processing of deciding where sentences begin and end. Often natural language processing tools require their input to be divided into sentences for a number of reasons. However sentence boundary identification is challenging because punctuation marks are often ambiguous. For example, a period may denote an abbreviation, decimal point, an ellipsis, or an email address – not the end of a sentence. About 47% of the periods in the Wall Street Journal corpus denote abbreviations. As well, question marks and exclamation marks may appear in embedded quotations, emoticons, computer code, and slang. Languages like Japanese and Chinese have unambiguous sentence-ending markers.
 
-The goal of **Pragmatic Segmenter** is to provide a "real-world" segmenter that works out of the box across many languages and does a reasonable job when the format and domain of the input text are unknown. Pragmatic Segmenter does not use any machine-learning techniques and thus does not require training data.  
+The goal of **Pragmatic Segmenter** is to provide a "real-world" segmenter that works out of the box across many languages and does a reasonable job when the format and domain of the input text are unknown. Pragmatic Segmenter does not use any machine-learning techniques and thus does not require training data.
 
-Pragmatic Segmenter aims to improve on other segmentation engines in 2 main areas:  
-1) Language support (most segmentation tools only focus on English)  
-2) Text cleaning and preprocessing  
+Pragmatic Segmenter aims to improve on other segmentation engines in 2 main areas:
+1) Language support (most segmentation tools only focus on English)
+2) Text cleaning and preprocessing
 
 Pragmatic Segmenter is opinionated and made for the explicit purpose of segmenting texts to create translation memories. Therefore, things such as parenthesis within a sentence are kept as one segment, even if technically there are two or more sentences within the segment in order to maintain coherence. The algorithm is also conservative in that if it comes across an ambiguous sentence boundary it will ignore it rather than splitting.
 
@@ -85,11 +85,11 @@ Pragmatic Segmenter is specifically used for the purpose of segmenting texts for
 
 ## The Golden Rules
 
-*The Golden Rules* are a set of tests I developed that can be run through a segmenter to check its accuracy in regards to edge case scenarios. Most of the papers cited below in *Segmentation Papers and Books* either use the WSJ corpus or Brown corpus from the [Penn Treebank](https://catalog.ldc.upenn.edu/LDC99T42) to test their segmentation algorithm. In my opinion there are 2 limits to using these corpora:  
-1) The corpora may be too expensive for some people ($1,700).  
-2) The majority of the sentences in the corpora are sentences that end with a regular word followed by a period, thus testing the same thing over and over again.  
+*The Golden Rules* are a set of tests I developed that can be run through a segmenter to check its accuracy in regards to edge case scenarios. Most of the papers cited below in *Segmentation Papers and Books* either use the WSJ corpus or Brown corpus from the [Penn Treebank](https://catalog.ldc.upenn.edu/LDC99T42) to test their segmentation algorithm. In my opinion there are 2 limits to using these corpora:
+1) The corpora may be too expensive for some people ($1,700).
+2) The majority of the sentences in the corpora are sentences that end with a regular word followed by a period, thus testing the same thing over and over again.
 
-> In the Brown Corpus 92% of potential sentence boundaries come after a regular word. The WSJ Corpus is richer with abbreviations and only 83% [53% according to Gale and Church, 1991] of sentences end with a regular word followed by a period.  
+> In the Brown Corpus 92% of potential sentence boundaries come after a regular word. The WSJ Corpus is richer with abbreviations and only 83% [53% according to Gale and Church, 1991] of sentences end with a regular word followed by a period.
 
 Andrei Mikheev - *Periods, Capitalized Words, etc.*
 
@@ -664,7 +664,7 @@ Pragmatic Segmenter                                                  | Ruby     
 [SRX English](https://github.com/apohllo/srx-english)                | Ruby                 | [GNU GPLv3](http://www.gnu.org/copyleft/gpl.html)   | 30.77%        | 28.57%                 | 6.19 s
 [Scapel](https://github.com/louismullie/scalpel)                     | Ruby                 | [GNU GPLv3](http://www.gnu.org/copyleft/gpl.html)   | 28.85%        | 20.00%                 | 0.13 s
 
-†GRS (Other Languages) is the total of the Golden Rules listed above for all languages other than English. This metric by no means includes all languages, only the ones that have Golden Rules listed above.  
+†GRS (Other Languages) is the total of the Golden Rules listed above for all languages other than English. This metric by no means includes all languages, only the ones that have Golden Rules listed above.
 ‡ Speed is based on the performance benchmark results detailed in the section "Speed Performance Benchmarks" below. The number is an average of 10 runs.
 
 Other tools not yet tested:
@@ -729,140 +729,143 @@ To test the relative performance of different segmentation tools and libraries I
 * Add additional language support
 * Add abbreviation lists for any languages that do not currently have one (only relevant for languages that have the concept of abbreviations with periods)
 * Get Golden Rule #18 passing - Handling of a.m. or p.m. followed by a capitalized non sentence starter (ex. "At 5 p.m. Mr. Smith went to the bank. He left the bank at 6 p.m. Next he went to the store." --> ["At 5 p.m. Mr. Smith went to the bank.", "He left the bank at 6 p.m.", "Next he went to the store."])
-* Support for Thai. This is a very challenging problem due to the absence of explicit sentence markers (i.e. like a period in English) and the ambiguity in Thai regarding what constitutes a sentence even among native speakers. For more information see the following research papers ([#1](http://www.cs.cmu.edu/~paisarn/papers/iccpol2001.pdf) | [#2](http://pioneer.chula.ac.th/~awirote/ling/snlp2007-wirote.pdf)). 
+* Support for Thai. This is a very challenging problem due to the absence of explicit sentence markers (i.e. like a period in English) and the ambiguity in Thai regarding what constitutes a sentence even among native speakers. For more information see the following research papers ([#1](http://www.cs.cmu.edu/~paisarn/papers/iccpol2001.pdf) | [#2](http://pioneer.chula.ac.th/~awirote/ling/snlp2007-wirote.pdf)).
 
 ## Change Log
 
-**Version 0.0.1**  
-* Initial Release  
+**Version 0.0.1**
+* Initial Release
 
-**Version 0.0.2**  
-* Major design refactor  
+**Version 0.0.2**
+* Major design refactor
 
 **Version 0.0.3**
-* Add travis.yml  
-* Add Code Climate  
-* Update README  
+* Add travis.yml
+* Add Code Climate
+* Update README
 
-**Version 0.0.4**  
-* Add `ConsecutiveForwardSlashRule` to cleaner  
-* Refactor `segmenter.rb` and `process.rb`  
+**Version 0.0.4**
+* Add `ConsecutiveForwardSlashRule` to cleaner
+* Refactor `segmenter.rb` and `process.rb`
 
-**Version 0.0.5**  
-* Make symbol substitution safer  
-* Refactor `process.rb`  
-* Update cleaner with escaped newline rules  
+**Version 0.0.5**
+* Make symbol substitution safer
+* Refactor `process.rb`
+* Update cleaner with escaped newline rules
 
-**Version 0.0.6**  
-* Add rule for escaped newlines that include a space between the slash and character   
-* Add Golden Rule #52 and code to make it pass  
+**Version 0.0.6**
+* Add rule for escaped newlines that include a space between the slash and character
+* Add Golden Rule #52 and code to make it pass
 
-**Version 0.0.7**  
-* Add change log to README  
-* Add passing spec for new end of sentence abbreviation (EN)  
-* Add roman numeral list support  
+**Version 0.0.7**
+* Add change log to README
+* Add passing spec for new end of sentence abbreviation (EN)
+* Add roman numeral list support
 
-**Version 0.0.8**  
-* Fix error in `list.rb`  
+**Version 0.0.8**
+* Fix error in `list.rb`
 
-**Version 0.0.9**  
-* Improve handling of alphabetical and roman numeral lists  
+**Version 0.0.9**
+* Improve handling of alphabetical and roman numeral lists
 
-**Version 0.1.0**  
-* Add Kommanditgesellschaft Rule  
+**Version 0.1.0**
+* Add Kommanditgesellschaft Rule
 
-**Version 0.1.1**  
-* Fix handling of German dates  
+**Version 0.1.1**
+* Fix handling of German dates
 
-**Version 0.1.2**  
-* Fix missing abbreviations  
-* Add footnote rule to `cleaner.rb`  
+**Version 0.1.2**
+* Fix missing abbreviations
+* Add footnote rule to `cleaner.rb`
 
-**Version 0.1.3**  
-* Improve punctuation in bracket replacement  
+**Version 0.1.3**
+* Improve punctuation in bracket replacement
 
-**Version 0.1.4**  
-* Fix missing abbreviations  
+**Version 0.1.4**
+* Fix missing abbreviations
 
-**Version 0.1.5**  
-* Fix comma at end of quotation bug  
+**Version 0.1.5**
+* Fix comma at end of quotation bug
 
-**Version 0.1.6**  
-* Fix bug in numbered list finder (ignore longer digits)   
+**Version 0.1.6**
+* Fix bug in numbered list finder (ignore longer digits)
 
-**Version 0.1.7**  
-* Add Alice in Wonderland specs  
-* Fix parenthesis between double quotations bug  
-* Fix split after quotation ending in dash bug  
+**Version 0.1.7**
+* Add Alice in Wonderland specs
+* Fix parenthesis between double quotations bug
+* Fix split after quotation ending in dash bug
 
-**Version 0.1.8**  
-* Fix bug in splitting new sentence after single quotes  
+**Version 0.1.8**
+* Fix bug in splitting new sentence after single quotes
 
-**Version 0.2.0**  
-* Add Dutch Golden Rules and abbreviations  
-* Update README with additional tools  
-* Update segmentation test scores in README with results of new Golden Rule tests  
-* Add Polish abbreviations  
+**Version 0.2.0**
+* Add Dutch Golden Rules and abbreviations
+* Update README with additional tools
+* Update segmentation test scores in README with results of new Golden Rule tests
+* Add Polish abbreviations
 
-**Version 0.3.0**  
-* Add support for square brackets  
-* Add support for continuous exclamation points or questions marks or combinations of both  
-* Fix Roman numeral support  
-* Add English abbreviations   
+**Version 0.3.0**
+* Add support for square brackets
+* Add support for continuous exclamation points or questions marks or combinations of both
+* Fix Roman numeral support
+* Add English abbreviations
 
-**Version 0.3.1**  
-* Fix undefined method 'gsub!' for nil:NilClass issue  
+**Version 0.3.1**
+* Fix undefined method 'gsub!' for nil:NilClass issue
 
-**Version 0.3.2**  
-* Add English abbreviations  
+**Version 0.3.2**
+* Add English abbreviations
 
-**Version 0.3.3**  
-* Fix cleaner bug  
+**Version 0.3.3**
+* Fix cleaner bug
 
-**Version 0.3.4**  
-* Large refactor   
+**Version 0.3.4**
+* Large refactor
 
-**Version 0.3.5**  
-* Reduce GC by replacing `#gsub` with `#gsub!` where possible  
+**Version 0.3.5**
+* Reduce GC by replacing `#gsub` with `#gsub!` where possible
 
-**Version 0.3.6**  
-* Refactor SENTENCE_STARTERS to each individual language and add SENTENCE_STARTERS for German    
+**Version 0.3.6**
+* Refactor SENTENCE_STARTERS to each individual language and add SENTENCE_STARTERS for German
 
-**Version 0.3.7**  
-* Add `unicode` gem and use it for downcasing to better handle cyrillic languages  
+**Version 0.3.7**
+* Add `unicode` gem and use it for downcasing to better handle cyrillic languages
 
-**Version 0.3.8**  
-* Fix bug that cleaned away single letter segments  
+**Version 0.3.8**
+* Fix bug that cleaned away single letter segments
 
-**Version 0.3.9**  
-* Remove `guard-rspec` development dependency  
+**Version 0.3.9**
+* Remove `guard-rspec` development dependency
 
-**Version 0.3.10**  
-* Change load order of dependencies to fix bug  
+**Version 0.3.10**
+* Change load order of dependencies to fix bug
 
-**Version 0.3.11**  
+**Version 0.3.11**
 * Update German abbreviation list
-* Refactor 'remove_newline_in_middle_of_sentence' method   
+* Refactor 'remove_newline_in_middle_of_sentence' method
 
-**Version 0.3.12**  
+**Version 0.3.12**
 * Fix issue involving words with leading apostrophes
 
-**Version 0.3.13**  
+**Version 0.3.13**
 * Fix issue involving unexpected sentence break between abbreviation and hyphen
 
-**Version 0.3.14**  
+**Version 0.3.14**
 * Add English abbreviation Rs. to denote the Indian currency
 
-**Version 0.3.15** 
+**Version 0.3.15**
 * Handle em dashes that appear in the middle of a sentence and include a sentence ending punctuation mark
 
-**Version 0.3.16** 
+**Version 0.3.16**
 * Add support and tests for Danish
+
+**Version 0.3.17**
+* Fix issue involving the HTML regex in the cleaner
 
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.
- 
+
 1. Fork it ( https://github.com/diasks2/pragmatic_segmenter/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)

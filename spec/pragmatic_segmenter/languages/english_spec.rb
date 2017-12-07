@@ -1399,5 +1399,12 @@ RSpec.describe PragmaticSegmenter::Languages::English, "(en)" do
       ps = PragmaticSegmenter::Segmenter.new(text: "What do you see? - Posted like silent sentinels all around the town, stand thousands upon thousands of mortal men fixed in ocean reveries.", clean: false)
       expect(ps.segment).to eq(["What do you see?", "- Posted like silent sentinels all around the town, stand thousands upon thousands of mortal men fixed in ocean reveries."])
     end
+
+    it 'correctly segments text #117' do
+      text = "In placebo-controlled studies of all uses of Tracleer, marked decreases in hemoglobin (>15% decrease from baseline resulting in values <11 g/ dL) were observed in 6% of Tracleer-treated patients and 3% of placebo-treated patients. Bosentan is highly bound (>98%) to plasma proteins, mainly albumin."
+      ps = PragmaticSegmenter::Segmenter.new(text: text)
+      expect(ps.segment).to eq(["In placebo-controlled studies of all uses of Tracleer, marked decreases in hemoglobin (>15% decrease from baseline resulting in values <11 g/ dL) were observed in 6% of Tracleer-treated patients and 3% of placebo-treated patients.", "Bosentan is highly bound (>98%) to plasma proteins, mainly albumin."])
+    end
+
   end
 end

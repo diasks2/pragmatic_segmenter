@@ -64,8 +64,8 @@ module PragmaticSegmenter
 
 
       module HTML
-        # Rubular: http://rubular.com/r/ENrVFMdJ8v
-        HTMLTagRule = Rule.new(/<\/?[^>]*>/, '')
+        # Rubular: http://rubular.com/r/9d0OVOEJWj
+        HTMLTagRule = Rule.new(/<\/?\w+((\s+\w+(\s*=\s*(?:".*?"|'.*?'|[\^'">\s]+))?)+\s*|\s*)\/?>/, '')
 
         # Rubular: http://rubular.com/r/XZVqMPJhea
         EscapedHTMLTagRule = Rule.new(/&lt;\/?[^gt;]*gt;/, '')
