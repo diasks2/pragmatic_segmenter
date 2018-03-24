@@ -77,7 +77,7 @@ Pragmatic Segmenter is opinionated and made for the explicit purpose of segmenti
 Pragmatic Segmenter is specifically used for the purpose of segmenting texts for use in translation (and translation memory) related applications. Therefore Pragmatic Segmenter takes a stance on some formatting and segmentation gray areas with the goal of improving the segmentation for the above stated purpose. Some examples:
 
 - Removes 'table of contents' style long string of periods ('............')
-- Keeps parenthetical sentences within a sentence as one segment for clarity even though technically there are multiple grammatical sentences within the segment
+- Keeps parentheticals, quotations, and parentheticals or quotations within a sentence as one segment for clarity even though technically there may be multiple grammatical sentences within the segment
 - Strips out any xhtml code
 - Conservative in cases where the sentence boundary is ambigious and Pragmatic Segmenter does not have a built in rule
 
