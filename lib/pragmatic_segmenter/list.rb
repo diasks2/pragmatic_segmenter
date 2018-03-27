@@ -42,6 +42,10 @@ module PragmaticSegmenter
     ALPHABETICAL_LIST_LETTERS_AND_PERIODS_REGEX =
       /(?<=^)[a-z]\.|(?<=\A)[a-z]\.|(?<=\s)[a-z]\./i
 
+    # Rubular: http://rubular.com/r/GcnmQt4a3I
+    ROMAN_NUMERALS_IN_PARENTHESES =
+        /\(((?=[mdclxvi])m*(c[md]|d?c*)(x[cl]|l?x*)(i[xv]|v?i*))\)(?=\s[A-Z])/
+
     attr_reader :text
     def initialize(text:)
       @text = Text.new(text)
@@ -55,12 +59,7 @@ module PragmaticSegmenter
     end
 
     def replace_parens
-      ROMAN_NUMERALS.each do |rm|
-        next unless text =~ /\(#{Regexp.escape(rm)}\)\s[A-Z]/
-        text.gsub!(/\(#{Regexp.escape(rm)}\)(?=\s[A-Z])/) do |match|
-          match.gsub!(/\(/, '&✂&').gsub!(/\)/, '&⌬&')
-        end
-      end
+      text.gsub!(ROMAN_NUMERALS_IN_PARENTHESES, '&✂&\1&⌬&'.freeze)
       text
     end
 
