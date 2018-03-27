@@ -862,6 +862,9 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.3.17**
 * Fix issue involving the HTML regex in the cleaner
 
+**Version 0.3.18**
+* Performance optimizations
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.

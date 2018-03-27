@@ -1,3 +1,7 @@
+0.3.18 (2018-03-27):
+
+* Improvement: Performance optimizations
+
 0.3.17 (2017-12-07):
 
 * Bug Fix: Regex for parsing HTML
