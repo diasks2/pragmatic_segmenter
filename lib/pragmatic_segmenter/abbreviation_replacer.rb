@@ -76,19 +76,11 @@ module PragmaticSegmenter
       # and try to cover the words that most often start a
       # sentence but could never follow one of the abbreviations below.
 
+      # Rubular: http://rubular.com/r/PkBQ3PVBS8
       @language::AbbreviationReplacer::SENTENCE_STARTERS.each do |word|
         escaped = Regexp.escape(word)
-        txt.gsub!(/U∯S∯\s#{escaped}\s/, "U∯S\.\s#{escaped}\s")
-        txt.gsub!(/U\.S∯\s#{escaped}\s/, "U\.S\.\s#{escaped}\s")
-        txt.gsub!(/U∯K∯\s#{escaped}\s/, "U∯K\.\s#{escaped}\s")
-        txt.gsub!(/U\.K∯\s#{escaped}\s/, "U\.K\.\s#{escaped}\s")
-        txt.gsub!(/E∯U∯\s#{escaped}\s/, "E∯U\.\s#{escaped}\s")
-        txt.gsub!(/E\.U∯\s#{escaped}\s/, "E\.U\.\s#{escaped}\s")
-        txt.gsub!(/U∯S∯A∯\s#{escaped}\s/, "U∯S∯A\.\s#{escaped}\s")
-        txt.gsub!(/U\.S\.A∯\s#{escaped}\s/, "U\.S\.A\.\s#{escaped}\s")
-        txt.gsub!(/I∯\s#{escaped}\s/, "I\.\s#{escaped}\s")
-        txt.gsub!(/i.v∯\s#{escaped}\s/, "i\.v\.\s#{escaped}\s")
-        txt.gsub!(/I.V∯\s#{escaped}\s/, "I\.V\.\s#{escaped}\s")
+        regex   = /(U∯S|U\.S|U∯K|E∯U|E\.U|U∯S∯A|U\.S\.A|I|i.v|I.V)∯(?=\s#{escaped}\s)/
+        txt.gsub!(regex, '\1.')
       end
       txt
     end
