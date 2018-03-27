@@ -30,11 +30,12 @@ module PragmaticSegmenter
     def search_for_abbreviations_in_string(txt)
       original = txt.dup
       downcased = Unicode::downcase(txt)
-      @language::Abbreviation::ABBREVIATIONS.each do |a|
-        next unless downcased.include?(a.strip)
-        abbrev_match = original.scan(/(?:^|\s|\r|\n)#{Regexp.escape(a.strip)}/i)
+      @language::Abbreviation::ABBREVIATIONS.each do |abbreviation|
+        stripped = abbreviation.strip
+        next unless downcased.include?(stripped)
+        abbrev_match = original.scan(/(?:^|\s|\r|\n)#{Regexp.escape(stripped)}/i)
         next if abbrev_match.empty?
-        next_word_start = /(?<=#{Regexp.escape(a.strip)} ).{1}/
+        next_word_start = /(?<=#{Regexp.escape(stripped)} ).{1}/
         character_array = @text.scan(next_word_start)
         abbrev_match.each_with_index do |am, index|
           txt = scan_for_replacements(txt, am, index, character_array)
