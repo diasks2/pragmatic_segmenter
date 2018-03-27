@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+# frozen_string_literal: true
 
 module PragmaticSegmenter
   # This class replaces punctuation that is typically a sentence boundary
@@ -63,7 +64,7 @@ module PragmaticSegmenter
 
     def sub_characters(string, char_a, char_b)
       sub = string.gsub(char_a, char_b)
-      @text.gsub!(/#{Regexp.escape(string)}/, "#{sub}")
+      @text.gsub!(/#{Regexp.escape(string)}/, sub)
       sub
     end
   end
