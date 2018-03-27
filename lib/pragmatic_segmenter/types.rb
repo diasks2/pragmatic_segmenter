@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PragmaticSegmenter
   Rule = Struct.new(:pattern, :replacement)
 

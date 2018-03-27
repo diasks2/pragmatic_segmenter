@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+# frozen_string_literal: true
 
 module PragmaticSegmenter
   # This class replaces punctuation that is typically a sentence boundary

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PragmaticSegmenter
   # This is an opinionated class that removes errant newlines,
   # xhtml, inline formatting, etc.

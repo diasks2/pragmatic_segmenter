@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+# frozen_string_literal: true
 
 module PragmaticSegmenter
   # This class searches for a list within a string and adds
