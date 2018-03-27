@@ -64,7 +64,7 @@ module PragmaticSegmenter
 
     def replace_punctuation_in_brackets
       @text.dup.gsub!(/\[(?:[^\]])*\]/) do |match|
-        @text.gsub!(/#{Regexp.escape(match)}/, "#{match.dup.gsub!(/\?/, '&ᓷ&')}") if match.include?('?')
+        @text.gsub!(/#{Regexp.escape(match)}/, match.dup.gsub!(/\?/, '&ᓷ&')) if match.include?('?')
       end
     end
 

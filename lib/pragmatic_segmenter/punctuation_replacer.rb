@@ -64,7 +64,7 @@ module PragmaticSegmenter
 
     def sub_characters(string, char_a, char_b)
       sub = string.gsub(char_a, char_b)
-      @text.gsub!(/#{Regexp.escape(string)}/, "#{sub}")
+      @text.gsub!(/#{Regexp.escape(string)}/, sub)
       sub
     end
   end
