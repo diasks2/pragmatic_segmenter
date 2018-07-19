@@ -507,7 +507,7 @@ RSpec.describe PragmaticSegmenter::Languages::Danish, "(da)" do
 
     it 'correctly segments text #048' do
       ps = PragmaticSegmenter::Segmenter.new(text: "CELLULAR COMMUNICATIONS INC. sold 1,550,000 common shares at $21.75 each yesterday, according to lead underwriter L.F. Rothschild & Co. (cited from WSJ 05/29/1987)", language: 'en')
-      expect(ps.segment).to eq(["CELLULAR COMMUNICATIONS INC. sold 1,550,000 common shares at $21.75 each yesterday, according to lead underwriter L.F. Rothschild & Co.", "(cited from WSJ 05/29/1987)"])
+      expect(ps.segment).to eq(["CELLULAR COMMUNICATIONS INC. sold 1,550,000 common shares at $21.75 each yesterday, according to lead underwriter L.F. Rothschild & Co. (cited from WSJ 05/29/1987)"])
     end
 
     it 'correctly segments text #049' do

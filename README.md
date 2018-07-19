@@ -865,6 +865,9 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.3.18**
 * Performance optimizations
 
+**Version 0.3.19**
+* Treat a parenthetical following an abbreviation as part of the same segment
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.

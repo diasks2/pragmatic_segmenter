@@ -512,7 +512,7 @@ RSpec.describe PragmaticSegmenter::Languages::English, "(en)" do
 
     it 'correctly segments text #048' do
       ps = PragmaticSegmenter::Segmenter.new(text: "CELLULAR COMMUNICATIONS INC. sold 1,550,000 common shares at $21.75 each yesterday, according to lead underwriter L.F. Rothschild & Co. (cited from WSJ 05/29/1987)", language: 'en')
-      expect(ps.segment).to eq(["CELLULAR COMMUNICATIONS INC. sold 1,550,000 common shares at $21.75 each yesterday, according to lead underwriter L.F. Rothschild & Co.", "(cited from WSJ 05/29/1987)"])
+      expect(ps.segment).to eq(["CELLULAR COMMUNICATIONS INC. sold 1,550,000 common shares at $21.75 each yesterday, according to lead underwriter L.F. Rothschild & Co. (cited from WSJ 05/29/1987)"])
     end
 
     it 'correctly segments text #049' do
@@ -1406,5 +1406,10 @@ RSpec.describe PragmaticSegmenter::Languages::English, "(en)" do
       expect(ps.segment).to eq(["In placebo-controlled studies of all uses of Tracleer, marked decreases in hemoglobin (>15% decrease from baseline resulting in values <11 g/ dL) were observed in 6% of Tracleer-treated patients and 3% of placebo-treated patients.", "Bosentan is highly bound (>98%) to plasma proteins, mainly albumin."])
     end
 
+    it 'correctly segments text #118' do
+      text = "The parties to this Agreement are PragmaticSegmenterExampleCompanyA Inc. (“Company A”), and PragmaticSegmenterExampleCompanyB Inc. (“Company B”)."
+      ps = PragmaticSegmenter::Segmenter.new(text: text, clean: false)
+      expect(ps.segment).to eq(["The parties to this Agreement are PragmaticSegmenterExampleCompanyA Inc. (“Company A”), and PragmaticSegmenterExampleCompanyB Inc. (“Company B”)."])
+    end
   end
 end

@@ -1,3 +1,7 @@
+0.3.19 (2018-07-19):
+
+* Bug Fix: A parenthetical following an abbreviation is now included as part of the same segment. Example: "The parties to this Agreement are PragmaticSegmenterExampleCompanyA Inc. (“Company A”), and PragmaticSegmenterExampleCompanyB Inc. (“Company B”)." is now treated as one segment.
+
 0.3.18 (2018-03-27):
 
 * Improvement: Performance optimizations
