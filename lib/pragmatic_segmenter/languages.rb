@@ -26,6 +26,7 @@ require 'pragmatic_segmenter/languages/polish'
 require 'pragmatic_segmenter/languages/chinese'
 require 'pragmatic_segmenter/languages/bulgarian'
 require 'pragmatic_segmenter/languages/danish'
+require 'pragmatic_segmenter/languages/kazakh'
 
 module PragmaticSegmenter
   module Languages
@@ -49,7 +50,8 @@ module PragmaticSegmenter
       'nl' => Dutch,
       'pl' => Polish,
       'zh' => Chinese,
-      'da' => Danish
+      'da' => Danish,
+      'kk' => Kazakh
     }
 
     def self.get_language_by_code(code)
