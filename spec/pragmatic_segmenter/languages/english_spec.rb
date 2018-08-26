@@ -1411,5 +1411,10 @@ RSpec.describe PragmaticSegmenter::Languages::English, "(en)" do
       ps = PragmaticSegmenter::Segmenter.new(text: text, clean: false)
       expect(ps.segment).to eq(["The parties to this Agreement are PragmaticSegmenterExampleCompanyA Inc. (“Company A”), and PragmaticSegmenterExampleCompanyB Inc. (“Company B”)."])
     end
+
+    it 'correctly segments text #119' do
+      ps = PragmaticSegmenter::Segmenter.new(text: "Unlike the abbreviations i.e. and e.g., viz. is used to indicate a detailed description of something stated before.")
+      expect(ps.segment).to eq(["Unlike the abbreviations i.e. and e.g., viz. is used to indicate a detailed description of something stated before."])
+    end
   end
 end
