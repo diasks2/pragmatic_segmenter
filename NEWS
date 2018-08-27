@@ -1,3 +1,10 @@
+0.3.20 (2018-08-28):
+
+* Improvement: Handle slanted single quotation as a single quote
+* Bug Fix: The text contains a single character abbreviation as part of a list
+* Bug Fix: Chinese book quotes
+* Improvement: Add viz as abbreviation
+
 0.3.19 (2018-07-19):
 
 * Bug Fix: A parenthetical following an abbreviation is now included as part of the same segment. Example: "The parties to this Agreement are PragmaticSegmenterExampleCompanyA Inc. (“Company A”), and PragmaticSegmenterExampleCompanyB Inc. (“Company B”)." is now treated as one segment.
