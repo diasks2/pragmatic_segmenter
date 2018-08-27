@@ -1416,5 +1416,15 @@ RSpec.describe PragmaticSegmenter::Languages::English, "(en)" do
       ps = PragmaticSegmenter::Segmenter.new(text: "Unlike the abbreviations i.e. and e.g., viz. is used to indicate a detailed description of something stated before.")
       expect(ps.segment).to eq(["Unlike the abbreviations i.e. and e.g., viz. is used to indicate a detailed description of something stated before."])
     end
+
+    it 'correctly segments text #120' do
+      ps = PragmaticSegmenter::Segmenter.new(text: "For example, ‘dragonswort… is said that it should be grown in dragon’s blood. It grows at the tops of mountains where there are groves of trees, chiefly in holy places and in the country that is called Apulia’ (translated by Anne Van Arsdall, in Medieval Herbal Remedies: The Old English Herbarium and Anglo-Saxon Medicine p. 154). The Herbal also includes lore about other plants, such as the mandrake.")
+      expect(ps.segment).to eq(["For example, ‘dragonswort… is said that it should be grown in dragon’s blood. It grows at the tops of mountains where there are groves of trees, chiefly in holy places and in the country that is called Apulia’ (translated by Anne Van Arsdall, in Medieval Herbal Remedies: The Old English Herbarium and Anglo-Saxon Medicine p. 154).", "The Herbal also includes lore about other plants, such as the mandrake."])
+    end
+
+    it 'correctly segments text #121' do
+      ps = PragmaticSegmenter::Segmenter.new(text: "Here’s the - ahem - official citation: Baker, C., Anderson, Kenneth, Martin, James, & Palen, Leysia. Modeling Open Source Software Communities, ProQuest Dissertations and Theses.")
+      expect(ps.segment).to eq(["Here’s the - ahem - official citation: Baker, C., Anderson, Kenneth, Martin, James, & Palen, Leysia.", "Modeling Open Source Software Communities, ProQuest Dissertations and Theses."])
+    end
   end
 end
