@@ -76,10 +76,10 @@ module PragmaticSegmenter
       # replaces the periods.
       module SingleLetterAbbreviationRules
         # Rubular: http://rubular.com/r/e3H6kwnr6H
-        SingleUpperCaseLetterAtStartOfLineRule = Rule.new(/(?<=^[A-Z])\.(?=\s)/, '∯')
+        SingleUpperCaseLetterAtStartOfLineRule = Rule.new(/(?<=^[A-Z])\.(?=,?\s)/, '∯')
 
         # Rubular: http://rubular.com/r/gitvf0YWH4
-        SingleUpperCaseLetterRule = Rule.new(/(?<=\s[A-Z])\.(?=\s)/, '∯')
+        SingleUpperCaseLetterRule = Rule.new(/(?<=\s[A-Z])\.(?=,?\s)/, '∯')
 
         All = [
           SingleUpperCaseLetterAtStartOfLineRule,
