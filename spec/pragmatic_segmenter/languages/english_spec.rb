@@ -1426,5 +1426,10 @@ RSpec.describe PragmaticSegmenter::Languages::English, "(en)" do
       ps = PragmaticSegmenter::Segmenter.new(text: "Here’s the - ahem - official citation: Baker, C., Anderson, Kenneth, Martin, James, & Palen, Leysia. Modeling Open Source Software Communities, ProQuest Dissertations and Theses.")
       expect(ps.segment).to eq(["Here’s the - ahem - official citation: Baker, C., Anderson, Kenneth, Martin, James, & Palen, Leysia.", "Modeling Open Source Software Communities, ProQuest Dissertations and Theses."])
     end
+
+    it 'correctly segments text #122' do
+      ps = PragmaticSegmenter::Segmenter.new(text: "These include images of various modes of transport and members of the team, all available in .jpeg format. Images can be downloaded from our website. We also offer archives as .zip files.")
+      expect(ps.segment).to eq(["These include images of various modes of transport and members of the team, all available in .jpeg format.", "Images can be downloaded from our website.", "We also offer archives as .zip files."])
+    end
   end
 end

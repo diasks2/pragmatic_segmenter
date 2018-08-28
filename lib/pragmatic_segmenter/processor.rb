@@ -25,6 +25,7 @@ module PragmaticSegmenter
       replace_continuous_punctuation
       @text.apply(@language::Abbreviations::WithMultiplePeriodsAndEmailRule)
       @text.apply(@language::GeoLocationRule)
+      @text.apply(@language::FileFormatRule)
       split_into_segments
     end
 
