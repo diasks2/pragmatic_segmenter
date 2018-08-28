@@ -23,6 +23,7 @@ module PragmaticSegmenter
       replace_abbreviations
       replace_numbers
       replace_continuous_punctuation
+      replace_periods_before_numeric_references
       @text.apply(@language::Abbreviations::WithMultiplePeriodsAndEmailRule)
       @text.apply(@language::GeoLocationRule)
       @text.apply(@language::FileFormatRule)
@@ -67,6 +68,10 @@ module PragmaticSegmenter
       @text.gsub!(@language::CONTINUOUS_PUNCTUATION_REGEX) do |match|
         match.gsub(/!/, '&ᓴ&').gsub(/\?/, '&ᓷ&')
       end
+    end
+
+    def replace_periods_before_numeric_references
+      @text.gsub!(@language::NUMBERED_REFERENCE_REGEX, "∯\\2\r\\7")
     end
 
     def consecutive_underscore?(txt)

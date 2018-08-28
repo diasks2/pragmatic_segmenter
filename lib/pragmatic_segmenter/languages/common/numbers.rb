@@ -47,6 +47,8 @@ module PragmaticSegmenter
       # Rubular: http://rubular.com/r/mQ8Es9bxtk
       CONTINUOUS_PUNCTUATION_REGEX = /(?<=\S)(!|\?){3,}(?=(\s|\z|$))/
 
+      NUMBERED_REFERENCE_REGEX = /(?<=[^\d\s])(\.|∯)((\[(\d{1,3},?\s?-?\s?)*\b\d{1,3}\])+|((\d{1,3}\s?)*\d{1,3}))(\s)(?=[A-Z])/
+
       # Rubular: http://rubular.com/r/yqa4Rit8EY
       PossessiveAbbreviationRule = Rule.new(/\.(?='s\s)|\.(?='s$)|\.(?='s\z)/, '∯')
 
