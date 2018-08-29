@@ -1,3 +1,8 @@
+0.3.21 (2018-08-30):
+
+* Improvement: Add support for file formats
+* Improvement: Add support for numeric references at the end of a sentence (i.e. Wikipedia references)
+
 0.3.20 (2018-08-28):
 
 * Improvement: Handle slanted single quotation as a single quote

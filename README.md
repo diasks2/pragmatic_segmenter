@@ -874,6 +874,10 @@ To test the relative performance of different segmentation tools and libraries I
 * Add support for Chinese caret brackets
 * Add viz as abbreviation
 
+**Version 0.3.21**
+* Add support for file formats
+* Add support for numeric references at the end of a sentence (i.e. Wikipedia references)
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.
