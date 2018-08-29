@@ -1456,5 +1456,11 @@ RSpec.describe PragmaticSegmenter::Languages::English, "(en)" do
       ps = PragmaticSegmenter::Segmenter.new(text: "Thus increasing the desire for political reform both in Lancashire and in the country at large.[7][8] This was a serious misdemeanour,[16] encouraging them to declare the assembly illegal as soon as it was announced on 31 July.[17][18] The radicals sought a second opinion on the meeting's legality.")
       expect(ps.segment).to eq(["Thus increasing the desire for political reform both in Lancashire and in the country at large.[7][8]", "This was a serious misdemeanour,[16] encouraging them to declare the assembly illegal as soon as it was announced on 31 July.[17][18]", "The radicals sought a second opinion on the meeting's legality."])
     end
+
+    it 'correctly segments text #128' do
+      ps = PragmaticSegmenter::Segmenter.new(text: "The table in (4) is a sample from the Wall Street Journal (1987).1 According to the distribution all the pairs given in (4) count as candidates for abbreviations.")
+      expect(ps.segment).to eq([ "The table in (4) is a sample from the Wall Street Journal (1987).1", "According to the distribution all the pairs given in (4) count as candidates for abbreviations."])
+    
+    end
   end
 end
