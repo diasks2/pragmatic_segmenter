@@ -24,6 +24,8 @@ module PragmaticSegmenter
       # Rubular: http://rubular.com/r/G2opjedIm9
       GeoLocationRule = Rule.new(/(?<=[a-zA-z]°)\.(?=\s*\d+)/, '∯')
 
+      FileFormatRule = Rule.new(/(?<=\s)\.(?=(jpe?g|png|gif|tiff?|pdf|ps|docx?|xlsx?|svg|bmp|tga|exif|odt|html?|txt|rtf|bat|sxw|xml|zip|exe|msi|blend|wmv|mp[34]|pptx?|flac|rb|cpp|cs|js)\s)/, '∯')
+
       SingleNewLineRule = Rule.new(/\n/, 'ȹ')
 
       module DoublePunctuationRules
