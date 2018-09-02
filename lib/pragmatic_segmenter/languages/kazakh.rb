@@ -15,6 +15,14 @@ module PragmaticSegmenter
 
       class AbbreviationReplacer < AbbreviationReplacer
         SENTENCE_STARTERS = [].freeze
+
+        SingleUpperCaseCyrillicLetterAtStartOfLineRule = Rule.new(/(?<=^[А-ЯЁ])\.(?=\s)/, '∯')
+        SingleUpperCaseCyrillicLetterRule = Rule.new(/(?<=\s[А-ЯЁ])\.(?=\s)/, '∯')
+
+        def replace
+          super
+          @text.apply(SingleUpperCaseCyrillicLetterAtStartOfLineRule, SingleUpperCaseCyrillicLetterRule)
+        end
       end
     end
   end
