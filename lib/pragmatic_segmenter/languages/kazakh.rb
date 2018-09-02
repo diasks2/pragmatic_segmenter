@@ -13,6 +13,20 @@ module PragmaticSegmenter
         NUMBER_ABBREVIATIONS = [].freeze
       end
 
+      class Processor < PragmaticSegmenter::Processor
+        private
+
+        # Rubular: http://rubular.com/r/WRWy56Z5zp
+        QuestionMarkFollowedByDashLowercaseRule = Rule.new(/(?<=\p{Ll})\?(?=\s*[-—]\s*\p{Ll})/, '&ᓷ&')
+        # Rubular: http://rubular.com/r/lixxP7puSa
+        ExclamationMarkFollowedByDashLowercaseRule = Rule.new(/(?<=\p{Ll})!(?=\s*[-—]\s*\p{Ll})/, '&ᓴ&')
+
+        def between_punctuation(txt)
+          super(txt)
+          txt.apply(QuestionMarkFollowedByDashLowercaseRule, ExclamationMarkFollowedByDashLowercaseRule)
+        end
+      end
+
       class AbbreviationReplacer < AbbreviationReplacer
         SENTENCE_STARTERS = [].freeze
 

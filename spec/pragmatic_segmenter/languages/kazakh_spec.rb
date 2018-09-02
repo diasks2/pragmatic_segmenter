@@ -41,13 +41,33 @@ RSpec.describe PragmaticSegmenter::Languages::Kazakh, "(kk)" do
     it "Multi period abbreviation within sentence #008" do
       ps = PragmaticSegmenter::Segmenter.new(text: "Иран революциясы (1905 — 11) және азаматтық қозғалыс (1918 — 21) кезінде А. Фарахани, М. Кермани, М. Т. Бехар, т.б. ақындар демократиялық идеяның жыршысы болды.", language: "kk")
       expect(ps.segment).to eq(["Иран революциясы (1905 — 11) және азаматтық қозғалыс (1918 — 21) кезінде А. Фарахани, М. Кермани, М. Т. Бехар, т.б. ақындар демократиялық идеяның жыршысы болды."])
-   end
+    end
+
+    it "Web addresses #009" do
+      ps = PragmaticSegmenter::Segmenter.new(text: "Владимир Федосеев: Аттар магиясы енді жоқ http://www.vremya.ru/2003/179/10/80980.html", language: "kk")
+      expect(ps.segment).to eq(["Владимир Федосеев: Аттар магиясы енді жоқ http://www.vremya.ru/2003/179/10/80980.html"])
+    end
+
+    it "Question mark not at end of sentence #010" do
+      ps = PragmaticSegmenter::Segmenter.new(text: "Бірақ оның енді не керегі бар? — деді.", language: "kk")
+      expect(ps.segment).to eq(["Бірақ оның енді не керегі бар? — деді."])
+    end
+
+    it "Exclamation mark not at end of sentence #011" do
+      ps = PragmaticSegmenter::Segmenter.new(text: "Сондықтан шапаныма жегізіп отырғаным! - деп, жауап береді.", language: "kk")
+      expect(ps.segment).to eq(["Сондықтан шапаныма жегізіп отырғаным! - деп, жауап береді."])
+    end
   end
 
   describe '#segment' do
     it 'correctly segments text #001' do
       ps = PragmaticSegmenter::Segmenter.new(text: "Б.з.б. 6 – 3 ғасырларда конфуцийшілдік, моизм, легизм мектептерінің қалыптасуы нәтижесінде Қытай философиясы пайда болды.", language: 'kk')
       expect(ps.segment).to eq(["Б.з.б. 6 – 3 ғасырларда конфуцийшілдік, моизм, легизм мектептерінің қалыптасуы нәтижесінде Қытай философиясы пайда болды."])
+    end
+
+    it 'correctly segments text #002' do
+      ps = PragmaticSegmenter::Segmenter.new(text: "'Та марбута' тек сөз соңында екі түрде жазылады:", language: "kk")
+      expect(ps.segment).to eq(["'Та марбута' тек сөз соңында екі түрде жазылады:"])
     end
   end
 end
