@@ -888,6 +888,10 @@ If you find a text that is incorrectly segmented using this gem, please submit a
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
 
+## Ports
+
+* [C# - PragmaticSegmenterNet](https://github.com/UglyToad/PragmaticSegmenterNet)
+
 ## License
 
 The MIT License (MIT)
