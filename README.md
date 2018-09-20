@@ -433,6 +433,12 @@ Was sind die Konsequenzen der Abstimmung vom 12. Juni?
 => ["Was sind die Konsequenzen der Abstimmung vom 12. Juni?"]
 ```
 
+4.) **Cardinal numbers at end of sentence** *Credit: Dr. Michael Ustaszewski*
+```
+Die Information steht auf Seite 12. Dort kannst du nachlesen.
+=> ["Die Information steht auf Seite 12.", "Dort kannst du nachlesen."]
+```
+
 #### Golden Rules (Japanese)
 
 1.) **Simple period to end sentence**

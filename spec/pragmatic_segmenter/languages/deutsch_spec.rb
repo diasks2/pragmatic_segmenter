@@ -17,6 +17,24 @@ RSpec.describe PragmaticSegmenter::Languages::Deutsch, "(de)" do
       ps = PragmaticSegmenter::Segmenter.new(text: "Was sind die Konsequenzen der Abstimmung vom 12. Juni?", language: "de")
       expect(ps.segment).to eq(["Was sind die Konsequenzen der Abstimmung vom 12. Juni?"])
     end
+
+    it "Numbers #004" do
+      # Credit: Dr. Michael Ustaszewski
+      # A numeral followed by a dot within the sentence should not be treated as a sentence,
+      # because the meaning of numeral + dot is that of an ordinal number.
+      # However, if the numeral + dot is in the last position of the sentence, then it is not an ordinal,
+      # but a cardinal number and thus a sentence break should be made. See the following example:
+
+      # <INPUT>Die Information steht auf Seite 12. Dort kannst du nachlesen.</INPUT>
+      # <SHOULDBE>["Die Information steht auf Seite 12.", "Dort kannst du nachlesen."]</SHOULDBE>
+      # The sentence translates as "The information can be found on page 12. You can read it there".
+
+      # That's a tricky one I guess, because the capitalisation of the word following the dot is not necessarily a clue,
+      # since German nouns are usually always capitalised.
+      skip "NOT IMPLEMENTED"
+      ps = PragmaticSegmenter::Segmenter.new(text: "Die Information steht auf Seite 12. Dort kannst du nachlesen.", language: "de")
+      expect(ps.segment).to eq(["Die Information steht auf Seite 12.", "Dort kannst du nachlesen."])
+    end
   end
 
   # Thanks to Silvia Busse for the German test examples.
