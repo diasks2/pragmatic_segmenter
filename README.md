@@ -884,6 +884,9 @@ To test the relative performance of different segmentation tools and libraries I
 * Add support for file formats
 * Add support for numeric references at the end of a sentence (i.e. Wikipedia references)
 
+**Version 0.3.22**
+* Add initial support and tests for Kazakh
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.
