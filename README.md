@@ -433,6 +433,12 @@ Was sind die Konsequenzen der Abstimmung vom 12. Juni?
 => ["Was sind die Konsequenzen der Abstimmung vom 12. Juni?"]
 ```
 
+4.) **Cardinal numbers at end of sentence** *Credit: Dr. Michael Ustaszewski*
+```
+Die Information steht auf Seite 12. Dort kannst du nachlesen.
+=> ["Die Information steht auf Seite 12.", "Dort kannst du nachlesen."]
+```
+
 #### Golden Rules (Japanese)
 
 1.) **Simple period to end sentence**
@@ -868,6 +874,16 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.3.19**
 * Treat a parenthetical following an abbreviation as part of the same segment
 
+**Version 0.3.20**
+* Handle slanted single quotation as a single quote
+* Handle a single character abbreviation as part of a list
+* Add support for Chinese caret brackets
+* Add viz as abbreviation
+
+**Version 0.3.21**
+* Add support for file formats
+* Add support for numeric references at the end of a sentence (i.e. Wikipedia references)
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.
@@ -877,6 +893,10 @@ If you find a text that is incorrectly segmented using this gem, please submit a
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
+
+## Ports
+
+* [C# - PragmaticSegmenterNet](https://github.com/UglyToad/PragmaticSegmenterNet)
 
 ## License
 

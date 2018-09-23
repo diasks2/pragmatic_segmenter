@@ -1411,5 +1411,56 @@ RSpec.describe PragmaticSegmenter::Languages::English, "(en)" do
       ps = PragmaticSegmenter::Segmenter.new(text: text, clean: false)
       expect(ps.segment).to eq(["The parties to this Agreement are PragmaticSegmenterExampleCompanyA Inc. (“Company A”), and PragmaticSegmenterExampleCompanyB Inc. (“Company B”)."])
     end
+
+    it 'correctly segments text #119' do
+      ps = PragmaticSegmenter::Segmenter.new(text: "Unlike the abbreviations i.e. and e.g., viz. is used to indicate a detailed description of something stated before.")
+      expect(ps.segment).to eq(["Unlike the abbreviations i.e. and e.g., viz. is used to indicate a detailed description of something stated before."])
+    end
+
+    it 'correctly segments text #120' do
+      ps = PragmaticSegmenter::Segmenter.new(text: "For example, ‘dragonswort… is said that it should be grown in dragon’s blood. It grows at the tops of mountains where there are groves of trees, chiefly in holy places and in the country that is called Apulia’ (translated by Anne Van Arsdall, in Medieval Herbal Remedies: The Old English Herbarium and Anglo-Saxon Medicine p. 154). The Herbal also includes lore about other plants, such as the mandrake.")
+      expect(ps.segment).to eq(["For example, ‘dragonswort… is said that it should be grown in dragon’s blood. It grows at the tops of mountains where there are groves of trees, chiefly in holy places and in the country that is called Apulia’ (translated by Anne Van Arsdall, in Medieval Herbal Remedies: The Old English Herbarium and Anglo-Saxon Medicine p. 154).", "The Herbal also includes lore about other plants, such as the mandrake."])
+    end
+
+    it 'correctly segments text #121' do
+      ps = PragmaticSegmenter::Segmenter.new(text: "Here’s the - ahem - official citation: Baker, C., Anderson, Kenneth, Martin, James, & Palen, Leysia. Modeling Open Source Software Communities, ProQuest Dissertations and Theses.")
+      expect(ps.segment).to eq(["Here’s the - ahem - official citation: Baker, C., Anderson, Kenneth, Martin, James, & Palen, Leysia.", "Modeling Open Source Software Communities, ProQuest Dissertations and Theses."])
+    end
+
+    it 'correctly segments text #122' do
+      ps = PragmaticSegmenter::Segmenter.new(text: "These include images of various modes of transport and members of the team, all available in .jpeg format. Images can be downloaded from our website. We also offer archives as .zip files.")
+      expect(ps.segment).to eq(["These include images of various modes of transport and members of the team, all available in .jpeg format.", "Images can be downloaded from our website.", "We also offer archives as .zip files."])
+    end
+
+    it 'correctly segments text #123' do
+      ps = PragmaticSegmenter::Segmenter.new(text: "Saint Maximus (died 250) is a Christian saint and martyr.[1] The emperor Decius published a decree ordering the veneration of busts of the deified emperors.")
+      expect(ps.segment).to eq(["Saint Maximus (died 250) is a Christian saint and martyr.[1]", "The emperor Decius published a decree ordering the veneration of busts of the deified emperors."])
+    end
+
+    it 'correctly segments text #124' do
+      ps = PragmaticSegmenter::Segmenter.new(text: "Differing agendas can potentially create an understanding gap in a consultation.11 12 Take the example of one of the most common presentations in ill health: the common cold.")
+      expect(ps.segment).to eq(["Differing agendas can potentially create an understanding gap in a consultation.11 12", "Take the example of one of the most common presentations in ill health: the common cold."])
+    end
+
+    it 'correctly segments text #125' do
+      ps = PragmaticSegmenter::Segmenter.new(text: "Daniel Kahneman popularised the concept of fast and slow thinking: the distinction between instinctive (type 1 thinking) and reflective, analytical cognition (type 2).10 This model relates to doctors achieving a balance between efficiency and effectiveness.")
+      expect(ps.segment).to eq(["Daniel Kahneman popularised the concept of fast and slow thinking: the distinction between instinctive (type 1 thinking) and reflective, analytical cognition (type 2).10", "This model relates to doctors achieving a balance between efficiency and effectiveness."])
+    end
+
+    it 'correctly segments text #126' do
+      ps = PragmaticSegmenter::Segmenter.new(text: "Its traditional use[1] is well documented in the ethnobotanical literature [2–11]. Leaves, buds, tar and essential oils are used to treat a wide spectrum of diseases.")
+      expect(ps.segment).to eq(["Its traditional use[1] is well documented in the ethnobotanical literature [2–11].", "Leaves, buds, tar and essential oils are used to treat a wide spectrum of diseases."])
+    end
+
+    it 'correctly segments text #127' do
+      ps = PragmaticSegmenter::Segmenter.new(text: "Thus increasing the desire for political reform both in Lancashire and in the country at large.[7][8] This was a serious misdemeanour,[16] encouraging them to declare the assembly illegal as soon as it was announced on 31 July.[17][18] The radicals sought a second opinion on the meeting's legality.")
+      expect(ps.segment).to eq(["Thus increasing the desire for political reform both in Lancashire and in the country at large.[7][8]", "This was a serious misdemeanour,[16] encouraging them to declare the assembly illegal as soon as it was announced on 31 July.[17][18]", "The radicals sought a second opinion on the meeting's legality."])
+    end
+
+    it 'correctly segments text #128' do
+      ps = PragmaticSegmenter::Segmenter.new(text: "The table in (4) is a sample from the Wall Street Journal (1987).1 According to the distribution all the pairs given in (4) count as candidates for abbreviations.")
+      expect(ps.segment).to eq([ "The table in (4) is a sample from the Wall Street Journal (1987).1", "According to the distribution all the pairs given in (4) count as candidates for abbreviations."])
+    
+    end
   end
 end

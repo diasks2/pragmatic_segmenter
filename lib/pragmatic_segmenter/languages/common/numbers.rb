@@ -47,6 +47,8 @@ module PragmaticSegmenter
       # Rubular: http://rubular.com/r/mQ8Es9bxtk
       CONTINUOUS_PUNCTUATION_REGEX = /(?<=\S)(!|\?){3,}(?=(\s|\z|$))/
 
+      NUMBERED_REFERENCE_REGEX = /(?<=[^\d\s])(\.|∯)((\[(\d{1,3},?\s?-?\s?)*\b\d{1,3}\])+|((\d{1,3}\s?)*\d{1,3}))(\s)(?=[A-Z])/
+
       # Rubular: http://rubular.com/r/yqa4Rit8EY
       PossessiveAbbreviationRule = Rule.new(/\.(?='s\s)|\.(?='s$)|\.(?='s\z)/, '∯')
 
@@ -76,10 +78,10 @@ module PragmaticSegmenter
       # replaces the periods.
       module SingleLetterAbbreviationRules
         # Rubular: http://rubular.com/r/e3H6kwnr6H
-        SingleUpperCaseLetterAtStartOfLineRule = Rule.new(/(?<=^[A-Z])\.(?=\s)/, '∯')
+        SingleUpperCaseLetterAtStartOfLineRule = Rule.new(/(?<=^[A-Z])\.(?=,?\s)/, '∯')
 
         # Rubular: http://rubular.com/r/gitvf0YWH4
-        SingleUpperCaseLetterRule = Rule.new(/(?<=\s[A-Z])\.(?=\s)/, '∯')
+        SingleUpperCaseLetterRule = Rule.new(/(?<=\s[A-Z])\.(?=,?\s)/, '∯')
 
         All = [
           SingleUpperCaseLetterAtStartOfLineRule,
