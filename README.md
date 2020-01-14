@@ -900,6 +900,7 @@ If you find a text that is incorrectly segmented using this gem, please submit a
 ## Ports
 
 * [C# - PragmaticSegmenterNet](https://github.com/UglyToad/PragmaticSegmenterNet)
+* [Python - pySBD](https://github.com/nipunsadvilkar/pySBD)
 
 ## License
 
