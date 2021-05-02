@@ -1,3 +1,7 @@
+0.3.22 (2021-05-03):
+
+* Improvement: Refactor for Ruby 3.0 compatibility
+
 0.3.22 (2018-09-23):
 
 * Improvement: Initial support for Kazakh

@@ -887,6 +887,9 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.3.22**
 * Add initial support and tests for Kazakh
 
+**Version 0.3.23**
+* Refactor for Ruby 3.0 compatibility
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.
