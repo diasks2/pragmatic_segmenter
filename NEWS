@@ -1,4 +1,9 @@
-0.3.22 (2021-05-03):
+0.3.24 (2024-08-12):
+
+* Bug Fix: Catastrophic backtracking in regular expression for numerical references
+* Improvement: Remove unicode dependency
+
+0.3.23 (2021-05-03):
 
 * Improvement: Refactor for Ruby 3.0 compatibility
 
