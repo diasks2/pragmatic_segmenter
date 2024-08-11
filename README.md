@@ -890,6 +890,10 @@ To test the relative performance of different segmentation tools and libraries I
 **Version 0.3.23**
 * Refactor for Ruby 3.0 compatibility
 
+**Version 0.3.24**
+* Fix catastrophic backtracking in regular expression for numerical references
+* Remove unicode dependency
+
 ## Contributing
 
 If you find a text that is incorrectly segmented using this gem, please submit an issue.
